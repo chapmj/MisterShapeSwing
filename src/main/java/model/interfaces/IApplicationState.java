@@ -1,16 +1,24 @@
 package model.interfaces;
 
-import model.ShapeStyle;
-import model.ShapeType;
-import model.StartAndEndPointMode;
+import model.shape.*;
 
 public interface IApplicationState {
-    void setActiveShape();
-    void setActivePrimaryColor();
-    void setActiveSecondaryColor();
-    void setActiveShadingType();
-    void setActiveStartAndEndPointMode();
-    ShapeType getActiveShapeType();
+    //Mutators
+    void setUiShape();
+
+    void setUiPrimaryColor();
+
+    void setUiSecondaryColor();
+
+    void setUiShadingType();
+
+    void setUiStartAndEndPointMode();
+
+    ShapeType getShapeType();
     ShapeStyle getShapeStyle();
-    StartAndEndPointMode getActiveStartAndEndPointMode();
+    ShapeColor getPrimaryColor();
+    ShapeColor getSecondaryColor();
+    ShapeShadingType getShadingType();
+
+    StartAndEndPointMode getStartAndEndPointMode();
 }

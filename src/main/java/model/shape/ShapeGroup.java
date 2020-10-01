@@ -1,31 +1,37 @@
-package model;
+package model.shape;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import controller.CanvasUtils;
+import model.Dimensions;
+import model.PointInt;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
 
 /* Part of a composite pattern / tree data structure. Represents a node.
  * ShapeGroups contain other shape groups or shapes.  Collectively called ShapeComponents.
  * COMPOSITE PATTERN: Node
  */
 public class ShapeGroup extends ShapeComponent {
-	ArrayList<ShapeComponent> children = new ArrayList<>();
+	List<ShapeComponent> children = new ArrayList<>();
 	Integer cachedHeight = 0;
 	Integer cachedWidth = 0;
 	PointInt cachedAnchor = null;
 	ShapeType shapeType = ShapeType.INVISIBLE_RECT;
 
-	public ShapeGroup(ArrayList<ShapeComponent> children) {
+	public ShapeGroup(List<ShapeComponent> children)
+	{
 		addChild(children);
 	}
 
-	public void addChild(ArrayList<ShapeComponent> selection) {
+	public void addChild(List<ShapeComponent> selection)
+	{
 		children.addAll(selection);	
 		setGroupBounds();
 	}
-	public void removeChild(ArrayList<ShapeComponent> selection) {
+
+	public void removeChild(List<ShapeComponent> selection)
+	{
 		children.removeAll(selection);
 		setGroupBounds();	
 	}
@@ -58,7 +64,7 @@ public class ShapeGroup extends ShapeComponent {
 			if (yLeft < yMin) yMin = yLeft;
 		}
 
-		ShapeComponent boundingShape = new Shape (ShapeType.RECTANGLE,new Dimensions(xMax - xMin, yMax - yMin), new PointInt(xMin,yMin));
+		ShapeComponent boundingShape = new Shape(ShapeType.RECTANGLE,new Dimensions(xMax - xMin, yMax - yMin), new PointInt(xMin,yMin));
 
 		return boundingShape;
 	}
@@ -125,8 +131,8 @@ public class ShapeGroup extends ShapeComponent {
 	}
 
 	@Override
-	public ArrayList<IShape> getShapes() {
-		ArrayList<IShape> list = new ArrayList<>();
+	public List<IShape> getShapes() {
+		List<IShape> list = new ArrayList<>();
 
 		for (ShapeComponent child : children) {
 			list.addAll(child.getShapes());
@@ -165,8 +171,8 @@ public class ShapeGroup extends ShapeComponent {
 	public ShapeComponent clone() {
 		ShapeGroup dupeGroup = null;
 
-		ArrayList<IShape> shapes = this.getShapes();
-		ArrayList<ShapeComponent> dupeShapes = new ArrayList<>(); 
+		var shapes = this.getShapes();
+		var dupeShapes = new ArrayList<ShapeComponent>();
 			
 		shapes.stream()
 			.map((shape) -> ShapeFactory.duplicateShapeComponent((ShapeComponent) shape))

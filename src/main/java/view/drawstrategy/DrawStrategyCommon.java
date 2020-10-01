@@ -1,12 +1,10 @@
-package view;
-
-import java.awt.BasicStroke;
-import java.awt.Color;
+package view.drawstrategy;
 
 import controller.CanvasUtils;
-import model.ShapeShadingType;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
+import model.shape.ShapeShadingType;
+
+import java.awt.*;
 
 /* Create Graphics objects and paint them to canvas.
  * Specific graphic type in class name.
@@ -20,16 +18,13 @@ public class DrawStrategyCommon {
 		this.shape = shape;
 	}
 
-	public DrawStrategyCommon(ShapeComponent group) {
-	}
-	
-	
-	public static BasicStroke makeStroke() {
-		final float dash1[] = {10.0f};
-		return new BasicStroke(3.0f,
-						BasicStroke.CAP_BUTT,
-						BasicStroke.JOIN_MITER,
-						3.0f, dash1, 0.0f);
+	public static BasicStroke makeStroke()
+	{
+		final float[] dash1 = {10.0f};
+		final float width = 3.0f;
+		final float miterlimit = 3.0f;
+		final float dash_phase = 0.0f;
+		return new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, miterlimit, dash1, dash_phase);
 	}
 	
 	public Color getPrimaryColor() {

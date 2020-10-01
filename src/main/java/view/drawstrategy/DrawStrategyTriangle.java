@@ -1,16 +1,16 @@
-package view;
+package view.drawstrategy;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Stroke;
-import java.util.ArrayList;
 
-import controller.CanvasController;
-import model.ShapeCardinality;
-import model.ShapeShadingType;
+import model.shape.ShapeCardinality;
+import model.shape.ShapeShadingType;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
+import model.shape.ShapeComponent;
+import model.persistence.ModelState;
+import view.viewstate.ViewState;
 
 /* Create Graphics objects and paint them to canvas.
  * Specific graphic type in class name.
@@ -18,21 +18,20 @@ import model.interfaces.ShapeComponent;
  */
 public class DrawStrategyTriangle extends DrawStrategy {
 	private Stroke stroke;
-	private CanvasController canvasController;
 	private IShape shape;
-	private Graphics2D g2D;
+	private Graphics2D graphics;
 	private Color primaryColor;
 	private Color secondaryColor;
 	private ShapeShadingType shadingType;
 	private ShapeCardinality cardinality;
-	private Graphics2D g2Dselected;
+	private Graphics2D graphicsSelection;
 	private DrawStrategyCommon common;
 
-	public DrawStrategyTriangle(CanvasController canvasController, ShapeComponent shape) {
+	public DrawStrategyTriangle(ShapeComponent shape)
+	{
 		super();
-		this.canvasController = canvasController;
-		this.g2D = canvasController.getGraphics2D();
-		this.g2Dselected = canvasController.getGraphics2D();
+		this.graphics = ViewState.getGraphics();
+		this.graphicsSelection = ViewState.getGraphics();
 		this.shape = (IShape) shape;
 		this.common = new DrawStrategyCommon((IShape) shape);
 		setStyleParams();
@@ -40,7 +39,7 @@ public class DrawStrategyTriangle extends DrawStrategy {
 
 	// Draw shape to canvas and then determine if a selection should be drawn as well.
 	@Override
-	public void execute() {
+	public void draw() {
 		paintShapeWithShading();
 		drawSelection();
 	}
@@ -69,7 +68,8 @@ public class DrawStrategyTriangle extends DrawStrategy {
 	}
 
 	private void drawSelection() {
-		ArrayList<IShape> selectedShapes = canvasController.getShapeSelectionList();
+		/*
+		var selectedShapes = canvasController.getShapeSelectionList();
 		double scale = 1.2;
 		if (selectedShapes.contains(shape)) {
 			g2Dselected.setColor(Color.BLACK);
@@ -77,10 +77,22 @@ public class DrawStrategyTriangle extends DrawStrategy {
 			RawPoly rp = createTrianglePolygon(shape);
 			Polygon selectionTriangle = dilateTriangle(rp.xs, rp.ys, scale);
 			g2Dselected.drawPolygon(selectionTriangle);
+		}*/
 
-		}
+		double scale = 1.2;
+		ModelState.getShapeComponentSelectionList().stream()
+				.filter((s) -> s.equals(shape))
+                .limit(1)
+                .forEach((shape) ->
+					{
+						graphicsSelection.setColor(Color.BLACK);
+						graphicsSelection.setStroke(stroke);
+						RawPoly rp = createTrianglePolygon((IShape)shape);
+						Polygon selectionTriangle = dilateTriangle(rp.xs, rp.ys, scale);
+						graphicsSelection.drawPolygon(selectionTriangle);
+					});
 	}
-	
+
 	// Return a polygon with the same center point as a given polygon, but scaled.
 	private Polygon dilateTriangle(int[] xs, int[] ys, Double scale) {
 		// Citation https://stackoverflow.com/questions/8591991/algorithm-to-enlarge-scale-inflate-enbiggen-a-triangle
@@ -91,34 +103,32 @@ public class DrawStrategyTriangle extends DrawStrategy {
 			ysum+=ys[i];
 		}
 
-		double xcent = xsum/3;
-		double ycent = ysum/3;
+		double xcent = xsum / 3;
+		double ycent = ysum / 3;
 		
 		int[] xs_new = new int[3];
 		int[] ys_new = new int[3];
-		for (int i=0; i<3; i++) {
+		for (int i = 0; i < 3; i++) {
 			xs_new[i] = (int) (xcent + (xs[i]-xcent)*scale);
 			ys_new[i] = (int) (ycent + (ys[i]-ycent)*scale);
 		}
 		return new Polygon(xs_new,ys_new,3);
 	}
 
-
 	private void drawShape(Color color) {
 		Polygon triangle = createTrianglePolygon(shape).poly;
-		g2D.setColor(color);
-		g2D.setStroke(stroke);
-		g2D.drawPolygon(triangle);
+		graphics.setColor(color);
+		graphics.setStroke(stroke);
+		graphics.drawPolygon(triangle);
 	}
 	
 	private void fillShape(Color color) {
 		Polygon triangle = createTrianglePolygon(shape).poly;
-		g2D.setColor(color);
-		g2D.fillPolygon(triangle);
+		graphics.setColor(color);
+		graphics.fillPolygon(triangle);
 	}
 
 	private RawPoly createTrianglePolygon(IShape shape) {
-		// TODO: It would be better to just create the polygon and rotate it.
 		IShape triangle = (IShape) shape.clone();
 		Integer x = triangle.getAnchor().getX();
 		Integer y = triangle.getAnchor().getY();
@@ -131,6 +141,7 @@ public class DrawStrategyTriangle extends DrawStrategy {
 		Integer y1 = y;
 		Integer y2 = y;
 		Integer y3 = y;
+
 		switch (cardinality) {
 			case NE:
 				x2 += width;
@@ -153,6 +164,7 @@ public class DrawStrategyTriangle extends DrawStrategy {
 				y3 += height;
 				break;
 		}
+
 		trianglePoly.addPoint(x1, y1);
 		trianglePoly.addPoint(x2, y2);
 		trianglePoly.addPoint(x3 , y3);
@@ -162,6 +174,7 @@ public class DrawStrategyTriangle extends DrawStrategy {
 		int[] yr = {y1, y2, y3};
 		rp.xs = xr; 
 		rp.ys = yr;
+
 		return rp;
 	}
 

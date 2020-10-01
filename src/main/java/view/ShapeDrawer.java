@@ -1,38 +1,44 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
-import controller.CanvasController;
-import model.ShapeGroup;
+import model.shape.ShapeGroup;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
+import model.shape.ShapeComponent;
+import view.drawstrategy.*;
 
 /* Draw shape data to canvas.
  * Shapes are appended to the shape drawer object prior to a call to draw them.
  * BUILDER PATTERN
  */
 public class ShapeDrawer {
-	private CanvasController canvasController;
-	private ArrayList<IShape> shapeDrawerShapes = new ArrayList<>();
-	private ArrayList<ShapeGroup> groups = new ArrayList<>();
+	private List<IShape> shapeDrawerShapes = new ArrayList<>();
+	private List<ShapeGroup> groups = new ArrayList<>();
 	
-	public ShapeDrawer (){
-		canvasController = CanvasController.getInstance();
-	}
+	public ShapeDrawer()
+	{ }
 
-	private DrawStrategy inferDrawStrategy(ShapeComponent component) {
-		switch (component.getType()) {
-			case RECTANGLE:	return new DrawStrategyRectangle(canvasController, component);
-			case ELLIPSE:	return new DrawStrategyEllipse(canvasController, component);
-			case TRIANGLE:	return new DrawStrategyTriangle(canvasController, component);
-			case INVISIBLE_RECT: return new DrawStrategyInvisibleRect(component);
-			default:		return new DrawStrategyRectangle(canvasController, component);
+	private DrawStrategy inferDrawStrategy(ShapeComponent component)
+	{
+		switch (component.getType())
+		{
+			case RECTANGLE:
+				return new DrawStrategyRectangle(component);
+			case ELLIPSE:
+				return new DrawStrategyEllipse(component);
+			case TRIANGLE:
+				return new DrawStrategyTriangle(component);
+			case INVISIBLE_RECT:
+				return new DrawStrategyInvisibleRect(component);
+			default:
+				return new DrawStrategyRectangle(component);
 		}
 	}
 
 	// Divide ShapeComponents into IShapes and Shapegroups, then add all shapes to drawer.
-	public void add(ArrayList<ShapeComponent> component) {
+	public void add(List<ShapeComponent> component) {
 		// Add shapes to shapeDrawer pending
 		component.stream()
 			.filter(comp -> comp instanceof IShape)
@@ -54,25 +60,33 @@ public class ShapeDrawer {
 	}
 
 	// Take a ShapeComponent and return all of the shapes in it.
-	private ArrayList<IShape> splitGroup(ShapeComponent component) {
-		ArrayList<IShape> shapes = new ArrayList<>();
+	private List<IShape> splitGroup(ShapeComponent component) {
+		var shapes = new ArrayList<IShape>();
+
 		if (component instanceof ShapeGroup) {
-			component.getShapes().stream()
-				.map (shape -> (IShape) shape)
-				.forEach(shapes::add);
+			shapes.addAll(component.getShapes());
 		}
+
 		return shapes;
 	}
 
 	// Builder execute
-	public void draw() {
-		shapeDrawerShapes.forEach((shape) -> inferDrawStrategy((ShapeComponent)shape).execute());
-		groups.forEach((group) -> inferDrawStrategy((ShapeComponent)group).execute());
+	public void draw()
+	{
+
+		shapeDrawerShapes.stream()
+				.map((shape) -> (ShapeComponent)shape)
+				.map(this::inferDrawStrategy)
+				.forEach(DrawStrategy::draw);
+
+		groups.stream()
+				.map(this::inferDrawStrategy)
+				.forEach(DrawStrategy::draw);
 	}
 
 	// Builder append
 	public void add(ShapeComponent shape) {
-		ArrayList<ShapeComponent> component = new ArrayList<>();
+		var component = new ArrayList<ShapeComponent>();
 		component.add(shape);
 		add(component);
 	}

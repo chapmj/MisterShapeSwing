@@ -1,14 +1,15 @@
 package controller.commands;
 
-import java.util.ArrayList;
-
-import controller.CanvasController;
 import controller.CanvasUtils;
 import controller.interfaces.ICanvasControllerCommand;
 import model.PointInt;
-import model.ShapeGroup;
-import model.interfaces.ShapeComponent;
+import model.persistence.ModelState;
+import model.shape.ShapeGroup;
+import model.shape.ShapeComponent;
 import model.persistence.CanvasState;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /* Responsible for updating the model's canvas state.
  * Used to add shapes to the canvas based on shape components
@@ -16,15 +17,13 @@ import model.persistence.CanvasState;
  */
 public class PasteTask implements ICanvasControllerCommand {
 
-	private ArrayList<ShapeComponent> copyBuffer;
-	private ArrayList<ShapeComponent> shapeCopies;
+	private List<ShapeComponent> shapeCopies;
 	private Integer incX = 20;
 	private Integer incY = 20;
 	private CanvasState canvasState;
-	private CanvasController canvasController = CanvasController.getInstance();
 
 	public PasteTask() {
-		this.canvasState = canvasController.getCanvasState();
+		this.canvasState = ModelState.getCanvasState();
 	}
 
 	/* Get copy buffer and add shapes to model.  Positions remain relative to their
@@ -32,16 +31,16 @@ public class PasteTask implements ICanvasControllerCommand {
 	 * the canvas.
 	 */
 	@Override
-	public void execute() throws Exception {
-		copyBuffer = canvasState.getComponentCopyBuffer();
-		shapeCopies = new ArrayList<>();
+	public void execute() {
 		PointInt pasteLocation = canvasState.getLastPasteLocation();
-		
-		for (ShapeComponent comp : copyBuffer)
-			shapeCopies.add(comp.clone());
 
-		ShapeGroup moveGroup = new ShapeGroup(shapeCopies);
-		PointInt pasteDelta = new PointInt(
+		var copyBuffer = canvasState.getComponentCopyBuffer();
+		this.shapeCopies = copyBuffer.stream()
+				.map(ShapeComponent::clone)
+				.collect(Collectors.toList());
+
+		var moveGroup = new ShapeGroup(shapeCopies);
+		var pasteDelta = new PointInt(
 				(pasteLocation.getX() + incX) - moveGroup.getAnchor().getX(),
 				(pasteLocation.getY() + incY) - moveGroup.getAnchor().getY());
 
@@ -55,14 +54,14 @@ public class PasteTask implements ICanvasControllerCommand {
 	 * dereferenced.
 	 */
 	@Override
-	public void undo() throws Exception {
+	public void undo() {
 		decrementPasteLocation();
 		canvasState.removeComponent(shapeCopies);
 	}
 
 	// Put the objects back in the shape list.
 	@Override
-	public void redo() throws Exception {
+	public void redo() {
 		incrementPasteLocation();
 		canvasState.addComponent(shapeCopies);
 	}

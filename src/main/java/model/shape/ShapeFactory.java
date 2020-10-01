@@ -1,7 +1,8 @@
-package model;
+package model.shape;
 
+import model.Dimensions;
+import model.PointInt;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
 
 // TODO: Make this an actual factory.  Right now its just a static method to duplicate a shape component.
 public class ShapeFactory  {

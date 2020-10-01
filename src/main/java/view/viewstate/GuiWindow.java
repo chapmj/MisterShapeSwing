@@ -1,4 +1,4 @@
-package view.gui;
+package view.viewstate;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -21,18 +22,14 @@ import view.EventName;
 import view.interfaces.IGuiWindow;
 
 public class GuiWindow extends JFrame implements IGuiWindow {
-    private final int defaultWidth = 1250;
-    private final int defaultHeight = 800;
-    private final String defaultTitle = "MisterShape";
-    private final Insets defaultButtonDimensions 
-    	= new Insets(5, 8, 5, 8);
     private final Map<EventName, JButton> eventButtons = new HashMap<>();
 
-    public GuiWindow(JComponent canvas){
+    public GuiWindow(JComponent canvas, int width, int height, String title)
+    {
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle(defaultTitle);
-        setSize(defaultWidth, defaultHeight);
+        setTitle(title);
+        setSize(width, height);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         JPanel window = createWindow();
         window.add(canvas, BorderLayout.CENTER);
@@ -56,10 +53,8 @@ public class GuiWindow extends JFrame implements IGuiWindow {
 
     private JPanel createMenu() {
         JPanel buttonPanel = createButtonPanel();
-
-        for(EventName eventName : EventName.values()){
-            addButtonToPanel(eventName, buttonPanel);
-        }
+        Stream.of(EventName.values())
+                .forEach((eventName) -> addButtonToPanel(eventName, buttonPanel));
 
         return buttonPanel;
     }
@@ -80,7 +75,7 @@ public class GuiWindow extends JFrame implements IGuiWindow {
 
 	private Border createButtonBorder() {
         Border line = new LineBorder(Color.BLACK);
-        Border margin = new EmptyBorder(defaultButtonDimensions);
+        Border margin = new EmptyBorder(new Insets(5,5,5,5));
     	return new CompoundBorder(line, margin);
 	}
 

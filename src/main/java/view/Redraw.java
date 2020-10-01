@@ -1,24 +1,16 @@
 package view;
 
-import java.util.ArrayList;
+import model.*;
+import model.shape.ShapeComponent;
+import model.shape.*;
+import view.viewstate.ViewState;
 
-import controller.CanvasController;
-import model.Dimensions;
-import model.PointInt;
-import model.Shape;
-import model.ShapeCardinality;
-import model.ShapeColor;
-import model.ShapeShadingType;
-import model.ShapeStyle;
-import model.ShapeType;
-import model.interfaces.ShapeComponent;
-import view.interfaces.PaintCanvasBase;
+import java.util.List;
 
 // Check canvas state and redraw everything.
 public class Redraw {
-	private static PaintCanvasBase paintCanvas = CanvasController.getInstance().getPaintCanvas();
-	
-	public static void execute(ArrayList<ShapeComponent> shapeComponents) throws Exception {
+
+	public static void execute(List<ShapeComponent> shapeComponents) throws Exception {
 		ShapeDrawer shapeDrawer = new ShapeDrawer();
 		shapeDrawer.add(clearCanvas());
 		shapeDrawer.add(shapeComponents);
@@ -26,13 +18,16 @@ public class Redraw {
 	}
 	
 	// Make a big white triangle the size of the canvas.
-	static ShapeComponent clearCanvas() {
+	static ShapeComponent clearCanvas()
+	{
+		var canvas = ViewState.getCanvas();
+
 		return new Shape (
 			ShapeType.RECTANGLE,
-			new Dimensions(paintCanvas.getHeight(),paintCanvas.getWidth()),
+			new Dimensions(canvas.getHeight(),canvas.getWidth()),
 			new ShapeStyle(
-				ShapeColor.WHITE, 
-				ShapeColor.WHITE, 
+				ShapeColor.WHITE,
+				ShapeColor.WHITE,
 				ShapeShadingType.FILLED_IN),
 			ShapeCardinality.NE,
 			new PointInt(0,0));

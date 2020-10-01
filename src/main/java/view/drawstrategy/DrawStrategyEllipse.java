@@ -1,15 +1,13 @@
-package view;
+package view.drawstrategy;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.util.ArrayList;
+import java.awt.*;
 
-import controller.CanvasController;
 import model.Selection;
-import model.ShapeShadingType;
+import model.shape.ShapeShadingType;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
+import model.shape.ShapeComponent;
+import model.persistence.ModelState;
+import view.viewstate.ViewState;
 
 /* Create Graphics objects and paint them to canvas.
  * Specific graphic type in class name.
@@ -18,25 +16,23 @@ import model.interfaces.ShapeComponent;
 public class DrawStrategyEllipse extends DrawStrategy {
 
 	private Stroke stroke;
-	private CanvasController canvasController;
-	private Graphics2D g2D;
+	private Graphics2D graphics;
 	private IShape shape;
 	private Color primaryColor;
 	private Color secondaryColor;
 	private ShapeShadingType shadingType;
 	private DrawStrategyCommon common;
 
-	public DrawStrategyEllipse(CanvasController canvasController, ShapeComponent shape) {
+	public DrawStrategyEllipse(ShapeComponent shape) {
 		super();
-		this.canvasController = canvasController;
-		this.g2D = canvasController.getGraphics2D();
+		this.graphics = ViewState.getGraphics();
 		this.shape = (IShape) shape;
 		this.common = new DrawStrategyCommon((IShape) shape);
 		setStyleParams();
 	}
 
 	@Override
-	public void execute() {
+	public void draw() {
 		paintShapeWithShading();
 		drawSelection();
 	}
@@ -64,13 +60,13 @@ public class DrawStrategyEllipse extends DrawStrategy {
 	}
 		
 	private void drawSelection() {
-		ArrayList <IShape> selectedShapes = canvasController.getShapeSelectionList();
+		var selectedShapes = ModelState.getShapeSelectionList();
 		if (selectedShapes.contains(shape)) {
 			IShape selection = (IShape) (new Selection((ShapeComponent) shape, 10).getSelectionShape());
 			
-			g2D.setColor(Color.BLACK);
-			g2D.setStroke(stroke);
-			g2D.drawOval(
+			graphics.setColor(Color.BLACK);
+			graphics.setStroke(stroke);
+			graphics.drawOval(
 				selection.getAnchor().getX(),
 				selection.getAnchor().getY(),
 				selection.getWidth(),
@@ -79,9 +75,9 @@ public class DrawStrategyEllipse extends DrawStrategy {
 	}
 
 	private void drawShape(Color color) {
-		g2D.setColor(color);
-		g2D.setStroke(stroke);
-		g2D.drawOval(
+		graphics.setColor(color);
+		graphics.setStroke(stroke);
+		graphics.drawOval(
 			shape.getAnchor().getX(), 
 			shape.getAnchor().getY(), 
 			shape.getWidth(),
@@ -89,8 +85,8 @@ public class DrawStrategyEllipse extends DrawStrategy {
 	}
 
 	private void fillShape(Color color) {
-		g2D.setColor(color);
-		g2D.fillOval(
+		graphics.setColor(color);
+		graphics.fillOval(
 			shape.getAnchor().getX(), 
 			shape.getAnchor().getY(), 
 			shape.getWidth(),

@@ -1,8 +1,10 @@
-package model;
+package model.shape;
 
-import model.interfaces.ShapeComponent;
+import model.Dimensions;
+import model.PointInt;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import controller.CanvasUtils;
 import model.interfaces.IShape;
@@ -112,7 +114,7 @@ public class Shape extends ShapeComponent implements IShape, Cloneable {
 	}
 
 	@Override
-	public ArrayList<IShape> getShapes() {
+	public List<IShape> getShapes() {
 		ArrayList<IShape> list = new ArrayList<>();
 		list.add(this);
 		return list;

@@ -2,10 +2,7 @@ package model.interfaces;
 
 import model.Dimensions;
 import model.PointInt;
-import model.ShapeCardinality;
-import model.ShapeColor;
-import model.ShapeStyle;
-import model.ShapeType;
+import model.shape.*;
 
 /* IShape is an interface to represent
  * shapes.  Each shape has a type and some generic dimensions.

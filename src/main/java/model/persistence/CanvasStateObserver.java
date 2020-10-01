@@ -1,16 +1,18 @@
 package model.persistence;
 
-import controller.CanvasController;
-import model.interfaces.IObservableObserver;
+import controller.JPaintController;
+import model.interfaces.IObservable;
+
+import static controller.JPaintController.*;
 
 /* Observes the canvasState object for changes
  */
-public class CanvasStateObserver implements IObservableObserver {
-	CanvasController canvasController;
+public class CanvasStateObserver implements IObservable
+{
 	CanvasStateSubject subject;
 
-	public CanvasStateObserver(CanvasController canvasController, CanvasStateSubject subject) {
-		this.canvasController= canvasController;
+	public CanvasStateObserver(CanvasStateSubject subject) {
+		//this.canvasController= canvasController;
 		this.subject = subject;
 	}
 
@@ -18,8 +20,16 @@ public class CanvasStateObserver implements IObservableObserver {
  * keep the canvas view in sync with the model data
  */
 	@Override
-	public void update() throws Exception {
-		canvasController.redraw();
+	public void update()
+	{
+        try
+		{
+			JPaintController.getInstance().redraw();
+		}
+        catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 }

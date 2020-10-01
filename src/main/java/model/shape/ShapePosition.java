@@ -1,6 +1,8 @@
-package model;
+package model.shape;
 
-/* Represents where a shape is on the canvas.  Two points with (X,Y) coordinates. 
+import model.PointInt;
+
+/* Represents where a shape is on the canvas.  Two points with (X,Y) coordinates.
  * Represent upper left and lower right corners of the shape boundaries.
  */
 public class ShapePosition {

@@ -2,11 +2,11 @@ package model.persistence;
 
 import java.io.Serializable;
 
-import model.ShapeColor;
-import model.ShapeShadingType;
-import model.ShapeStyle;
-import model.ShapeType;
-import model.StartAndEndPointMode;
+import model.shape.ShapeColor;
+import model.shape.ShapeShadingType;
+import model.shape.ShapeStyle;
+import model.shape.ShapeType;
+import model.shape.StartAndEndPointMode;
 import model.dialogs.DialogProvider;
 import model.interfaces.IApplicationState;
 import model.interfaces.IDialogProvider;
@@ -19,65 +19,96 @@ public class ApplicationState implements IApplicationState, Serializable {
     private final IUiModule uiModule;
     private final IDialogProvider dialogProvider;
 
-    private ShapeType activeShapeType;
-    private ShapeColor activePrimaryColor;
-    private ShapeColor activeSecondaryColor;
-    private ShapeShadingType activeShapeShadingType;
-    private StartAndEndPointMode activeStartAndEndPointMode;
+    private ShapeType uiShapeType;
+    private ShapeColor uiPrimaryColor;
+    private ShapeColor uiSecondaryColor;
+    private ShapeShadingType uiShapeShadingType;
+    private StartAndEndPointMode uiStartAndEndPointMode;
 
-    public ApplicationState(IUiModule uiModule) {
+    public ApplicationState(IUiModule uiModule)
+    {
         this.uiModule = uiModule;
         this.dialogProvider = new DialogProvider(this);
-        setDefaults();
+        uiShapeType = ShapeType.ELLIPSE;
+        uiPrimaryColor = ShapeColor.BLUE;
+        uiSecondaryColor = ShapeColor.GREEN;
+        uiShapeShadingType = ShapeShadingType.FILLED_IN;
+        uiStartAndEndPointMode = StartAndEndPointMode.DRAW;
     }
 
     @Override
-    public void setActiveShape() {
-        activeShapeType = uiModule.getDialogResponse(dialogProvider.getChooseShapeDialog());
+    public void setUiShape()
+    {
+        uiShapeType = uiModule.getDialogResponse(dialogProvider.getChooseShapeDialog());
     }
 
     @Override
-    public void setActivePrimaryColor() {
-        activePrimaryColor = uiModule.getDialogResponse(dialogProvider.getChoosePrimaryColorDialog());
+    public void setUiPrimaryColor()
+    {
+        uiPrimaryColor = uiModule.getDialogResponse(dialogProvider.getChoosePrimaryColorDialog());
     }
 
     @Override
-    public void setActiveSecondaryColor() {
-        activeSecondaryColor = uiModule.getDialogResponse(dialogProvider.getChooseSecondaryColorDialog());
+    public void setUiSecondaryColor()
+    {
+        uiSecondaryColor = uiModule.getDialogResponse(dialogProvider.getChooseSecondaryColorDialog());
     }
 
     @Override
-    public void setActiveShadingType() {
-        activeShapeShadingType = uiModule.getDialogResponse(dialogProvider.getChooseShadingTypeDialog());
+    public void setUiShadingType()
+    {
+        uiShapeShadingType = uiModule.getDialogResponse(dialogProvider.getChooseShadingTypeDialog());
     }
 
     @Override
-    public void setActiveStartAndEndPointMode() {
-        activeStartAndEndPointMode = uiModule.getDialogResponse(dialogProvider.getChooseStartAndEndPointModeDialog());
+    public void setUiStartAndEndPointMode()
+    {
+        uiStartAndEndPointMode = uiModule.getDialogResponse(dialogProvider.getChooseStartAndEndPointModeDialog());
+    }
+    //end mutators
+
+    @Override
+    public ShapeType getShapeType()
+    {
+        return this.uiShapeType;
     }
 
     @Override
-    public ShapeType getActiveShapeType() {
-        return activeShapeType;
+    public ShapeColor getPrimaryColor()
+    {
+        return this.uiPrimaryColor;
     }
 
     @Override
-    public StartAndEndPointMode getActiveStartAndEndPointMode() {
-        return activeStartAndEndPointMode;
+    public ShapeColor getSecondaryColor()
+    {
+        return this.uiSecondaryColor;
+    }
+
+    @Override
+    public ShapeShadingType getShadingType()
+    {
+        return this.uiShapeShadingType;
+    }
+
+    @Override
+    public StartAndEndPointMode getStartAndEndPointMode()
+    {
+        return this.uiStartAndEndPointMode;
     }
     
-    public ShapeStyle getShapeStyle() {
-        return new ShapeStyle(
-        	activePrimaryColor,
-			activeSecondaryColor,
-			activeShapeShadingType);
+    public ShapeStyle getShapeStyle()
+    {
+        var x = new ShapeStyle(null,null,null);
+        return new ShapeStyle(this.getPrimaryColor(), this.getSecondaryColor(), this.getShadingType());
     }
     
-    private void setDefaults() {
-        activeShapeType = ShapeType.ELLIPSE;
-        activePrimaryColor = ShapeColor.BLUE;
-        activeSecondaryColor = ShapeColor.GREEN;
-        activeShapeShadingType = ShapeShadingType.FILLED_IN;
-        activeStartAndEndPointMode = StartAndEndPointMode.DRAW;
+    private void setDefaults()
+    {
+        uiShapeType = ShapeType.ELLIPSE;
+        uiPrimaryColor = ShapeColor.BLUE;
+        uiSecondaryColor = ShapeColor.GREEN;
+        uiShapeShadingType = ShapeShadingType.FILLED_IN;
+        uiStartAndEndPointMode = StartAndEndPointMode.DRAW;
     }
 }

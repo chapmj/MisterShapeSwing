@@ -1,4 +1,4 @@
-package view.interfaces;
+package controller;
 
 import java.awt.Graphics2D;
 

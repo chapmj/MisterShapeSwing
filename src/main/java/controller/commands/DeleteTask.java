@@ -1,11 +1,12 @@
 package controller.commands;
 
-import java.util.ArrayList;
-
-import controller.CanvasController;
 import controller.interfaces.ICanvasControllerCommand;
-import model.interfaces.ShapeComponent;
+import model.shape.ShapeComponent;
 import model.persistence.CanvasState;
+import model.persistence.ModelState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /* Responsible for updating the model's canvas state.
  * Used to remove shapes from the canvas.
@@ -13,15 +14,14 @@ import model.persistence.CanvasState;
 public class DeleteTask implements ICanvasControllerCommand {
 
 	private CanvasState canvasState;
-	private ArrayList<ShapeComponent> selection;
-	private ArrayList<ShapeComponent> selectionCopy;
-	private CanvasController canvasController = CanvasController.getInstance();
+	private List<ShapeComponent> selection;
+	private List<ShapeComponent> selectionCopy;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public DeleteTask(ArrayList<ShapeComponent> selection) {
-		this.canvasState = canvasController.getCanvasState();
+	public DeleteTask(List<ShapeComponent> selection) {
+		this.canvasState = ModelState.getCanvasState();
 		this.selection = selection;
 	}
 
@@ -29,20 +29,20 @@ public class DeleteTask implements ICanvasControllerCommand {
 	 * it back to the canvas shape list.
 	 */
 	@Override
-	public void undo() throws Exception {
+	public void undo() {
 		canvasState.addComponent(selectionCopy);
 	}
 
 	// Remove the shape from the model's shape list 
 	@Override
-	public void redo() throws Exception {
+	public void redo() {
 		canvasState.removeComponent(selectionCopy);
 	}
 
 	// Remove the shape from the model's shape list 
 	@Override
-	public void execute() throws Exception {
-		selectionCopy = new ArrayList<ShapeComponent>(selection);
+	public void execute() {
+		selectionCopy = new ArrayList<>(selection);
 		canvasState.removeComponent(selectionCopy);
 		canvasState.clearComponentSelectionList();
 	}

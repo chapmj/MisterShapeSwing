@@ -1,14 +1,12 @@
-package view;
+package view.drawstrategy;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.util.ArrayList;
-
-import controller.CanvasController;
 import model.Selection;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
+import model.shape.ShapeComponent;
+import model.persistence.ModelState;
+import view.viewstate.ViewState;
+
+import java.awt.*;
 
 /* Create Graphics objects and paint them to canvas.
  * Specific graphic type in class name.
@@ -21,34 +19,36 @@ import model.interfaces.ShapeComponent;
  */
 
 public class DrawStrategyInvisibleRect extends DrawStrategy {
-	private CanvasController canvasController;
-	private Graphics2D g2D;
+	private Graphics2D graphics;
 	private ShapeComponent group;
 	private BasicStroke stroke;
 
-	public DrawStrategyInvisibleRect(ShapeComponent group) {
+	public DrawStrategyInvisibleRect(ShapeComponent group)
+	{
 		super();
-		this.canvasController = CanvasController.getInstance();
-		this.g2D = canvasController.getGraphics2D();
+		this.graphics = ViewState.getGraphics();
 		this.group = group;
 		setStyleParams();	
 	}
 	
-	public void execute() {
+	public void draw()
+	{
 		drawSelection();
 	}
 
-	private void setStyleParams() {
+	private void setStyleParams()
+	{
 		stroke = DrawStrategyCommon.makeStroke();
 	}
 	
 	private void drawSelection() {
-		ArrayList<ShapeComponent> selectedComponents = canvasController.getShapeComponentSelectionList();
+		var selectedComponents= ModelState.getShapeComponentSelectionList();
+
 		if (selectedComponents.contains(group)) {
 			IShape selection = (IShape) (new Selection(group, 10).getSelectionShape());
-			g2D.setColor(Color.RED);
-			g2D.setStroke(stroke);
-			g2D.drawRect(
+			graphics.setColor(Color.RED);
+			graphics.setStroke(stroke);
+			graphics.drawRect(
 				selection.getAnchor().getX(),
 				selection.getAnchor().getY(),
 				selection.getWidth(),

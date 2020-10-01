@@ -1,4 +1,4 @@
-package model;
+package model.shape;
 
 public enum ShapeShadingType {
     FILLED_IN,

@@ -1,44 +1,55 @@
 package model.persistence;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
-import controller.JPaintController;
 import model.PointInt;
-import model.ShapeGroup;
+import model.shape.ShapeGroup;
 import model.interfaces.ICanvasState;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
+import model.shape.ShapeComponent;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /* Stores data for interactions with the canvas.
  */
-public class CanvasState implements ICanvasState {
+public class CanvasState implements ICanvasState
+{
 
 	private PointInt lastPasteLocation;
-	private PointInt mousePressed;
-	private PointInt mouseReleased;
-	private ArrayList<ShapeGroup> shapeGroups;
-	private ArrayList<ShapeComponent> componentSelectionList;
-	private ArrayList<ShapeComponent> componentList; 
-	private ArrayList<ShapeComponent> componentCopyBuffer;
+	private PointInt mousePressedCoord;
+	private PointInt mouseReleasedCoord;
+	private List<ShapeGroup> shapeGroups;
+	private List<ShapeComponent> componentSelectionList;
+	private List<ShapeComponent> componentList;
+	private List<ShapeComponent> componentCopyBuffer;
+	CanvasStateSubject canvasStateSubject;
 
-	public CanvasState(JPaintController controller) {
-		this.mousePressed = new PointInt();
-		this.mouseReleased = new PointInt();
+	public CanvasState() {
+		this.mousePressedCoord = new PointInt();
+		this.mouseReleasedCoord = new PointInt();
 		this.shapeGroups = new ArrayList<>();
 		this.componentSelectionList = new ArrayList<>();
 		this.componentList = new ArrayList<>();
 		this.componentCopyBuffer  = new ArrayList<>();
 		this.lastPasteLocation = new PointInt(0,0);
+		this.canvasStateSubject = new CanvasStateSubject();
 	}
 
 	// DRAWABLES
 
-	public void addComponent(ArrayList<ShapeComponent> components) {
+	public void addComponent(ShapeComponent component)
+	{
+		componentList.add(component);
+	}
+
+	public void addComponent(List<ShapeComponent> components)
+	{
 		componentList.addAll(components);
 	}
 
-	public void removeComponent(ArrayList<ShapeComponent> components) {
+	public void removeComponent(List<ShapeComponent> components) {
 		componentList.removeAll(components);
 	}
 
@@ -46,32 +57,39 @@ public class CanvasState implements ICanvasState {
 		componentList.remove(shapeComponent);
 	}
 
-	public ArrayList<ShapeComponent> getComponentList() {
+	public List<ShapeComponent> getComponentList()
+	{
 		return componentList;
 	}
 
 	// SELECTABLES
-	public void addComponentSelection(ArrayList<ShapeComponent> componentSelection) throws Exception {
+	public void addComponentSelection(List<ShapeComponent> componentSelection)
+	{
 		componentSelectionList.addAll(componentSelection);
 	}
-	public void addComponentSelection(ShapeComponent component) throws Exception {
+	public void addComponentSelection(ShapeComponent component)
+	{
 		componentSelectionList.add(component);
 	}
 
-	public ArrayList<ShapeComponent> getComponentSelectionList () {
+	public List<ShapeComponent> getComponentSelectionList ()
+	{
 		return componentSelectionList;
 	}
 	
-	public void clearComponentSelectionList() {
+	public void clearComponentSelectionList()
+	{
 		componentSelectionList.clear();
 	}
 
 	// COPYABLES
-	public ArrayList<ShapeComponent> getComponentCopyBuffer() {
+	public List<ShapeComponent> getComponentCopyBuffer()
+	{
 		return componentCopyBuffer;
 	}
 
-	public void setComponentCopyBuffer(ArrayList<ShapeComponent> copyBuffer) {
+	public void setComponentCopyBuffer(List<ShapeComponent> copyBuffer)
+	{
 		this.componentCopyBuffer = copyBuffer;
 	}
 
@@ -85,66 +103,62 @@ public class CanvasState implements ICanvasState {
 	}
 
 	// MOUSE 
-	public void setMousePressed(PointInt point) {
-		mousePressed = point; 
+	public void setMousePressed(PointInt point)
+	{
+		mousePressedCoord = point;
 	}
 	
-	public PointInt getMousePressed() {
-		return mousePressed;
+	public PointInt getMousePressed()
+	{
+		return mousePressedCoord;
 	}
 
-	public void setMouseReleased(PointInt point) throws Exception {
-		mouseReleased = point; 
+	public void setMouseReleased(PointInt point)
+	{
+		mouseReleasedCoord = point;
 	}
 	
-	public PointInt getMouseReleased() {
-		return mouseReleased;
+	public PointInt getMouseReleased()
+	{
+		return mouseReleasedCoord;
 	}
 
 	// GROUPABLES
-	public ArrayList<ShapeGroup> getShapeGroups() {
-		ArrayList<ShapeComponent> list = getComponentList();
-		ArrayList<ShapeGroup> listA = new ArrayList<>(); 
-
-		listA = (ArrayList<ShapeGroup>) list
-			.stream()
-			.filter((c) -> c instanceof ShapeGroup)
-			.map((c) -> (ShapeGroup) c)
-			.collect(Collectors.toList());
-		return listA;
+	public List<ShapeGroup> getShapeGroups() {
+		return this.componentList.stream()
+				.filter((c) -> c instanceof ShapeGroup)
+				.map((c) -> (ShapeGroup) c)
+				.collect(Collectors.toList());
 	}
 
-	public void addSelectionGroup(ShapeGroup group) throws Exception {
+	public void addSelectionGroup(ShapeGroup group) {
 		shapeGroups.add(group);
 	}
 	
-	public void removeSelectionGroup(ShapeGroup group) throws Exception {
+	public void removeSelectionGroup(ShapeGroup group) {
 		shapeGroups.remove(group);
 	}
 
-	public ArrayList<ShapeGroup> getGroupList() {
+	public List<ShapeGroup> getGroupList() {
 		return shapeGroups;
 	}
 
 	@Override
-	public ArrayList<IShape> getShapeList() {
-		ArrayList<ShapeComponent> list = getComponentList();
-		ArrayList<IShape> listA = new ArrayList<>(); 
+	public List<IShape> getShapeList() {
+		return componentList.stream()
+				.flatMap((shapeComponent) -> Stream.of(shapeComponent.getShapes()))
+				.flatMap(Collection::stream)
+                .distinct()
+				.collect(Collectors.toList());
 
-		for (ShapeComponent c : list) 
-			listA.addAll(c.getShapes());
-
-		listA.stream().distinct().collect(Collectors.toList());
-		return listA;
 	}
 	
-	public ArrayList<IShape> getShapeSelectionList() {
-		ArrayList<IShape> shapeSelectionList = new ArrayList<>();
-		shapeSelectionList.addAll(componentSelectionList.stream()
-			.filter ((component) -> component instanceof IShape)
-			.map((component) -> (IShape) component)
-			.collect (Collectors.toList()));
-		return shapeSelectionList;
+	public List<IShape> getShapeSelectionList() {
+		return Stream.of(componentSelectionList)
+				.filter ((component) -> component instanceof IShape)
+				.map((component) -> (IShape) component)
+				.collect (Collectors.toList());
+
 	}
 
 	public void addShapeGroup(ShapeGroup group) {
@@ -152,14 +166,4 @@ public class CanvasState implements ICanvasState {
 		list.add(group);
 		addComponent(list);	
 	}
-
-	public void addShapeGroup(ArrayList<ShapeGroup> components) {
-		ArrayList<ShapeComponent> list = new ArrayList<>();
-		list.addAll(componentSelectionList.stream()
-			.map((component) -> (ShapeComponent) component)
-			.collect (Collectors.toList()));
-
-		addComponent(list);	
-	}
-
 }

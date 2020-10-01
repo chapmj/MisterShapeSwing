@@ -1,4 +1,4 @@
-package model;
+package model.shape;
 
 public final class ShapeStyle {
 	public final ShapeColor primaryColor;

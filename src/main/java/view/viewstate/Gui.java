@@ -1,4 +1,4 @@
-package model;
+package view.viewstate;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -11,15 +11,15 @@ import view.interfaces.IUiModule;
 
 public class Gui implements IUiModule {
 
-    private final IGuiWindow gui;
+    private final IGuiWindow guiWindow;
 
-    public Gui(IGuiWindow gui) {
-        this.gui = gui;
+    public Gui(IGuiWindow guiWindow) {
+        this.guiWindow = guiWindow;
     }
     
 	@Override
 	public void addEvent(EventName eventName, IEventCallback callback) {
-		JButton button = gui.getButton(eventName);
+		JButton button = guiWindow.getButton(eventName);
 		button.addActionListener((ActionEvent) -> callback.run());
 	}
 

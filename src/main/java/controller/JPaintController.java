@@ -2,13 +2,11 @@ package controller;
 
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
-import model.ShapeStyle;
-import model.ShapeType;
-import model.StartAndEndPointMode;
-import model.interfaces.IApplicationState;
+import model.persistence.CanvasStateObserver;
+import model.persistence.ModelState;
 import view.EventName;
-import view.interfaces.IUiModule;
-import view.interfaces.PaintCanvasBase;
+import view.Redraw;
+import view.viewstate.ViewState;
 
 /* JPaintController is responsible for application UI widgets and events 
  * outside the canvas.
@@ -16,55 +14,54 @@ import view.interfaces.PaintCanvasBase;
  */
 
 public class JPaintController implements IJPaintController, ISingleton {
-    private final IUiModule uiModule;
-	private final IApplicationState applicationState;
 	private static JPaintController instance;
+	CanvasStateObserver canvasStateObserver;
 
-    public JPaintController(IUiModule uiModule, IApplicationState applicationState, PaintCanvasBase paintCanvas) throws Exception {
-        this.uiModule = uiModule;
-        this.applicationState = applicationState;
-    }
+	public JPaintController() throws Exception
+	{
+		canvasStateObserver = new CanvasStateObserver(ModelState.getCanvasStateSubject());
+		CanvasControllerCommands.initAfterCanvasStateSubject(); //force static fields to load
+		registerEvents();
+		registerObservers();
+	}
 
-	// Singleton creation code satisfies ISingleton needs.
-	public static JPaintController getInstance() {
+	public static JPaintController getInstance()
+	{
 		if (instance == null) 
 			return null;	
 		else 
 			return instance;
 	}
 	
-	public static void createInstance(IUiModule uiModule, IApplicationState applicationState, PaintCanvasBase paintCanvas) throws Exception {
+	public static void createInstance() throws Exception
+	{
 		if (instance == null)
-			instance = new JPaintController(uiModule, applicationState, paintCanvas);
-	}
-	
-	// Setup callbacks for UI buttons that change UI mode.
-    @Override
-    public void setup() {
-        registerEvents();
-    }
-
-    private void registerEvents() {
-		uiModule.addEvent(EventName.CHOOSE_SHAPE, applicationState::setActiveShape);
-		uiModule.addEvent(EventName.CHOOSE_PRIMARY_COLOR, applicationState::setActivePrimaryColor);
-		uiModule.addEvent(EventName.CHOOSE_SECONDARY_COLOR, applicationState::setActiveSecondaryColor);
-		uiModule.addEvent(EventName.CHOOSE_SHADING_TYPE, applicationState::setActiveShadingType);
-        uiModule.addEvent(EventName.CHOOSE_START_POINT_ENDPOINT_MODE, applicationState::setActiveStartAndEndPointMode);
-    }
-
-    public IUiModule getUiModule() {
-		return uiModule;
+		{
+			instance = new JPaintController();
+		}
 	}
 
-	public ShapeType getActiveShape() {
-		return applicationState.getActiveShapeType();
+	public void redraw() throws Exception {
+		var shapeComponents = ModelState.getCanvasState().getComponentList();
+		Redraw.execute(shapeComponents);
 	}
-	
-	public StartAndEndPointMode getStartAndEndPointMode() {
-		return applicationState.getActiveStartAndEndPointMode();
+
+	private void registerEvents() throws Exception
+	{
+		var ui = ViewState.getUI();
+		ui.addEvent(EventName.COPY, CanvasControllerCommands::copySelection);
+		ui.addEvent(EventName.PASTE, CanvasControllerCommands::pasteSelection);
+		ui.addEvent(EventName.DELETE, CanvasControllerCommands::deleteSelection);
+		ui.addEvent(EventName.GROUP, CanvasControllerCommands::groupSelection);
+		ui.addEvent(EventName.UNGROUP, CanvasControllerCommands::ungroupSelection);
+		ui.addEvent(EventName.UNDO, CanvasControllerCommands::undo);
+		ui.addEvent(EventName.REDO, CanvasControllerCommands::redo);
 	}
-	
-	public ShapeStyle getShapeStyleFromApp() {
-		return applicationState.getShapeStyle();
+
+	// Observe CanvasState fields that concern this controller.
+	private void registerObservers()
+	{
+		ModelState.getCanvasStateSubject().registerObserver(canvasStateObserver);
 	}
+
 }

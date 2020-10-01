@@ -1,38 +1,38 @@
 package model.persistence;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import model.interfaces.IObservableObserver;
+import model.interfaces.IObservable;
 import model.interfaces.IObservableSubject;
 
 // Store canvasState observers
 public class CanvasStateSubject implements IObservableSubject {
 
-	private ArrayList<IObservableObserver> observers = new ArrayList<>();
+	private List<IObservable> observers = new ArrayList<>();
 	
 	public CanvasStateSubject() {
 	
 	}
 
 	@Override
-	public void registerObserver(IObservableObserver obs) {
-		observers.add((CanvasStateObserver) obs);	
+	public void registerObserver(IObservable observer) {
+		observers.add(observer);
 	}
 
 	@Override
-	public void deregisterObserver(IObservableObserver obs) {
+	public void deregisterObserver(IObservable obs) {
 		observers.remove(obs);
 	}
 
 	@Override
-	public ArrayList<IObservableObserver> listObservers() {
+	public List<IObservable> listObservers() {
 		return this.observers;	
 	}
 
 	@Override
 	public void notifyObservers() throws Exception {
-		for (IObservableObserver observer : observers)
-			observer.update();
+		observers.stream().forEach(IObservable::update);
 	}
 
 }

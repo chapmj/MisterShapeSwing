@@ -1,4 +1,6 @@
-package model;
+package model.shape;
+
+import model.PointInt;
 
 // Represent the direction which a shape is rotated.
 public enum ShapeCardinality {

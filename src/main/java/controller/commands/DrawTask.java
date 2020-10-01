@@ -1,67 +1,61 @@
 package controller.commands;
 
-import controller.CanvasController;
 import controller.JPaintController;
 import controller.interfaces.ICanvasControllerCommand;
 import model.Dimensions;
 import model.PointInt;
-import model.ShapeCardinality;
-import model.ShapeFactory;
-import model.ShapePosition;
-import model.ShapeStyle;
-import model.ShapeType;
+import model.interfaces.IApplicationState;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
+import model.persistence.CanvasState;
+import model.persistence.ModelState;
+import model.shape.ShapeComponent;
+import model.shape.*;
 
 /* Responsible for updating the model's canvas state.
  * Used to add shapes to the canvas.
  */
 public class DrawTask implements ICanvasControllerCommand {
 
+	private final CanvasState canvasState;
 	private PointInt startPoint;
 	private PointInt endPoint;
 	private ShapeType shapeType;
 	private ShapeStyle shapeStyle;
 	private IShape shape;
-	JPaintController controller = JPaintController.getInstance();
-	CanvasController canvasController = CanvasController.getInstance();
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public DrawTask(PointInt startPoint, PointInt endPoint) {
-		this.shapeType = controller.getActiveShape();
-		this.shapeStyle = controller.getShapeStyleFromApp().clone();
+	public DrawTask(PointInt startPoint, PointInt endPoint, IApplicationState appState) {
+		this.shapeType = appState.getShapeType();
+		this.shapeStyle = appState.getShapeStyle().clone();
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
+		this.canvasState = ModelState.getCanvasState();
 	}
 
 	// The opposite of drawing is for the shape to not exist on the canvas.
 	@Override
-	public void undo() throws Exception {
-		canvasController.removeComponent((ShapeComponent)shape);
+	public void undo() {
+		canvasState.removeComponent((ShapeComponent)shape);
 	}
 
 	// To redo, put the shape back on the canvas.
 	@Override
-	public void redo() throws Exception {
+	public void redo() {
 		addShapeToShapeList();
 	}
 
 	@Override
-	public void execute() throws Exception {
+	public void execute() {
 		createShape();
 		addShapeToShapeList();
 	}
 	
 	// Helper functions
-	private void addShapeToShapeList() throws Exception {
-		canvasController.addComponent((ShapeComponent)shape);
+	private void addShapeToShapeList() {
+		canvasState.addComponent((ShapeComponent)shape);
 	}
-	
-//	private void removeShapeFromShapeList() throws Exception {
-//		canvasController.removeComponent((ShapeComponent) shape);
-//	}
 	
 	// Makes shape objects to store as data items.
 	private void createShape() {

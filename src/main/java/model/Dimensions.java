@@ -1,5 +1,7 @@
 package model;
 
+import model.shape.ShapePosition;
+
 // Size of a shape object
 public class Dimensions {
 	Integer height;

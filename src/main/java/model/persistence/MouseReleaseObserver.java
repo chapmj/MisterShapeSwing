@@ -1,10 +1,11 @@
 package model.persistence;
 
 import controller.MouseController;
-import model.interfaces.IObservableObserver;
+import model.interfaces.IObservable;
 
 // Watch for when mouse release state data is updated.
-public class MouseReleaseObserver implements IObservableObserver {
+public class MouseReleaseObserver implements IObservable
+{
 
 	private MouseController mouseController;
 
@@ -13,8 +14,16 @@ public class MouseReleaseObserver implements IObservableObserver {
 	}
 
 	@Override
-	public void update() throws Exception {
-		mouseController.mouseReleaseAction();
+	public void update()
+	{
+		try
+		{
+			mouseController.mouseReleaseAction();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 }

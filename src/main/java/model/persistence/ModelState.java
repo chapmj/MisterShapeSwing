@@ -1,0 +1,61 @@
+package model.persistence;
+
+import model.interfaces.IApplicationState;
+import model.interfaces.IShape;
+import model.shape.ShapeComponent;
+
+import java.util.List;
+
+/***
+ * Provide global access to CanvasState, Application State
+ */
+public class ModelState
+{
+    private static IApplicationState applicationState;
+    private static CanvasState canvasState;
+
+    public ModelState(IApplicationState applicationState, CanvasState canvasState)
+    {
+        ModelState.applicationState = applicationState;
+        ModelState.canvasState = canvasState;
+    }
+
+    //provide shape selection list
+
+    public static CanvasState getCanvasState()
+    {
+        return ModelState.canvasState;
+    }
+
+    public static CanvasStateSubject getCanvasStateSubject()
+    {
+        return ModelState.canvasState.canvasStateSubject;
+    }
+
+    public static IApplicationState getApplicationState()
+    {
+        return ModelState.applicationState;
+    }
+
+    public static void update(CanvasState canvasState)
+    {
+        ModelState.canvasState = canvasState;
+    }
+
+    public static void update(ApplicationState applicationState)
+    {
+        ModelState.applicationState = applicationState;
+    }
+
+    public static List<IShape> getShapeSelectionList()
+    {
+        return ModelState.canvasState.getShapeSelectionList();
+    }
+
+    public static List<ShapeComponent> getShapeComponentSelectionList()
+    {
+        return ModelState.canvasState.getComponentSelectionList();
+    }
+
+
+}

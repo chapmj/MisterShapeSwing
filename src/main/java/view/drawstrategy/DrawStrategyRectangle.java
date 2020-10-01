@@ -1,15 +1,13 @@
-package view;
+package view.drawstrategy;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.util.ArrayList;
-
-import controller.CanvasController;
 import model.Selection;
-import model.ShapeShadingType;
+import model.shape.ShapeShadingType;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
+import model.shape.ShapeComponent;
+import model.persistence.ModelState;
+import view.viewstate.ViewState;
+
+import java.awt.*;
 
 /* Create Graphics objects and paint them to canvas.
  * Specific graphic type in class name.
@@ -17,22 +15,29 @@ import model.interfaces.ShapeComponent;
  */
 public class DrawStrategyRectangle extends DrawStrategy {
 
+	private final Graphics2D graphics;
+	private final IShape shape;
+	private final DrawStrategyCommon common;
 	private Stroke stroke;
-	private CanvasController canvasController;
-	private Graphics2D g2D;
-	private IShape shape;
 	private Color primaryColor;
 	private Color secondaryColor;
 	private ShapeShadingType shadingType;
-	private DrawStrategyCommon common;
 
-	public DrawStrategyRectangle(CanvasController canvasController, ShapeComponent shape) {
+	public DrawStrategyRectangle(ShapeComponent shape)
+	{
 		super();
-		this.canvasController = canvasController;
-		this.g2D = canvasController.getGraphics2D();
+		this.graphics = ViewState.getGraphics();
 		this.shape = (IShape) shape;
 		this.common = new DrawStrategyCommon((IShape) shape);
 		setStyleParams();	
+	}
+
+
+	// Draw shape to canvas and then determine if a selection should be drawn as well.
+	@Override
+	public void draw() {
+		paintShapeWithShading();
+		drawSelection();
 	}
 
 	private void setStyleParams() {
@@ -40,13 +45,6 @@ public class DrawStrategyRectangle extends DrawStrategy {
 		primaryColor = common.getPrimaryColor(); 
 		secondaryColor = common.getSecondaryColor(); 
 		shadingType = common.getShadingType();
-	}
-
-	// Draw shape to canvas and then determine if a selection should be drawn as well.
-	@Override
-	public void execute() {
-		paintShapeWithShading();
-		drawSelection();
 	}
 
 	private void paintShapeWithShading() {
@@ -65,9 +63,9 @@ public class DrawStrategyRectangle extends DrawStrategy {
 	}
 
 	private void drawShape(Color color) {
-		g2D.setColor(color);
-		g2D.setStroke(stroke);
-		g2D.drawRect(
+		graphics.setColor(color);
+		graphics.setStroke(stroke);
+		graphics.drawRect(
 			shape.getAnchor().getX(),
 			shape.getAnchor().getY(),
 			shape.getWidth(),
@@ -75,8 +73,8 @@ public class DrawStrategyRectangle extends DrawStrategy {
 	}
 
 	private void fillShape(Color color) {
-		g2D.setColor(color);
-		g2D.fillRect(
+		graphics.setColor(color);
+		graphics.fillRect(
 			shape.getAnchor().getX(),
 			shape.getAnchor().getY(),
 			shape.getWidth(),
@@ -84,12 +82,12 @@ public class DrawStrategyRectangle extends DrawStrategy {
 	}
 
 	private void drawSelection() {
-		ArrayList<IShape> selectedShapes = canvasController.getShapeSelectionList();
+		var selectedShapes = ModelState.getShapeSelectionList();
 		if (selectedShapes.contains(shape)) {
 			IShape selection = (IShape) (new Selection((ShapeComponent) shape, 10).getSelectionShape());
-			g2D.setColor(Color.BLACK);
-			g2D.setStroke(stroke);
-			g2D.drawRect(
+			graphics.setColor(Color.BLACK);
+			graphics.setStroke(stroke);
+			graphics.drawRect(
 				selection.getAnchor().getX(),
 				selection.getAnchor().getY(),
 				selection.getWidth(),

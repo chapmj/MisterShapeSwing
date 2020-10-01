@@ -1,33 +1,33 @@
 package controller.commands;
 
-import java.util.ArrayList;
-import java.util.stream.Stream;
-
-import controller.CanvasController;
+import controller.JPaintController;
 import controller.interfaces.ICanvasControllerCommand;
-import model.ShapeGroup;
 import model.interfaces.IShape;
-import model.interfaces.ShapeComponent;
+import model.shape.ShapeComponent;
 import model.persistence.CanvasState;
+import model.persistence.ModelState;
+import model.shape.ShapeGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 /* Responsible for taking a selection containing shapes or groups
  * and combining them in a group. Add this data to model state.
  */
 public class UngroupTask implements ICanvasControllerCommand {
-	private ArrayList<ShapeComponent> selection;
-	private ArrayList<ShapeComponent> groups;
-	private CanvasController canvasController;
+	private List<ShapeComponent> selection;
+	private List<ShapeComponent> groups;
 	private CanvasState canvasState;
-	private ArrayList<ShapeComponent> groupedShapes;
-	private ArrayList<ShapeComponent> ungroupedShapes;
+	private List<ShapeComponent> groupedShapes;
+	private List<ShapeComponent> ungroupedShapes;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public UngroupTask(ArrayList<ShapeComponent> selection) {
-		this.canvasController = CanvasController.getInstance();
-		this.selection = new ArrayList<ShapeComponent>(selection);
-		this.canvasState = canvasController.getCanvasState();
+	public UngroupTask(List<ShapeComponent> selection) {
+		this.selection = new ArrayList<>(selection);
+		this.canvasState = ModelState.getCanvasState();
 		groups = new ArrayList<>();
 		groupedShapes = new ArrayList<>();
 		ungroupedShapes = new ArrayList<>();
@@ -35,10 +35,10 @@ public class UngroupTask implements ICanvasControllerCommand {
 
 	//Split group, remove group from canvas, add child objects to canvas.
 	@Override
-	public void execute() throws Exception {
+	public void execute() {
 		initializeGroupedShapes();
-		canvasController.removeComponents(groups);
-		canvasController.addComponents(groupedShapes);
+		canvasState.removeComponent(groups);
+		canvasState.addComponent(groupedShapes);
 		canvasState.clearComponentSelectionList();
 		canvasState.addComponentSelection(ungroupedShapes);
 		canvasState.addComponentSelection(groupedShapes);
@@ -76,9 +76,9 @@ public class UngroupTask implements ICanvasControllerCommand {
 
 	// Remove shapes from canvas and add back group.
 	@Override
-	public void undo() throws Exception {
-		canvasController.removeComponents(groupedShapes);
-		canvasController.addComponents(groups);
+	public void undo() {
+		canvasState.removeComponent(groupedShapes);
+		canvasState.addComponent(groups);
 		canvasState.clearComponentSelectionList();
 		canvasState.addComponentSelection(ungroupedShapes);
 		canvasState.addComponentSelection(groups);
@@ -86,7 +86,7 @@ public class UngroupTask implements ICanvasControllerCommand {
 
 	// Remove group and add back shapes.
 	@Override
-	public void redo() throws Exception {
+	public void redo() {
 		execute();
 	}
 }

@@ -1,37 +1,38 @@
 package model.persistence;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import model.interfaces.IObservableObserver;
+import model.interfaces.IObservable;
 import model.interfaces.IObservableSubject;
 
 // Mailbox for mouse observers
 public class MouseReleaseSubject implements IObservableSubject {
 
-	private ArrayList<IObservableObserver> observers = new ArrayList<>();
+	private List<IObservable> observers = new ArrayList<>();
 	
 	public MouseReleaseSubject() {
 	
 	}
 
 	@Override
-	public ArrayList<IObservableObserver> listObservers() {
+	public List<IObservable> listObservers() {
 		return this.observers;	
 	}
 
 	@Override
 	public void notifyObservers() throws Exception {
-		for (IObservableObserver observer : observers)
+		for (IObservable observer : observers)
 			observer.update();
 	}
 
 	@Override
-	public void registerObserver(IObservableObserver obs) {
+	public void registerObserver(IObservable obs) {
 		observers.add((MouseReleaseObserver) obs);	
 	}
 
 	@Override
-	public void deregisterObserver(IObservableObserver obs) {
+	public void deregisterObserver(IObservable obs) {
 		observers.remove(obs);
 	}
 

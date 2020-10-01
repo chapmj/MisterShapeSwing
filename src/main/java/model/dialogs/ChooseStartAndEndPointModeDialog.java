@@ -1,6 +1,6 @@
 package model.dialogs;
 
-import model.StartAndEndPointMode;
+import model.shape.StartAndEndPointMode;
 import model.interfaces.IApplicationState;
 import view.interfaces.IDialogChoice;
 
@@ -29,6 +29,6 @@ public class ChooseStartAndEndPointModeDialog implements IDialogChoice<StartAndE
 
     @Override
     public StartAndEndPointMode getCurrentSelection() {
-        return applicationState.getActiveStartAndEndPointMode();
+        return applicationState.getStartAndEndPointMode();
     }
 }

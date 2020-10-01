@@ -1,8 +1,8 @@
-package view.gui;
+package controller;
 
 import java.awt.Graphics2D;
 
-import view.interfaces.PaintCanvasBase;
+import controller.PaintCanvasBase;
 
 public class PaintCanvas extends PaintCanvasBase {
 

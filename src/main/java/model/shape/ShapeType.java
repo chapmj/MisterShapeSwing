@@ -1,4 +1,4 @@
-package model;
+package model.shape;
 
 public enum ShapeType {
     ELLIPSE,

@@ -1,9 +1,9 @@
 package model.interfaces;
 
 import model.Dimensions;
-import model.Shape;
-import model.ShapeCardinality;
-import model.ShapeStyle;
+import model.shape.Shape;
+import model.shape.ShapeCardinality;
+import model.shape.ShapeStyle;
 
 // TODO: This was a failed pattern that I moved on from.
 public interface IShapeAbstractFactory {

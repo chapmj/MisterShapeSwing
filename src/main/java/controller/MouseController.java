@@ -1,10 +1,10 @@
 package controller;
 
 import model.PointInt;
-import model.persistence.CanvasState;
+import model.persistence.ModelState;
 import model.persistence.MouseReleaseObserver;
 import model.persistence.MouseReleaseSubject;
-import view.MouseHandler;
+import view.viewstate.ViewState;
 
 /* Controller for mouse relate events
  * SINGLETON PATTERN
@@ -15,15 +15,8 @@ public class MouseController {
 	private static MouseController instance;
 	private static MouseReleaseSubject mouseReleaseSubject;
 	private static MouseReleaseObserver mouseReleaseObserver;
-	private static JPaintController controller;
-	private static CanvasController canvasController;
-	private static CanvasState canvasState;
 
-	private MouseController() {
-		canvasController = CanvasController.getInstance();	
-		controller = JPaintController.getInstance();
-		canvasState = canvasController.getCanvasState();
-	}
+	private MouseController() { }
 	
 	private static void postInstance() {
 		mouseReleaseSubject = new MouseReleaseSubject(); 
@@ -44,7 +37,8 @@ public class MouseController {
 	
 	// Assign an observer to watch CanvasState for mouse related state changes.
 	private static void registerMouse() {
-        canvasController.getPaintCanvas().addMouseListener(new MouseHandler());
+        //canvasController.getPaintCanvas().addMouseListener(new MouseHandler());
+        ViewState.getCanvas().addMouseListener(new MouseHandler());
 	}
 
 	// Runs a command depending on application mode when the mouse button is unpressed.
@@ -52,7 +46,7 @@ public class MouseController {
 		PointInt startPoint = getPress();
 		PointInt endPoint = getRelease();
 		if (startPoint != null && endPoint != null) {
-			switch(controller.getStartAndEndPointMode()) {
+			switch(ModelState.getApplicationState().getStartAndEndPointMode()) {
 				case DRAW: 
 					CanvasControllerCommands.draw(startPoint, endPoint);
 					break;
@@ -62,25 +56,30 @@ public class MouseController {
 				case MOVE: 
 					CanvasControllerCommands.moveSelection(startPoint, endPoint);
 					break;
+				default:
+					throw new Exception("Release Mode not implemented");
 			}
 		}
 	}
 
 	// CanvasState interactions
-	public PointInt getPress() {
-		return canvasState.getMousePressed();	
+	public PointInt getPress()
+	{
+		return ModelState.getCanvasState().getMousePressed();
 	}
 
-	public PointInt getRelease() throws Exception {
-		return canvasState.getMouseReleased();	
+	public PointInt getRelease()
+	{
+		return ModelState.getCanvasState().getMouseReleased();
 	}
 
-	public void setPress(int x, int y) {
-		canvasState.setMousePressed(new PointInt(x,y));	
+	public void setPress(int x, int y)
+	{
+		ModelState.getCanvasState().setMousePressed(new PointInt(x,y));
 	}
 
 	public void setRelease(int x, int y) throws Exception {
-		canvasState.setMouseReleased(new PointInt(x,y));	
+		ModelState.getCanvasState().setMouseReleased(new PointInt(x,y));
 		mouseReleaseSubject.notifyObservers();
 	}
 }
