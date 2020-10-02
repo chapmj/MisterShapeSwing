@@ -1,12 +1,11 @@
 package controller.commands;
 
 import controller.CanvasUtils;
-import controller.interfaces.ICanvasControllerCommand;
 import model.PointInt;
-import model.persistence.ModelState;
-import model.shape.ShapeGroup;
-import model.shape.ShapeComponent;
 import model.persistence.CanvasState;
+import model.persistence.ModelState;
+import model.shape.ShapeComponent;
+import model.shape.ShapeGroup;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,14 +14,16 @@ import java.util.stream.Collectors;
  * Used to add shapes to the canvas based on shape components
  * stored in the copy buffer.
  */
-public class PasteTask implements ICanvasControllerCommand {
+public class PasteTask extends AbstractControllerCommand
+{
 
 	private List<ShapeComponent> shapeCopies;
 	private Integer incX = 20;
 	private Integer incY = 20;
 	private CanvasState canvasState;
 
-	public PasteTask() {
+	public PasteTask()
+	{
 		this.canvasState = ModelState.getCanvasState();
 	}
 
@@ -31,7 +32,8 @@ public class PasteTask implements ICanvasControllerCommand {
 	 * the canvas.
 	 */
 	@Override
-	public void execute() {
+	public void execute()
+	{
 		PointInt pasteLocation = canvasState.getLastPasteLocation();
 
 		var copyBuffer = canvasState.getComponentCopyBuffer();
@@ -54,26 +56,30 @@ public class PasteTask implements ICanvasControllerCommand {
 	 * dereferenced.
 	 */
 	@Override
-	public void undo() {
+	public void undo()
+	{
 		decrementPasteLocation();
 		canvasState.removeComponent(shapeCopies);
 	}
 
 	// Put the objects back in the shape list.
 	@Override
-	public void redo() {
+	public void redo()
+	{
 		incrementPasteLocation();
 		canvasState.addComponent(shapeCopies);
 	}
 
 	// Track where to paste something on the canvas.
-	public void decrementPasteLocation() {
+	public void decrementPasteLocation()
+	{
 		Integer deltaX = incX * shapeCopies.size();
 		Integer deltaY = incY * shapeCopies.size();
 		canvasState.getLastPasteLocation().subtract(new PointInt(deltaX,deltaY));
 	}
 
-	public void incrementPasteLocation() {
+	public void incrementPasteLocation()
+	{
 		Integer deltaX = incX * shapeCopies.size();
 		Integer deltaY = incY * shapeCopies.size();
 		canvasState.getLastPasteLocation().add(new PointInt(deltaX,deltaY));

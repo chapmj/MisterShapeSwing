@@ -12,28 +12,23 @@ import java.util.List;
  * the current selection on the canvas.
  */
 
-public class CopyTask implements ICanvasControllerCommand {
+public class CopyTask extends AbstractControllerCommand
+{
 	private List<ShapeComponent> selection;
 	private CanvasState canvasState;
-
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public CopyTask() {
+	public CopyTask()
+	{
 		selection = ModelState.getCanvasState().getComponentSelectionList();
 		canvasState = ModelState.getCanvasState();
 	}
 
-	// Undo/redo not implemented because it would be confusing UX.
 	@Override
-	public void undo() { }
-
-	@Override
-	public void redo() { }
-
-	@Override
-	public void execute() {
+	public void execute()
+	{
 		var copyBuffer = new ArrayList<>(selection);
 		canvasState.setComponentCopyBuffer(copyBuffer);
 	}

@@ -11,7 +11,8 @@ import java.util.List;
 /* Responsible for updating the model's canvas state.
  * Used to remove shapes from the canvas.
  */
-public class DeleteTask implements ICanvasControllerCommand {
+public class DeleteTask extends AbstractControllerCommand
+{
 
 	private CanvasState canvasState;
 	private List<ShapeComponent> selection;
@@ -20,30 +21,35 @@ public class DeleteTask implements ICanvasControllerCommand {
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public DeleteTask(List<ShapeComponent> selection) {
+	public DeleteTask(List<ShapeComponent> selection)
+	{
 		this.canvasState = ModelState.getCanvasState();
 		this.selection = selection;
 	}
 
-	/* The opposite of deleting a shape from canvas is adding 
+	// Remove the shape from the model's shape list
+	@Override
+	public void execute()
+	{
+		selectionCopy = new ArrayList<>(selection);
+		canvasState.removeComponent(selectionCopy);
+		canvasState.clearComponentSelectionList();
+	}
+
+	/* The opposite of deleting a shape from canvas is adding
 	 * it back to the canvas shape list.
 	 */
 	@Override
-	public void undo() {
+	public void undo()
+	{
 		canvasState.addComponent(selectionCopy);
 	}
 
 	// Remove the shape from the model's shape list 
 	@Override
-	public void redo() {
+	public void redo()
+	{
 		canvasState.removeComponent(selectionCopy);
 	}
 
-	// Remove the shape from the model's shape list 
-	@Override
-	public void execute() {
-		selectionCopy = new ArrayList<>(selection);
-		canvasState.removeComponent(selectionCopy);
-		canvasState.clearComponentSelectionList();
-	}
 }

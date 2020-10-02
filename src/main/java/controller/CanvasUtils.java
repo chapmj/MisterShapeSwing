@@ -8,28 +8,8 @@ import model.shape.ShapePosition;
 import java.awt.*;
 import java.util.List;
 
-public class CanvasUtils {
-
-	// Returns true of the coordinates of two rectangles overlap.
-	/*
-	public static boolean compareRects (PointInt anchor1, Dimensions dimension1, PointInt anchor2, Dimensions dimension2) {
-	//Citation: https://www.hackerearth.com/practice/notes/how-to-check-if-two-rectangles-intersect-or-not/
-		int r1TopY = anchor1.getY();
-		int r1BotY = anchor1.getY() + dimension1.getHeight();
-		int r2TopY = anchor2.getY();
-		int r2BotY = anchor2.getY() + dimension2.getHeight();
-		
-		int r1LeftX = anchor1.getX();
-		int r1RightX = anchor1.getX() + dimension1.getWidth();
-		int r2LeftX = anchor2.getX();
-		int r2RightX = anchor2.getX() + dimension2.getWidth();
-		
-		return !((r1LeftX > r2RightX) 
-		      || (r1RightX < r2LeftX) 
-		      || (r1TopY > r2BotY) 
-		      || (r1BotY < r2TopY));
-	}*/
-	
+public class CanvasUtils
+{
 	// Returns true if two rectangle boundaries overlap
 	public static boolean compareRects(ShapePosition pos1, ShapePosition pos2) {
 	
@@ -50,7 +30,8 @@ public class CanvasUtils {
 	}	
 
 	// Translates a shape component to a new position	
-	public static void moveShape(ShapeComponent shape, PointInt translation) {
+	public static void moveShape(ShapeComponent shape, PointInt translation)
+	{
 		shape.setAnchor(
 			new PointInt(
 				shape.getAnchor().getX() + translation.getX(),
@@ -58,11 +39,13 @@ public class CanvasUtils {
 	}
 
 	// Translates a set of shapes components to a new position
-	public static void moveShapes(List<ShapeComponent> components, PointInt translation) {
+	public static void moveShapes(List<ShapeComponent> components, PointInt translation)
+	{
 		components.forEach(c -> moveShape(c,translation));
 	}
 
-	public static Color toColor(ShapeColor color) {
+	public static Color toColor(ShapeColor color)
+	{
 		switch (color) {
 			case BLACK:
 				return Color.BLACK;

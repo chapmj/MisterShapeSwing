@@ -10,12 +10,14 @@ import model.shape.ShapeGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /* Responsible for taking a selection containing shapes or groups
  * and combining them in a group. Add this data to model state.
  */
-public class UngroupTask implements ICanvasControllerCommand {
+public class UngroupTask extends AbstractControllerCommand
+{
 	private List<ShapeComponent> selection;
 	private List<ShapeComponent> groups;
 	private CanvasState canvasState;
@@ -25,7 +27,8 @@ public class UngroupTask implements ICanvasControllerCommand {
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public UngroupTask(List<ShapeComponent> selection) {
+	public UngroupTask(List<ShapeComponent> selection)
+	{
 		this.selection = new ArrayList<>(selection);
 		this.canvasState = ModelState.getCanvasState();
 		groups = new ArrayList<>();
@@ -35,7 +38,8 @@ public class UngroupTask implements ICanvasControllerCommand {
 
 	//Split group, remove group from canvas, add child objects to canvas.
 	@Override
-	public void execute() {
+	public void execute()
+	{
 		initializeGroupedShapes();
 		canvasState.removeComponent(groups);
 		canvasState.addComponent(groupedShapes);
@@ -46,7 +50,8 @@ public class UngroupTask implements ICanvasControllerCommand {
 	}
 
 	// Set up instance fields.
-	private void initializeGroupedShapes() {
+	private void initializeGroupedShapes()
+	{
 		groups.clear();
 		selection.stream()
 			.filter ((component) -> component instanceof ShapeGroup)
@@ -64,19 +69,21 @@ public class UngroupTask implements ICanvasControllerCommand {
 	}
 	
 	// Flatten group to a list of shapes.
-	private ArrayList<ShapeComponent> splitGroup(ShapeComponent component) {
-		ArrayList<ShapeComponent> shapes = new ArrayList<>();
-		if (component instanceof ShapeGroup) {
-			component.getShapes().stream()
-			.map (shape -> (ShapeComponent) shape)
-			.forEach(shapes::add);
+	private List<ShapeComponent> splitGroup(ShapeComponent component)
+	{
+		if (component instanceof ShapeGroup)
+		{
+			return component.getShapes().stream()
+					.map (shape -> (ShapeComponent) shape)
+					.collect(Collectors.toList());
 		}
-		return shapes;
+		return new ArrayList<>();
 	}
 
 	// Remove shapes from canvas and add back group.
 	@Override
-	public void undo() {
+	public void undo()
+	{
 		canvasState.removeComponent(groupedShapes);
 		canvasState.addComponent(groups);
 		canvasState.clearComponentSelectionList();
@@ -86,7 +93,8 @@ public class UngroupTask implements ICanvasControllerCommand {
 
 	// Remove group and add back shapes.
 	@Override
-	public void redo() {
+	public void redo()
+	{
 		execute();
 	}
 }
