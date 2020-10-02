@@ -4,7 +4,6 @@ import model.Dimensions;
 import model.PointInt;
 import model.interfaces.IShape;
 
-// TODO: Make this an actual factory.  Right now its just a static method to duplicate a shape component.
 public class ShapeFactory  {
 	public static IShape createShape(ShapeType type, Dimensions dimensions, ShapeStyle style, ShapeCardinality cardinality, PointInt anchor) {
 		return new Shape(type, dimensions, style, cardinality, anchor);
@@ -24,7 +23,7 @@ public class ShapeFactory  {
 		if (shape instanceof Shape)
 			return (ShapeComponent) duplicateShape((IShape) shape);
 
-		return (ShapeComponent) new Shape(
+		return new Shape(
 			shape.getType(), 
 			shape.getDimensions().clone(), 
 			shape.getAnchor().clone());

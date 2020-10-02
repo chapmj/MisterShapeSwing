@@ -2,6 +2,7 @@ package controller.commands;
 
 import controller.CanvasUtils;
 import model.PointInt;
+import model.api.ModelAPI;
 import model.persistence.CanvasState;
 import model.persistence.ModelState;
 import model.shape.ShapeComponent;
@@ -20,11 +21,9 @@ public class PasteTask extends AbstractControllerCommand
 	private List<ShapeComponent> shapeCopies;
 	private Integer incX = 20;
 	private Integer incY = 20;
-	private CanvasState canvasState;
 
 	public PasteTask()
 	{
-		this.canvasState = ModelState.getCanvasState();
 	}
 
 	/* Get copy buffer and add shapes to model.  Positions remain relative to their
@@ -34,21 +33,28 @@ public class PasteTask extends AbstractControllerCommand
 	@Override
 	public void execute()
 	{
-		PointInt pasteLocation = canvasState.getLastPasteLocation();
+		PointInt pasteLocation = ModelAPI.getPasteLocation();
 
-		var copyBuffer = canvasState.getComponentCopyBuffer();
+		var copyBuffer = ModelAPI.getComponentBuffer();
+
 		this.shapeCopies = copyBuffer.stream()
 				.map(ShapeComponent::clone)
 				.collect(Collectors.toList());
 
-		var moveGroup = new ShapeGroup(shapeCopies);
-		var pasteDelta = new PointInt(
-				(pasteLocation.getX() + incX) - moveGroup.getAnchor().getX(),
-				(pasteLocation.getY() + incY) - moveGroup.getAnchor().getY());
+		shapeCopies.stream().forEach((shapeComponent) -> {
+			var moveGroup = new ShapeGroup(shapeCopies);
+			var pasteDelta = new PointInt(
+					(pasteLocation.getX() + incX) - moveGroup.getAnchor().getX(),
+					(pasteLocation.getY() + incY) - moveGroup.getAnchor().getY());
+			var x = shapeComponent.getAnchor().getX() + pasteDelta.getX();
+			var y = shapeComponent.getAnchor().getY() + pasteDelta.getY();
+			ModelAPI.setShapeLocation(shapeComponent, x ,y);
+		});
 
-		CanvasUtils.moveShapes(shapeCopies, pasteDelta);	
 		incrementPasteLocation();
-		canvasState.addComponent(shapeCopies);
+		ModelAPI.addShapes(shapeCopies);
+		ModelAPI.commit();//changes are made, update observers to redraw
+
 	}
 
 	/* The opposite of Pasting a objects is removing them from the canvas.
@@ -59,7 +65,7 @@ public class PasteTask extends AbstractControllerCommand
 	public void undo()
 	{
 		decrementPasteLocation();
-		canvasState.removeComponent(shapeCopies);
+		ModelAPI.removeComponent(shapeCopies);
 	}
 
 	// Put the objects back in the shape list.
@@ -67,7 +73,7 @@ public class PasteTask extends AbstractControllerCommand
 	public void redo()
 	{
 		incrementPasteLocation();
-		canvasState.addComponent(shapeCopies);
+		ModelAPI.addShapes(shapeCopies);
 	}
 
 	// Track where to paste something on the canvas.
@@ -75,14 +81,14 @@ public class PasteTask extends AbstractControllerCommand
 	{
 		Integer deltaX = incX * shapeCopies.size();
 		Integer deltaY = incY * shapeCopies.size();
-		canvasState.getLastPasteLocation().subtract(new PointInt(deltaX,deltaY));
+		ModelAPI.getPasteLocation().subtract(new PointInt(deltaX,deltaY));
 	}
 
 	public void incrementPasteLocation()
 	{
 		Integer deltaX = incX * shapeCopies.size();
 		Integer deltaY = incY * shapeCopies.size();
-		canvasState.getLastPasteLocation().add(new PointInt(deltaX,deltaY));
+		ModelAPI.getPasteLocation().add(new PointInt(deltaX,deltaY));
 	}
 	
 }

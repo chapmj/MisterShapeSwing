@@ -57,5 +57,17 @@ public class ModelState
         return ModelState.canvasState.getComponentSelectionList();
     }
 
+    public static void refresh()
+    {
+        try
+        {
+            canvasState.canvasStateSubject.notifyObservers();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
 }
