@@ -1,9 +1,7 @@
 package controller.commands;
 
-import controller.interfaces.ICanvasControllerCommand;
+import model.api.ModelAPI;
 import model.shape.ShapeComponent;
-import model.persistence.CanvasState;
-import model.persistence.ModelState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +11,6 @@ import java.util.List;
  */
 public class DeleteTask extends AbstractControllerCommand
 {
-
-	private CanvasState canvasState;
 	private List<ShapeComponent> selection;
 	private List<ShapeComponent> selectionCopy;
 
@@ -23,7 +19,6 @@ public class DeleteTask extends AbstractControllerCommand
 	 */
 	public DeleteTask(List<ShapeComponent> selection)
 	{
-		this.canvasState = ModelState.getCanvasState();
 		this.selection = selection;
 	}
 
@@ -32,8 +27,8 @@ public class DeleteTask extends AbstractControllerCommand
 	public void execute()
 	{
 		selectionCopy = new ArrayList<>(selection);
-		canvasState.removeComponent(selectionCopy);
-		canvasState.clearComponentSelectionList();
+		ModelAPI.removeShapes(selectionCopy);
+		ModelAPI.clearSelection();
 	}
 
 	/* The opposite of deleting a shape from canvas is adding
@@ -42,14 +37,14 @@ public class DeleteTask extends AbstractControllerCommand
 	@Override
 	public void undo()
 	{
-		canvasState.addComponent(selectionCopy);
+		ModelAPI.addShapes(selectionCopy);
 	}
 
 	// Remove the shape from the model's shape list 
 	@Override
 	public void redo()
 	{
-		canvasState.removeComponent(selectionCopy);
+		ModelAPI.removeShapes(selectionCopy);
 	}
 
 }
