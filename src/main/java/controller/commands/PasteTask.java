@@ -1,10 +1,7 @@
 package controller.commands;
 
-import controller.CanvasUtils;
 import model.PointInt;
 import model.api.ModelAPI;
-import model.persistence.CanvasState;
-import model.persistence.ModelState;
 import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
@@ -21,10 +18,6 @@ public class PasteTask extends AbstractControllerCommand
 	private List<ShapeComponent> shapeCopies;
 	private Integer incX = 20;
 	private Integer incY = 20;
-
-	public PasteTask()
-	{
-	}
 
 	/* Get copy buffer and add shapes to model.  Positions remain relative to their
 	 * original position, but set at a paste position initialized to the corner of
@@ -65,7 +58,7 @@ public class PasteTask extends AbstractControllerCommand
 	public void undo()
 	{
 		decrementPasteLocation();
-		ModelAPI.removeComponent(shapeCopies);
+		ModelAPI.removeShapes(shapeCopies);
 	}
 
 	// Put the objects back in the shape list.

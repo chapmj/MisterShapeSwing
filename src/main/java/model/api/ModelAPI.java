@@ -23,7 +23,7 @@ public class ModelAPI
         }
 
 
-        public static void removeComponent(List<ShapeComponent> shapeComponents)
+        public static void removeShapes(List<ShapeComponent> shapeComponents)
         {
                 ModelState.getCanvasState().removeComponent(shapeComponents);
 
