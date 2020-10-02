@@ -15,6 +15,7 @@ public class ModelAPI
 {
         public static void addShapeGroup(ShapeGroup shapeGroup)
         {
+                ModelState.getCanvasState().addShapeGroup(shapeGroup);
 
         }
 
@@ -30,11 +31,16 @@ public class ModelAPI
 
         }
 
-        public static void addComponentSelection()
+        public static void addComponentSelection(ShapeGroup group)
         {
                 //returns a list of components that are in the current selection.
                 //controller calls this to store a list of shapes (Copy Task) then calls puts list of shapes in copybuffer
+            ModelState.getCanvasState().addComponentSelection(group);
 
+        }
+        public static void addComponentSelection(List<ShapeComponent> selection)
+        {
+                ModelState.getCanvasState().addComponentSelection(selection);
         }
 
         public static void transferSelectionToBuffer()
