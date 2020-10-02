@@ -1,6 +1,7 @@
 package model.api;
 
 import model.PointInt;
+import model.interfaces.IShape;
 import model.persistence.CanvasState;
 import model.persistence.ModelState;
 import model.shape.Shape;
@@ -74,6 +75,8 @@ public class ModelAPI
         public static void setShapeLocation(ShapeComponent shapeComponent, int x, int y)
         {
                 shapeComponent.setAnchor(new PointInt(x, y));
+                var z = (IShape) shapeComponent;
+
         }
 
         public static void commit()
@@ -81,4 +84,13 @@ public class ModelAPI
                 ModelState.refresh();
         }
 
+        public static void removeShape(ShapeComponent shape)
+        {
+                ModelState.getCanvasState().removeComponent(shape);
+        }
+
+        public static void addShape(ShapeComponent shape)
+        {
+                ModelState.getCanvasState().addComponent(shape);
+        }
 }

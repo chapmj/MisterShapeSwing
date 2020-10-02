@@ -1,12 +1,9 @@
 package controller.commands;
 
-import controller.interfaces.ICanvasControllerCommand;
 import model.Dimensions;
 import model.PointInt;
+import model.api.ModelAPI;
 import model.interfaces.IApplicationState;
-import model.interfaces.IShape;
-import model.persistence.CanvasState;
-import model.persistence.ModelState;
 import model.shape.*;
 
 /* Responsible for updating the model's canvas state.
@@ -14,13 +11,11 @@ import model.shape.*;
  */
 public class DrawTask extends AbstractControllerCommand
 {
-
-	private final CanvasState canvasState;
 	private PointInt startPoint;
 	private PointInt endPoint;
 	private ShapeType shapeType;
 	private ShapeStyle shapeStyle;
-	private IShape shape;
+	private ShapeComponent shape;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
@@ -31,47 +26,35 @@ public class DrawTask extends AbstractControllerCommand
 		this.shapeStyle = appState.getShapeStyle().clone();
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
-		this.canvasState = ModelState.getCanvasState();
 	}
 
 	// The opposite of drawing is for the shape to not exist on the canvas.
 	@Override
 	public void undo()
 	{
-		canvasState.removeComponent((ShapeComponent)shape);
+		ModelAPI.removeShape(shape);
 	}
 
 	// To redo, put the shape back on the canvas.
 	@Override
 	public void redo()
 	{
-		addShapeToShapeList();
+		ModelAPI.addShape(shape);
 	}
 
 	@Override
 	public void execute()
 	{
-		createShape();
-		addShapeToShapeList();
-	}
-	
-	// Helper functions
-	private void addShapeToShapeList()
-	{
-		canvasState.addComponent((ShapeComponent)shape);
-	}
-	
-	// Makes shape objects to store as data items.
-	private void createShape()
-	{
+	    //Create shape to draw
 		ShapePosition pos = new ShapePosition(startPoint, endPoint);
 		Dimensions dim = new Dimensions(pos);
 		ShapeCardinality card = ShapeCardinality.calculateCardinality(pos);
-        shape = ShapeFactory.createShape(
-			shapeType,
-			dim,	
-			shapeStyle,
-			card,
-			pos.getLeft());
+		shape = (ShapeComponent) ShapeFactory.createShape(
+				shapeType,
+				dim,
+				shapeStyle,
+				card,
+				pos.getLeft());
+		ModelAPI.addShape(shape);
 	}
 }
