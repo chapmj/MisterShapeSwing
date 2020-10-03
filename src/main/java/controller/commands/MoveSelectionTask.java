@@ -1,19 +1,14 @@
 package controller.commands;
 
-import controller.CanvasUtils;
 import model.PointInt;
+import model.api.ModelAPI;
 import model.shape.ShapeComponent;
-import model.persistence.CanvasState;
-import model.persistence.ModelState;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // Responsible for moving all ShapeComponents in a selection to new coordinates.
 public class MoveSelectionTask extends AbstractControllerCommand
 {
-	private PointInt startPoint;
-	private PointInt endPoint;
 	private Integer deltaX;
 	private Integer deltaY;
 	private List<ShapeComponent> selection;
@@ -23,43 +18,51 @@ public class MoveSelectionTask extends AbstractControllerCommand
 	 */
 	public MoveSelectionTask(PointInt startPoint, PointInt endPoint)
 	{
-		CanvasState canvasState = ModelState.getCanvasState();
-		this.startPoint = startPoint;
-		this.endPoint = endPoint;
-		this.selection = new ArrayList<>(canvasState.getComponentSelectionList());
+		this.deltaX = endPoint.getX() - startPoint.getX();
+		this.deltaY = endPoint.getY() - startPoint.getY();
+		this.selection = ModelAPI.getSelection();
 	}
 
 	// Store relative change to position then move selected components.
 	@Override
 	public void execute()
 	{
-		setDelta();
-		move();
+		this.move();
 	}
 
 	// The opposite of moving by a delta is moving by a minus delta.
 	@Override
 	public void undo()
 	{
-		CanvasUtils.moveShapes(selection, new PointInt(-deltaX, -deltaY));
+		this.moveBack();
 	}
 
 	// Move stored selection.
 	@Override
 	public void redo()
 	{
-		move();
+		this.move();
 	}
 
 	// Move selection components by a delta relative point.
 	private void move()
 	{
-		CanvasUtils.moveShapes(selection, new PointInt(deltaX, deltaY));
+		selection.forEach((shapeComponent)->
+		{
+			var x = shapeComponent.getAnchor().getX() + deltaX;
+			var y = shapeComponent.getAnchor().getY() + deltaY;
+			ModelAPI.setShapeLocation(shapeComponent, x, y);
+		});
 	}
-	
-	private void setDelta()
+
+	private void moveBack()
 	{
-		deltaX = endPoint.getX() - startPoint.getX();
-		deltaY = endPoint.getY() - startPoint.getY();
-	}	
+		selection.forEach((shapeComponent)->
+		{
+			var x = shapeComponent.getAnchor().getX() - deltaX;
+			var y = shapeComponent.getAnchor().getY() - deltaY;
+			ModelAPI.setShapeLocation(shapeComponent, x, y);
+		});
+	}
+
 }

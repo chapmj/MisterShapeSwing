@@ -2,9 +2,7 @@ package model.api;
 
 import model.PointInt;
 import model.interfaces.IShape;
-import model.persistence.CanvasState;
 import model.persistence.ModelState;
-import model.shape.Shape;
 import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
@@ -16,7 +14,6 @@ public class ModelAPI
         public static void addShapeGroup(ShapeGroup shapeGroup)
         {
                 ModelState.getCanvasState().addShapeGroup(shapeGroup);
-
         }
 
         public static void addShapes(List<ShapeComponent> shapes)
@@ -28,16 +25,20 @@ public class ModelAPI
         public static void removeShapes(List<ShapeComponent> shapeComponents)
         {
                 ModelState.getCanvasState().removeComponent(shapeComponents);
+        }
 
+        public static List<ShapeComponent> getSelection()
+        {
+                return ModelState.getShapeComponentSelectionList();
         }
 
         public static void addComponentSelection(ShapeGroup group)
         {
                 //returns a list of components that are in the current selection.
                 //controller calls this to store a list of shapes (Copy Task) then calls puts list of shapes in copybuffer
-            ModelState.getCanvasState().addComponentSelection(group);
-
+                ModelState.getCanvasState().addComponentSelection(group);
         }
+
         public static void addComponentSelection(List<ShapeComponent> selection)
         {
                 ModelState.getCanvasState().addComponentSelection(selection);
@@ -46,7 +47,6 @@ public class ModelAPI
         public static void transferSelectionToBuffer()
         {
                 var canvasState = ModelState.getCanvasState();
-
                 var selection = canvasState.getComponentSelectionList();
                 canvasState.setComponentCopyBuffer(selection);
         }
@@ -82,7 +82,6 @@ public class ModelAPI
         {
                 shapeComponent.setAnchor(new PointInt(x, y));
                 var z = (IShape) shapeComponent;
-
         }
 
         public static void commit()
@@ -98,5 +97,10 @@ public class ModelAPI
         public static void addShape(ShapeComponent shape)
         {
                 ModelState.getCanvasState().addComponent(shape);
+        }
+
+        public static List<ShapeComponent> getComponents()
+        {
+                return ModelState.getCanvasState().getComponentList();
         }
 }

@@ -2,12 +2,10 @@ package controller.commands;
 
 import controller.CanvasUtils;
 import model.PointInt;
+import model.api.ModelAPI;
 import model.shape.ShapeComponent;
-import model.persistence.CanvasState;
-import model.persistence.ModelState;
 import model.shape.ShapePosition;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,18 +15,16 @@ import java.util.stream.Collectors;
  */
 public class SaveSelectionTask extends AbstractControllerCommand
 {
-	private CanvasState canvasState;
 	private List<ShapeComponent> components;
 	private ShapePosition selectionBox;
-	private List<ShapeComponent> componentSelection;
+	private List<ShapeComponent> selection;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
 	public SaveSelectionTask(PointInt startPoint, PointInt endPoint)
 	{
-		this.canvasState = ModelState.getCanvasState();
-		this.components = canvasState.getComponentList();
+		this.components = ModelAPI.getComponents();
 		this.selectionBox = new ShapePosition(startPoint, endPoint);
 	}
 	
@@ -43,21 +39,14 @@ public class SaveSelectionTask extends AbstractControllerCommand
 	private void addComponentsToSelection()
 	{
 		addOverlappingShapeComponents(components, selectionBox);
-		canvasState.clearComponentSelectionList();
-		canvasState.addComponentSelection(componentSelection);
+		ModelAPI.clearSelection();
+		ModelAPI.addComponentSelection(selection);
 	}
 
 	// Create a selection of objects that intersect with the bounds of mouse press and release.
 	private void addOverlappingShapeComponents(List<ShapeComponent> components, ShapePosition selectionBox)
 	{
-		/*
-		componentSelection = new ArrayList<>();
-		componentSelection.addAll(components.stream()
-			.filter ((component) -> CanvasUtils.compareRects(component.getPosition(), selectionBox))
-			.collect (Collectors.toList()));
-
-		 */
-		componentSelection = components.stream()
+		selection = components.stream()
 				.filter ((component) -> CanvasUtils.compareRects(component.getPosition(), selectionBox))
 				.collect (Collectors.toList());
 	}

@@ -2,6 +2,7 @@ package controller.commands;
 
 import controller.JPaintController;
 import controller.interfaces.ICanvasControllerCommand;
+import model.api.ModelAPI;
 import model.interfaces.IShape;
 import model.shape.ShapeComponent;
 import model.persistence.CanvasState;
@@ -20,7 +21,6 @@ public class UngroupTask extends AbstractControllerCommand
 {
 	private List<ShapeComponent> selection;
 	private List<ShapeComponent> groups;
-	private CanvasState canvasState;
 	private List<ShapeComponent> groupedShapes;
 	private List<ShapeComponent> ungroupedShapes;
 
@@ -30,7 +30,6 @@ public class UngroupTask extends AbstractControllerCommand
 	public UngroupTask(List<ShapeComponent> selection)
 	{
 		this.selection = new ArrayList<>(selection);
-		this.canvasState = ModelState.getCanvasState();
 		groups = new ArrayList<>();
 		groupedShapes = new ArrayList<>();
 		ungroupedShapes = new ArrayList<>();
@@ -41,11 +40,11 @@ public class UngroupTask extends AbstractControllerCommand
 	public void execute()
 	{
 		initializeGroupedShapes();
-		canvasState.removeComponent(groups);
-		canvasState.addComponent(groupedShapes);
-		canvasState.clearComponentSelectionList();
-		canvasState.addComponentSelection(ungroupedShapes);
-		canvasState.addComponentSelection(groupedShapes);
+		ModelAPI.removeShapes(groups);
+		ModelAPI.addShapes(groupedShapes);
+		ModelAPI.clearSelection();
+		ModelAPI.addComponentSelection(ungroupedShapes);
+		ModelAPI.addComponentSelection(groupedShapes);
 
 	}
 
@@ -84,11 +83,11 @@ public class UngroupTask extends AbstractControllerCommand
 	@Override
 	public void undo()
 	{
-		canvasState.removeComponent(groupedShapes);
-		canvasState.addComponent(groups);
-		canvasState.clearComponentSelectionList();
-		canvasState.addComponentSelection(ungroupedShapes);
-		canvasState.addComponentSelection(groups);
+		ModelAPI.removeShapes(groupedShapes);
+		ModelAPI.addShapes(groups);
+		ModelAPI.clearSelection();
+		ModelAPI.addShapes(ungroupedShapes);
+		ModelAPI.addShapes(groups);
 	}
 
 	// Remove group and add back shapes.

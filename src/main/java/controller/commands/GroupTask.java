@@ -13,14 +13,12 @@ public class GroupTask extends AbstractControllerCommand
 {
 	private ShapeGroup group;
 	private List<ShapeComponent> selection;
-	//private CanvasState canvasState;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
 	public GroupTask(List<ShapeComponent> selection)
 	{
-		//this.canvasState = ModelState.getCanvasState();
 		this.selection = selection;
 	}
 
@@ -30,13 +28,9 @@ public class GroupTask extends AbstractControllerCommand
 	public void execute()
 	{
 		this.group = new ShapeGroup(selection);
-		//canvasState.removeComponent(selection);
 		ModelAPI.removeShapes(selection);
-		//canvasState.addShapeGroup(group);
 		ModelAPI.addShapeGroup(group);
-		//canvasState.clearComponentSelectionList();
 		ModelAPI.clearSelection();
-		//canvasState.addComponentSelection(group);
 		ModelAPI.addComponentSelection(group);
 	}
 
@@ -44,19 +38,10 @@ public class GroupTask extends AbstractControllerCommand
 	@Override
 	public void undo()
 	{
-		//canvasState.removeComponent(group);
 		ModelAPI.removeShape(group);
-
-		//canvasState.addComponent(selection);
 		ModelAPI.addShapes(selection);
-
-		//canvasState.removeComponent(group);
         ModelAPI.removeShape(group);
-
-		//canvasState.clearComponentSelectionList();
         ModelAPI.clearSelection();
-
-		//canvasState.addComponentSelection(selection);
 		ModelAPI.addComponentSelection(selection);
 	}
 
@@ -64,13 +49,9 @@ public class GroupTask extends AbstractControllerCommand
 	@Override
 	public void redo()
 	{
-		//canvasState.removeComponent(selection);
 		ModelAPI.removeShapes(selection);
-		//canvasState.addShapeGroup(group);
 		ModelAPI.addShapeGroup(group);
-		//canvasState.clearComponentSelectionList();
         ModelAPI.clearSelection();
-		//canvasState.addComponentSelection(group);
 		ModelAPI.addComponentSelection(group);
 	}
 }
