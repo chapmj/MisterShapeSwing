@@ -1,9 +1,13 @@
 package controller;
 
+import controller.commands.RedrawTask;
+import controller.interfaces.ICanvasControllerCommand;
+import controller.interfaces.ICommand;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
-import model.persistence.CanvasStateObserver;
+import model.api.ModelAPI;
 import model.persistence.ModelState;
+import model.shape.ShapeComponent;
 import view.EventName;
 import view.Redraw;
 import view.viewstate.ViewState;
@@ -15,11 +19,9 @@ import view.viewstate.ViewState;
 
 public class JPaintController implements IJPaintController, ISingleton {
 	private static JPaintController instance;
-	CanvasStateObserver canvasStateObserver;
 
 	public JPaintController() throws Exception
 	{
-		canvasStateObserver = new CanvasStateObserver(ModelState.getCanvasStateSubject());
 		CanvasControllerCommands.initAfterCanvasStateSubject(); //force static fields to load
 		registerEvents();
 		registerObservers();
@@ -41,11 +43,6 @@ public class JPaintController implements IJPaintController, ISingleton {
 		}
 	}
 
-	public void redraw() throws Exception {
-		var shapeComponents = ModelState.getCanvasState().getComponentList();
-		Redraw.execute(shapeComponents);
-	}
-
 	private void registerEvents() throws Exception
 	{
 		var ui = ViewState.getUI();
@@ -61,7 +58,8 @@ public class JPaintController implements IJPaintController, ISingleton {
 	// Observe CanvasState fields that concern this controller.
 	private void registerObservers()
 	{
-		ModelState.getCanvasStateSubject().registerObserver(canvasStateObserver);
+	    ModelAPI.registerOnCanvasNotify(new RedrawTask());
 	}
+
 
 }

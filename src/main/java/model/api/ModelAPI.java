@@ -1,7 +1,10 @@
 package model.api;
 
+import controller.interfaces.ICanvasControllerCommand;
+import controller.interfaces.ICommand;
 import model.PointInt;
 import model.interfaces.IShape;
+import model.persistence.CanvasStateObserver;
 import model.persistence.ModelState;
 import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
@@ -102,5 +105,11 @@ public class ModelAPI
         public static List<ShapeComponent> getComponents()
         {
                 return ModelState.getCanvasState().getComponentList();
+        }
+
+        public static void registerOnCanvasNotify(ICanvasControllerCommand command)
+        {
+                var obs = new CanvasStateObserver(command);
+                ModelState.getCanvasStateSubject().registerObserver(obs);
         }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 // Check canvas state and redraw everything.
 public class Redraw {
 
-	public static void execute(List<ShapeComponent> shapeComponents) throws Exception {
+	public static void execute(List<ShapeComponent> shapeComponents) {
 		ShapeDrawer shapeDrawer = new ShapeDrawer();
 		shapeDrawer.add(clearCanvas());
 		shapeDrawer.add(shapeComponents);
