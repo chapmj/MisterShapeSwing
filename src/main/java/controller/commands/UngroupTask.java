@@ -37,10 +37,10 @@ public class UngroupTask extends AbstractControllerCommand
 		Predicate<ShapeComponent> isShapeGroup = component -> component instanceof ShapeGroup;
 		Predicate<ShapeComponent> isShape = shapeComponent -> shapeComponent instanceof IShape;
 
-		selection.stream().filter (isShapeGroup)
+		selection.stream().filter(isShapeGroup)
 				  .forEach(groups::add);
 
-		selection.stream().filter (isShape)
+		selection.stream().filter(isShape)
 				  .forEach(ungroupedShapes::add);
 
 		/* Flatten all shapes in a group into just a shape collection */

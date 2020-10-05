@@ -6,22 +6,28 @@ import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /* Responsible for taking a selection containing shapes or groups
  * and combining them in a group. Add this data to model state.
  */
 public class GroupTask extends AbstractControllerCommand
 {
-	private ShapeGroup group;
-	private List<ShapeComponent> selection;
+	private final List<ShapeComponent> shapes;
+	private final ShapeGroup group;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-    public GroupTask()
+	@SuppressWarnings("unused")
+    private GroupTask() throws Exception
 	{
-		this.selection = ModelAPI.getSelection();
+		throw new Exception("GroupTask must be parameterized");
+	}
+
+	public GroupTask(List<ShapeComponent> selection)
+	{
+		this.shapes = selection;
+		this.group = new ShapeGroup(shapes);
 	}
 
 	// Wrap selection into a group and update model state.
@@ -29,8 +35,6 @@ public class GroupTask extends AbstractControllerCommand
 	@Override
 	public void execute()
 	{
-		//var selection = (ArrayList<ShapeComponent>) ModelState.getCanvasState().getComponentSelectionList();
-
         this.group();
 		CommandHistory.add(this);
 		ModelAPI.notifyCanvasObservers();
@@ -38,8 +42,7 @@ public class GroupTask extends AbstractControllerCommand
 
 	private void group()
 	{
-		this.group = new ShapeGroup(selection);
-		ModelAPI.removeShapes(selection);
+		ModelAPI.removeShapes(shapes);
 		ModelAPI.addShapeGroup(group);
 		ModelAPI.clearSelection();
 		ModelAPI.addComponentToSelection(group);
@@ -50,21 +53,17 @@ public class GroupTask extends AbstractControllerCommand
 	@Override
 	public void undo()
 	{
-		var splitGroup = group.getShapes().stream()
-				.map (shape -> (ShapeComponent) shape)
-				.collect(Collectors.toList());
-
 		ModelAPI.removeShape(group);
-		ModelAPI.addShapes(splitGroup);
+		ModelAPI.addShapes(shapes);
         ModelAPI.clearSelection();
-		ModelAPI.addComponentToSelection(splitGroup);
+		ModelAPI.addComponentToSelection(shapes);
 	}
 
 	// Add the group back to the model state.
 	@Override
 	public void redo()
 	{
-		ModelAPI.removeShapes(selection);
+		ModelAPI.removeShapes(shapes);
 		ModelAPI.addShapeGroup(group);
         ModelAPI.clearSelection();
 		ModelAPI.addComponentToSelection(group);
