@@ -24,33 +24,21 @@ public class GroupTask extends AbstractControllerCommand
 	{
 		this.selection = ModelAPI.getSelection();
 	}
-	public GroupTask(List<ShapeComponent> selection)
-	{
-		this.selection = selection;
-	}
 
 	// Wrap selection into a group and update model state.
 	// Update fields to persist through undo and redo operations.
-	@SuppressWarnings("unchecked")
 	@Override
 	public void execute()
 	{
 		var selection = (ArrayList<ShapeComponent>) ModelState.getCanvasState().getComponentSelectionList();
-		var copiedSelection = selection.clone();
 
 		this.group = new ShapeGroup(selection);
 		ModelAPI.removeShapes(selection);
 		ModelAPI.addShapeGroup(group);
 		ModelAPI.clearSelection();
 		ModelAPI.addComponentSelection(group);
-
-		if(ModelState.getCanvasState() != null && ModelState.getCanvasState().getComponentSelectionList() != null)
-		{
-			var task = new GroupTask((List<ShapeComponent>) copiedSelection);
-			task.execute();
-			CommandHistory.add(task);
-			ModelAPI.notifyCanvasObservers();
-		}
+		CommandHistory.add(this);
+		ModelAPI.notifyCanvasObservers();
 	}
 
 	// The opposite of adding a group to the model is removing it.

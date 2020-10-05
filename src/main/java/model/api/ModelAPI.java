@@ -2,7 +2,6 @@ package model.api;
 
 import controller.interfaces.ICanvasControllerCommand;
 import model.PointInt;
-import model.interfaces.IShape;
 import model.persistence.CanvasStateObserver;
 import model.persistence.ModelState;
 import model.shape.ShapeComponent;
@@ -83,7 +82,6 @@ public class ModelAPI
         public static void setShapeLocation(ShapeComponent shapeComponent, int x, int y)
         {
                 shapeComponent.setAnchor(new PointInt(x, y));
-                var z = (IShape) shapeComponent;
         }
 
         public static void commit()
