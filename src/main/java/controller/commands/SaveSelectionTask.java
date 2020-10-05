@@ -31,6 +31,7 @@ public class SaveSelectionTask extends AbstractControllerCommand
 	public void execute()
 	{
 		addComponentsToSelection();
+		ModelAPI.notifyCanvasObservers();
 	}
 
 	/* Create a selection by storing components bounded by the mouse in a selection

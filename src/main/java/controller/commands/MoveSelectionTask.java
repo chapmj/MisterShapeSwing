@@ -1,5 +1,6 @@
 package controller.commands;
 
+import model.CommandHistory;
 import model.PointInt;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
@@ -28,6 +29,8 @@ public class MoveSelectionTask extends AbstractControllerCommand
 	public void execute()
 	{
 		this.move();
+		CommandHistory.add(this);
+		ModelAPI.notifyCanvasObservers();
 	}
 
 	// The opposite of moving by a delta is moving by a minus delta.

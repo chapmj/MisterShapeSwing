@@ -1,5 +1,6 @@
 package controller.commands;
 
+import model.CommandHistory;
 import model.PointInt;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
@@ -47,6 +48,9 @@ public class PasteTask extends AbstractControllerCommand
 		incrementPasteLocation();
 		ModelAPI.addShapes(shapeCopies);
 		ModelAPI.commit();//changes are made, update observers to redraw
+
+		CommandHistory.add(this);
+		ModelAPI.notifyCanvasObservers();
 
 	}
 

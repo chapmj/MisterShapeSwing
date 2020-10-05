@@ -16,6 +16,5 @@ public class App
 
         // Necessary to make the quirky Swing canvas stay up to date.
         Thread.sleep(500);
-
     }
 }

@@ -2,6 +2,7 @@ package controller.commands;
 
 import controller.JPaintController;
 import controller.interfaces.ICanvasControllerCommand;
+import model.CommandHistory;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
 import model.shape.ShapeComponent;
@@ -27,13 +28,19 @@ public class UngroupTask extends AbstractControllerCommand
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public UngroupTask(List<ShapeComponent> selection)
+	public UngroupTask()
 	{
-		this.selection = new ArrayList<>(selection);
+		var s = (ArrayList<ShapeComponent>) ModelAPI.getSelection();
+		var cp = s.clone();
+		this.selection = (List<ShapeComponent>) cp;
 		groups = new ArrayList<>();
 		groupedShapes = new ArrayList<>();
 		ungroupedShapes = new ArrayList<>();
 	}
+	/*
+	public UngroupTask(List<ShapeComponent> selection)
+	{
+	}*/
 
 	//Split group, remove group from canvas, add child objects to canvas.
 	@Override
@@ -45,6 +52,8 @@ public class UngroupTask extends AbstractControllerCommand
 		ModelAPI.clearSelection();
 		ModelAPI.addComponentSelection(ungroupedShapes);
 		ModelAPI.addComponentSelection(groupedShapes);
+		CommandHistory.add(this);
+		ModelAPI.notifyCanvasObservers();
 
 	}
 

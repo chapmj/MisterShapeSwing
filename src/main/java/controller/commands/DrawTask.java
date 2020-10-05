@@ -1,5 +1,7 @@
 package controller.commands;
 
+import controller.JPaintController;
+import model.CommandHistory;
 import model.Dimensions;
 import model.PointInt;
 import model.api.ModelAPI;
@@ -56,5 +58,8 @@ public class DrawTask extends AbstractControllerCommand
 				card,
 				pos.getLeft());
 		ModelAPI.addShape(shape);
+
+		CommandHistory.add(this);
+		ModelAPI.notifyCanvasObservers();
 	}
 }

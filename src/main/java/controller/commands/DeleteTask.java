@@ -1,5 +1,6 @@
 package controller.commands;
 
+import model.CommandHistory;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
 
@@ -17,6 +18,12 @@ public class DeleteTask extends AbstractControllerCommand
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
+
+    public DeleteTask()
+	{
+		this.selection = ModelAPI.getSelection();
+	}
+
 	public DeleteTask(List<ShapeComponent> selection)
 	{
 		this.selection = selection;
@@ -29,6 +36,8 @@ public class DeleteTask extends AbstractControllerCommand
 		selectionCopy = new ArrayList<>(selection);
 		ModelAPI.removeShapes(selectionCopy);
 		ModelAPI.clearSelection();
+		CommandHistory.add(this);
+		ModelAPI.notifyCanvasObservers();
 	}
 
 	/* The opposite of deleting a shape from canvas is adding

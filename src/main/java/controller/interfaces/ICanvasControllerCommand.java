@@ -1,5 +1,5 @@
 package controller.interfaces;
 
-public interface ICanvasControllerCommand extends IUndoRedo {
-	void execute() throws Exception;
+public interface ICanvasControllerCommand extends IUndoRedo, ICommand {
+	void execute();
 }

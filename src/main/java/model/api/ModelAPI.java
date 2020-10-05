@@ -112,4 +112,16 @@ public class ModelAPI
                 var obs = new CanvasStateObserver(command);
                 ModelState.getCanvasStateSubject().registerObserver(obs);
         }
+
+        public static void notifyCanvasObservers()
+        {
+                try
+                {
+                        ModelState.getCanvasStateSubject().notifyObservers();
+                }
+                catch (Exception e)
+                {
+                        e.printStackTrace();
+                }
+        }
 }

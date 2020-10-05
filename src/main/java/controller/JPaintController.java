@@ -1,15 +1,11 @@
 package controller;
 
-import controller.commands.RedrawTask;
-import controller.interfaces.ICanvasControllerCommand;
-import controller.interfaces.ICommand;
+import controller.commands.*;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
+import model.CommandHistory;
 import model.api.ModelAPI;
-import model.persistence.ModelState;
-import model.shape.ShapeComponent;
 import view.EventName;
-import view.Redraw;
 import view.viewstate.ViewState;
 
 /* JPaintController is responsible for application UI widgets and events 
@@ -22,7 +18,6 @@ public class JPaintController implements IJPaintController, ISingleton {
 
 	public JPaintController() throws Exception
 	{
-		CanvasControllerCommands.initAfterCanvasStateSubject(); //force static fields to load
 		registerEvents();
 		registerObservers();
 	}
@@ -46,13 +41,13 @@ public class JPaintController implements IJPaintController, ISingleton {
 	private void registerEvents() throws Exception
 	{
 		var ui = ViewState.getUI();
-		ui.addEvent(EventName.COPY, CanvasControllerCommands::copySelection);
-		ui.addEvent(EventName.PASTE, CanvasControllerCommands::pasteSelection);
-		ui.addEvent(EventName.DELETE, CanvasControllerCommands::deleteSelection);
-		ui.addEvent(EventName.GROUP, CanvasControllerCommands::groupSelection);
-		ui.addEvent(EventName.UNGROUP, CanvasControllerCommands::ungroupSelection);
-		ui.addEvent(EventName.UNDO, CanvasControllerCommands::undo);
-		ui.addEvent(EventName.REDO, CanvasControllerCommands::redo);
+		ui.addEvent(EventName.COPY, () -> (new CopyTask()).execute());
+		ui.addEvent(EventName.PASTE, () -> (new PasteTask()).execute());
+		ui.addEvent(EventName.DELETE, () -> (new DeleteTask()).execute());
+		ui.addEvent(EventName.GROUP, ()-> (new GroupTask()).execute());
+		ui.addEvent(EventName.UNGROUP, () -> (new UngroupTask()).execute());
+		ui.addEvent(EventName.UNDO, () -> (new UndoTask()).execute());
+		ui.addEvent(EventName.REDO, () -> (new RedoTask()).execute());
 	}
 
 	// Observe CanvasState fields that concern this controller.

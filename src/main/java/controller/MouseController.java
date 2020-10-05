@@ -1,6 +1,11 @@
 package controller;
 
+import controller.commands.DrawTask;
+import controller.commands.MoveSelectionTask;
+import controller.commands.SaveSelectionTask;
 import model.PointInt;
+import model.api.ModelAPI;
+import model.persistence.ApplicationState;
 import model.persistence.ModelState;
 import model.persistence.MouseReleaseObserver;
 import model.persistence.MouseReleaseSubject;
@@ -48,13 +53,19 @@ public class MouseController {
 		if (startPoint != null && endPoint != null) {
 			switch(ModelState.getApplicationState().getStartAndEndPointMode()) {
 				case DRAW: 
-					CanvasControllerCommands.draw(startPoint, endPoint);
+					var appstate = ModelState.getApplicationState();
+					var draw = new DrawTask(startPoint, endPoint, appstate);
+					draw.execute();
 					break;
 				case SELECT: 
-					CanvasControllerCommands.saveSelection(startPoint, endPoint);
+					//CanvasControllerCommands.saveSelection(startPoint, endPoint);
+					var saveSelection = new SaveSelectionTask(startPoint, endPoint);
+					saveSelection.execute();
 					break;
 				case MOVE: 
-					CanvasControllerCommands.moveSelection(startPoint, endPoint);
+					//CanvasControllerCommands.moveSelection(startPoint, endPoint);
+					var move = new MoveSelectionTask(startPoint, endPoint);
+					move.execute();
 					break;
 				default:
 					throw new Exception("Release Mode not implemented");
