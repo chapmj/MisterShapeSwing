@@ -44,7 +44,7 @@ public class JPaintController implements IJPaintController, ISingleton {
 		ui.addEvent(EventName.PASTE, () -> (new PasteTask()).execute());
 		ui.addEvent(EventName.DELETE, () -> (new DeleteTask()).execute());
 		ui.addEvent(EventName.GROUP, ()-> (new GroupTask()).execute());
-		ui.addEvent(EventName.UNGROUP, () -> (new UngroupTask()).execute());
+		ui.addEvent(EventName.UNGROUP, () -> (new UngroupTask(ModelAPI.getSelection())).execute());
 		ui.addEvent(EventName.UNDO, () -> (new UndoTask()).execute());
 		ui.addEvent(EventName.REDO, () -> (new RedoTask()).execute());
 	}
