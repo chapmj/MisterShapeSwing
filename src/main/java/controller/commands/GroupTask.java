@@ -8,6 +8,7 @@ import model.shape.ShapeGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /* Responsible for taking a selection containing shapes or groups
  * and combining them in a group. Add this data to model state.
@@ -30,26 +31,35 @@ public class GroupTask extends AbstractControllerCommand
 	@Override
 	public void execute()
 	{
-		var selection = (ArrayList<ShapeComponent>) ModelState.getCanvasState().getComponentSelectionList();
+		//var selection = (ArrayList<ShapeComponent>) ModelState.getCanvasState().getComponentSelectionList();
 
+        this.group();
+		CommandHistory.add(this);
+		ModelAPI.notifyCanvasObservers();
+	}
+
+	private void group()
+	{
 		this.group = new ShapeGroup(selection);
 		ModelAPI.removeShapes(selection);
 		ModelAPI.addShapeGroup(group);
 		ModelAPI.clearSelection();
 		ModelAPI.addComponentSelection(group);
-		CommandHistory.add(this);
-		ModelAPI.notifyCanvasObservers();
+
 	}
 
 	// The opposite of adding a group to the model is removing it.
 	@Override
 	public void undo()
 	{
+		var splitGroup = group.getShapes().stream()
+				.map (shape -> (ShapeComponent) shape)
+				.collect(Collectors.toList());
+
 		ModelAPI.removeShape(group);
-		ModelAPI.addShapes(selection);
-        ModelAPI.removeShape(group);
+		ModelAPI.addShapes(splitGroup);
         ModelAPI.clearSelection();
-		ModelAPI.addComponentSelection(selection);
+		ModelAPI.addComponentSelection(splitGroup);
 	}
 
 	// Add the group back to the model state.

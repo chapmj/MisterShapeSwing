@@ -11,11 +11,11 @@ public class RedoTask extends AbstractControllerCommand
 		try
 		{
 			CommandHistory.redo();
+			ModelAPI.notifyCanvasObservers();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		ModelAPI.notifyCanvasObservers();
 	}
 }

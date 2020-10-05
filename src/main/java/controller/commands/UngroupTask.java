@@ -43,15 +43,20 @@ public class UngroupTask extends AbstractControllerCommand
 	@Override
 	public void execute()
 	{
+	    ungroup();
+		CommandHistory.add(this);
+		ModelAPI.notifyCanvasObservers();
+
+	}
+
+	private void ungroup()
+	{
 		initializeGroupedShapes();
 		ModelAPI.removeShapes(groups);
 		ModelAPI.addShapes(groupedShapes);
 		ModelAPI.clearSelection();
 		ModelAPI.addComponentSelection(ungroupedShapes);
 		ModelAPI.addComponentSelection(groupedShapes);
-		CommandHistory.add(this);
-		ModelAPI.notifyCanvasObservers();
-
 	}
 
 	// Set up instance fields.
@@ -100,6 +105,6 @@ public class UngroupTask extends AbstractControllerCommand
 	@Override
 	public void redo()
 	{
-		execute();
+		ungroup();
 	}
 }

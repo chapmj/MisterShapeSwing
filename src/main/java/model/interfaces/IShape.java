@@ -12,7 +12,7 @@ import model.shape.*;
 public interface IShape extends IBoundary {
 	ShapeCardinality getCardinality();
 	ShapeStyle getStyle();
-	void translate(PointInt translation);
+	//void translate(PointInt translation);
 	ShapeColor getPrimaryColor();
 	ShapeColor getSecondaryColor();
 	Dimensions getDimensions();

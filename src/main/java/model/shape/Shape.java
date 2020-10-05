@@ -89,10 +89,12 @@ public class Shape extends ShapeComponent implements IShape, Cloneable {
 	public void setAnchor(PointInt anchor) {
 		this.anchor = anchor;
 	}
-	
+
+	/*
 	public void translate(PointInt translation) {
 		CanvasUtils.moveShape(this, translation);
 	}
+	 */
 	
 	@Override
 	public ShapeComponent clone() {

@@ -39,10 +39,10 @@ public class CanvasUtils
 	}
 
 	// Translates a set of shapes components to a new position
-	public static void moveShapes(List<ShapeComponent> components, PointInt translation)
-	{
-		components.forEach(c -> moveShape(c,translation));
-	}
+	//public static void moveShapes(List<ShapeComponent> components, PointInt translation)
+	//{
+	//	components.forEach(c -> moveShape(c,translation));
+	//}
 
 	public static Color toColor(ShapeColor color)
 	{
