@@ -1,7 +1,6 @@
 package view;
 
 import model.*;
-import model.shape.ShapeComponent;
 import model.shape.*;
 import view.viewstate.ViewState;
 

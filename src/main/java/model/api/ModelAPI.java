@@ -1,7 +1,6 @@
 package model.api;
 
 import controller.interfaces.ICanvasControllerCommand;
-import controller.interfaces.ICommand;
 import model.PointInt;
 import model.interfaces.IShape;
 import model.persistence.CanvasStateObserver;

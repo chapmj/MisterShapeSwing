@@ -3,7 +3,6 @@ package controller;
 import controller.commands.*;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
-import model.CommandHistory;
 import model.api.ModelAPI;
 import view.EventName;
 import view.viewstate.ViewState;

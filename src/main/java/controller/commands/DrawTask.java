@@ -1,6 +1,5 @@
 package controller.commands;
 
-import controller.JPaintController;
 import model.CommandHistory;
 import model.Dimensions;
 import model.PointInt;

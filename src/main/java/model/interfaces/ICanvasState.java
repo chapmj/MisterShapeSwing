@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface ICanvasState {
 	List<IShape> getShapeList();
-	public void addComponent(List<ShapeComponent> components);
-	public void removeComponent(List<ShapeComponent> components);
-	public void removeComponent(ShapeComponent shapeComponent);
-	public List<ShapeComponent> getComponentList();
+	void addComponent(List<ShapeComponent> components);
+	void removeComponent(List<ShapeComponent> components);
+	void removeComponent(ShapeComponent shapeComponent);
+	List<ShapeComponent> getComponentList();
 }

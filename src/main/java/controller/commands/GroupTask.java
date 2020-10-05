@@ -31,6 +31,7 @@ public class GroupTask extends AbstractControllerCommand
 
 	// Wrap selection into a group and update model state.
 	// Update fields to persist through undo and redo operations.
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute()
 	{

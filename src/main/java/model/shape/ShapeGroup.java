@@ -45,8 +45,8 @@ public class ShapeGroup extends ShapeComponent {
 
 	public ShapeComponent getBoundingPoints() {
 	// Recursively get boundaries $$
-		Integer xMax = Integer.MIN_VALUE;
-		Integer yMax = Integer.MIN_VALUE;
+		int xMax = Integer.MIN_VALUE;
+		int yMax = Integer.MIN_VALUE;
 		Integer xMin = Integer.MAX_VALUE;
 		Integer yMin = Integer.MAX_VALUE;
 
@@ -54,8 +54,8 @@ public class ShapeGroup extends ShapeComponent {
 			Integer width = child.getWidth();
 			Integer height = child.getHeight();
 			PointInt anchor = child.getAnchor();
-			Integer xRight = width + anchor.getX();
-			Integer yRight = height + anchor.getY();
+			int xRight = width + anchor.getX();
+			int yRight = height + anchor.getY();
 			Integer xLeft = anchor.getX();
 			Integer yLeft = anchor.getY();
 			if (xRight > xMax) xMax = xRight;
@@ -64,20 +64,18 @@ public class ShapeGroup extends ShapeComponent {
 			if (yLeft < yMin) yMin = yLeft;
 		}
 
-		ShapeComponent boundingShape = new Shape(ShapeType.RECTANGLE,new Dimensions(xMax - xMin, yMax - yMin), new PointInt(xMin,yMin));
-
-		return boundingShape;
+		return new Shape(ShapeType.RECTANGLE,new Dimensions(xMax - xMin, yMax - yMin), new PointInt(xMin,yMin));
 	}
 	
 	public Integer getWidth() {
 	// Recursively get width $$
-		Integer xMax = Integer.MIN_VALUE;
+		int xMax = Integer.MIN_VALUE;
 		Integer xMin = Integer.MAX_VALUE;
 
 		for (ShapeComponent child : children) {
 			Integer width = child.getWidth();
 			PointInt anchor = child.getAnchor();
-			Integer xRight = width + anchor.getX();
+			int xRight = width + anchor.getX();
 			Integer xLeft = anchor.getX();
 			if (xRight > xMax) xMax = xRight;
 			if (xLeft < xMin) xMin = xLeft;
@@ -87,13 +85,13 @@ public class ShapeGroup extends ShapeComponent {
 
 	public Integer getHeight() {
 	// Recursively get height $$
-		Integer yMax = Integer.MIN_VALUE;
+		int yMax = Integer.MIN_VALUE;
 		Integer yMin = Integer.MAX_VALUE;
 
 		for (ShapeComponent child : children) {
 			Integer height = child.getHeight();
 			PointInt anchor = child.getAnchor();
-			Integer yRight = height + anchor.getY();
+			int yRight = height + anchor.getY();
 			Integer yLeft = anchor.getY();
 			if (yRight > yMax) yMax = yRight;
 			if (yLeft < yMin) yMin = yLeft;

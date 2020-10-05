@@ -4,5 +4,5 @@ package model.interfaces;
  */
 public interface IObservable
 {
-	public void update();
+	void update();
 }

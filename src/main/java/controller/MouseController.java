@@ -4,8 +4,6 @@ import controller.commands.DrawTask;
 import controller.commands.MoveSelectionTask;
 import controller.commands.SaveSelectionTask;
 import model.PointInt;
-import model.api.ModelAPI;
-import model.persistence.ApplicationState;
 import model.persistence.ModelState;
 import model.persistence.MouseReleaseObserver;
 import model.persistence.MouseReleaseSubject;

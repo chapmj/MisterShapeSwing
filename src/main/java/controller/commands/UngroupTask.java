@@ -1,13 +1,9 @@
 package controller.commands;
 
-import controller.JPaintController;
-import controller.interfaces.ICanvasControllerCommand;
 import model.CommandHistory;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
 import model.shape.ShapeComponent;
-import model.persistence.CanvasState;
-import model.persistence.ModelState;
 import model.shape.ShapeGroup;
 
 import java.util.ArrayList;
@@ -28,6 +24,7 @@ public class UngroupTask extends AbstractControllerCommand
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
+	@SuppressWarnings("unchecked")
 	public UngroupTask()
 	{
 		var s = (ArrayList<ShapeComponent>) ModelAPI.getSelection();

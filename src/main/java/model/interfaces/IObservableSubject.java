@@ -6,8 +6,8 @@ import java.util.List;
  */
 public interface IObservableSubject{
 	// Citation: Head First Design Patterns, pg 58.
-	public void registerObserver(IObservable obs);
-	public void deregisterObserver(IObservable obs);
-	public List<IObservable> listObservers();
-	public void notifyObservers() throws Exception;
+    void registerObserver(IObservable obs);
+	void deregisterObserver(IObservable obs);
+	List<IObservable> listObservers();
+	void notifyObservers() throws Exception;
 }

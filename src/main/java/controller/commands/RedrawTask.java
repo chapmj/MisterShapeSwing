@@ -1,6 +1,5 @@
 package controller.commands;
 
-import controller.JPaintController;
 import model.api.ModelAPI;
 import view.Redraw;
 

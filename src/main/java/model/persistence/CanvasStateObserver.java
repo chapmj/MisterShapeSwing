@@ -1,11 +1,7 @@
 package model.persistence;
 
-import controller.JPaintController;
 import controller.interfaces.ICanvasControllerCommand;
-import controller.interfaces.ICommand;
 import model.interfaces.IObservable;
-
-import static controller.JPaintController.*;
 
 /* Observes the canvasState object for changes
  */

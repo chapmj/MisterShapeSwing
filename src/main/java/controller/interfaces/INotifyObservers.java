@@ -1,6 +1,6 @@
 package controller.interfaces;
 
 public interface INotifyObservers {
-	public void notifyObservers() throws Exception;
+	void notifyObservers() throws Exception;
 
 }

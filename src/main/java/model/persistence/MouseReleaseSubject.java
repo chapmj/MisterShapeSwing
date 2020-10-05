@@ -28,7 +28,7 @@ public class MouseReleaseSubject implements IObservableSubject {
 
 	@Override
 	public void registerObserver(IObservable obs) {
-		observers.add((MouseReleaseObserver) obs);	
+		observers.add(obs);
 	}
 
 	@Override
