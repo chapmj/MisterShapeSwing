@@ -4,6 +4,7 @@ import controller.commands.DrawTask;
 import controller.commands.MoveSelectionTask;
 import controller.commands.SaveSelectionTask;
 import model.PointInt;
+import model.api.ModelAPI;
 import model.persistence.ModelState;
 import model.persistence.MouseReleaseObserver;
 import model.persistence.MouseReleaseSubject;
@@ -62,7 +63,7 @@ public class MouseController {
 					break;
 				case MOVE: 
 					//CanvasControllerCommands.moveSelection(startPoint, endPoint);
-					var move = new MoveSelectionTask(startPoint, endPoint);
+					var move = new MoveSelectionTask(startPoint, endPoint, ModelAPI.getSelection());
 					move.execute();
 					break;
 				default:

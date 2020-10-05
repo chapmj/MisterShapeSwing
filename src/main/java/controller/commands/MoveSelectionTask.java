@@ -6,22 +6,24 @@ import model.api.ModelAPI;
 import model.shape.ShapeComponent;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 // Responsible for moving all ShapeComponents in a selection to new coordinates.
 public class MoveSelectionTask extends AbstractControllerCommand
 {
-	private Integer deltaX;
-	private Integer deltaY;
-	private List<ShapeComponent> selection;
+	private final Integer deltaX;
+	private final Integer deltaY;
+	private final List<ShapeComponent> shapes;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public MoveSelectionTask(PointInt startPoint, PointInt endPoint)
+	public MoveSelectionTask(PointInt startPoint, PointInt endPoint, List<ShapeComponent> selection)
 	{
 		this.deltaX = endPoint.getX() - startPoint.getX();
 		this.deltaY = endPoint.getY() - startPoint.getY();
-		this.selection = ModelAPI.getSelection();
+		this.shapes = selection;
 	}
 
 	// Store relative change to position then move selected components.
@@ -50,22 +52,27 @@ public class MoveSelectionTask extends AbstractControllerCommand
 	// Move selection components by a delta relative point.
 	private void move()
 	{
-		selection.forEach((shapeComponent)->
-		{
-			var x = shapeComponent.getAnchor().getX() + deltaX;
-			var y = shapeComponent.getAnchor().getY() + deltaY;
-			ModelAPI.setShapeLocation(shapeComponent, x, y);
-		});
+		BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
+
+		shapes.stream()
+			.map((shapeComponent) -> Map.of(
+				shapeComponent,
+				new PointInt(
+					shapeComponent.getAnchor().getX() + deltaX,
+					shapeComponent.getAnchor().getY() + deltaY)))
+			.forEach((entry) -> entry.forEach(moveShapeInModel));
 	}
 
 	private void moveBack()
 	{
-		selection.forEach((shapeComponent)->
-		{
-			var x = shapeComponent.getAnchor().getX() - deltaX;
-			var y = shapeComponent.getAnchor().getY() - deltaY;
-			ModelAPI.setShapeLocation(shapeComponent, x, y);
-		});
+		BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
+		shapes.stream()
+			.map((shapeComponent) -> Map.of(
+					shapeComponent,
+					new PointInt(
+							shapeComponent.getAnchor().getX() - deltaX,
+							shapeComponent.getAnchor().getY() - deltaY)))
+			.forEach((entry) -> entry.forEach(moveShapeInModel));
 	}
 
 }

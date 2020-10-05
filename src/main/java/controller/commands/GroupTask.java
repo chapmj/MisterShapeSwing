@@ -5,6 +5,7 @@ import model.api.ModelAPI;
 import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /* Responsible for taking a selection containing shapes or groups
@@ -12,8 +13,8 @@ import java.util.List;
  */
 public class GroupTask extends AbstractControllerCommand
 {
-	private final List<ShapeComponent> shapes;
-	private final ShapeGroup group;
+	private final List<ShapeComponent> shapes = new ArrayList<>();
+	private final ShapeGroup group = new ShapeGroup();
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
@@ -26,8 +27,8 @@ public class GroupTask extends AbstractControllerCommand
 
 	public GroupTask(List<ShapeComponent> selection)
 	{
-		this.shapes = selection;
-		this.group = new ShapeGroup(shapes);
+		this.shapes.addAll(selection);
+		this.group.addChild(shapes);
 	}
 
 	// Wrap selection into a group and update model state.

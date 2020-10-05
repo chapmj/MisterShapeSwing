@@ -13,15 +13,22 @@ import model.interfaces.IShape;
  * COMPOSITE PATTERN: Node
  */
 public class ShapeGroup extends ShapeComponent {
-	List<ShapeComponent> children = new ArrayList<>();
+	private final List<ShapeComponent> children = new ArrayList<>();
 	Integer cachedHeight = 0;
 	Integer cachedWidth = 0;
 	PointInt cachedAnchor = null;
 	ShapeType shapeType = ShapeType.INVISIBLE_RECT;
 
+	public ShapeGroup()
+	{
+
+	}
+
 	public ShapeGroup(List<ShapeComponent> children)
 	{
-		addChild(children);
+		//addChild(children);
+		this.children.addAll(children);
+		setGroupBounds();
 	}
 
 	public void addChild(List<ShapeComponent> selection)
@@ -167,7 +174,7 @@ public class ShapeGroup extends ShapeComponent {
 	// Deep copy the ShapeGroup and all of its children.
 	@Override
 	public ShapeComponent clone() {
-		ShapeGroup dupeGroup = null;
+		ShapeGroup dupeGroup;
 
 		var shapes = this.getShapes();
 		var dupeShapes = new ArrayList<ShapeComponent>();

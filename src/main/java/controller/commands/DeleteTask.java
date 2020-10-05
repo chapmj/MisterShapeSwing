@@ -12,29 +12,27 @@ import java.util.List;
  */
 public class DeleteTask extends AbstractControllerCommand
 {
-	private List<ShapeComponent> selection;
-	private List<ShapeComponent> selectionCopy;
+	private final List<ShapeComponent> shapes = new ArrayList<>();
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-
-    public DeleteTask()
+	@SuppressWarnings("unused")
+	private DeleteTask() throws Exception
 	{
-		this.selection = ModelAPI.getSelection();
+		throw new Exception("GroupTask must be parameterized");
 	}
 
 	public DeleteTask(List<ShapeComponent> selection)
 	{
-		this.selection = selection;
+		this.shapes.addAll(selection);
 	}
 
 	// Remove the shape from the model's shape list
 	@Override
 	public void execute()
 	{
-		selectionCopy = new ArrayList<>(selection);
-		ModelAPI.removeShapes(selectionCopy);
+		ModelAPI.removeShapes(shapes);
 		ModelAPI.clearSelection();
 		CommandHistory.add(this);
 		ModelAPI.notifyCanvasObservers();
@@ -46,14 +44,14 @@ public class DeleteTask extends AbstractControllerCommand
 	@Override
 	public void undo()
 	{
-		ModelAPI.addShapes(selectionCopy);
+		ModelAPI.addShapes(shapes);
 	}
 
 	// Remove the shape from the model's shape list 
 	@Override
 	public void redo()
 	{
-		ModelAPI.removeShapes(selectionCopy);
+		ModelAPI.removeShapes(shapes);
 	}
 
 }
