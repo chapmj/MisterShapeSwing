@@ -33,14 +33,14 @@ public class ModelAPI
                 return ModelState.getShapeComponentSelectionList();
         }
 
-        public static void addComponentSelection(ShapeGroup group)
+        public static void addComponentToSelection(ShapeGroup group)
         {
                 //returns a list of components that are in the current selection.
                 //controller calls this to store a list of shapes (Copy Task) then calls puts list of shapes in copybuffer
                 ModelState.getCanvasState().addComponentSelection(group);
         }
 
-        public static void addComponentSelection(List<ShapeComponent> selection)
+        public static void addComponentToSelection(List<ShapeComponent> selection)
         {
                 ModelState.getCanvasState().addComponentSelection(selection);
         }

@@ -41,7 +41,7 @@ public class SaveSelectionTask extends AbstractControllerCommand
 	{
 		addOverlappingShapeComponents(components, selectionBox);
 		ModelAPI.clearSelection();
-		ModelAPI.addComponentSelection(selection);
+		ModelAPI.addComponentToSelection(selection);
 	}
 
 	// Create a selection of objects that intersect with the bounds of mouse press and release.

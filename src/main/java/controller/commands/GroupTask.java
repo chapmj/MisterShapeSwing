@@ -2,11 +2,9 @@ package controller.commands;
 
 import model.CommandHistory;
 import model.api.ModelAPI;
-import model.persistence.ModelState;
 import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +42,7 @@ public class GroupTask extends AbstractControllerCommand
 		ModelAPI.removeShapes(selection);
 		ModelAPI.addShapeGroup(group);
 		ModelAPI.clearSelection();
-		ModelAPI.addComponentSelection(group);
+		ModelAPI.addComponentToSelection(group);
 
 	}
 
@@ -59,7 +57,7 @@ public class GroupTask extends AbstractControllerCommand
 		ModelAPI.removeShape(group);
 		ModelAPI.addShapes(splitGroup);
         ModelAPI.clearSelection();
-		ModelAPI.addComponentSelection(splitGroup);
+		ModelAPI.addComponentToSelection(splitGroup);
 	}
 
 	// Add the group back to the model state.
@@ -69,6 +67,6 @@ public class GroupTask extends AbstractControllerCommand
 		ModelAPI.removeShapes(selection);
 		ModelAPI.addShapeGroup(group);
         ModelAPI.clearSelection();
-		ModelAPI.addComponentSelection(group);
+		ModelAPI.addComponentToSelection(group);
 	}
 }

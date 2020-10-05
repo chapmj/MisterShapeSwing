@@ -9,7 +9,6 @@ import model.shape.ShapeGroup;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /* Responsible for taking a selection containing shapes or groups
@@ -17,19 +16,18 @@ import java.util.stream.Stream;
  */
 public class UngroupTask extends AbstractControllerCommand
 {
-	private List<ShapeComponent> selection = new ArrayList<>();
-	private List<ShapeComponent> groups = new ArrayList<>();
-	private List<ShapeComponent> groupedShapes = new ArrayList<>();
-	private List<ShapeComponent> ungroupedShapes = new ArrayList<>();
+	private final List<ShapeComponent> selection = new ArrayList<>();
+	private final List<ShapeComponent> groups = new ArrayList<>();
+	private final List<ShapeComponent> groupedShapes = new ArrayList<>();
+	private final List<ShapeComponent> ungroupedShapes = new ArrayList<>();
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	//public UngroupTask()
-	private UngroupTask()
+	@SuppressWarnings("unused")
+	private UngroupTask() throws Exception
 	{
-	    var selection = ModelAPI.getSelection();
-		this.selection.addAll(selection);
+	    throw new Exception("UngroupTask must be parameterized");
 	}
 
 	public UngroupTask(List<ShapeComponent> s)
@@ -44,7 +42,29 @@ public class UngroupTask extends AbstractControllerCommand
 	@Override
 	public void execute()
 	{
-	    ungroup();
+		groups.clear();
+		ungroupedShapes.clear();
+		groupedShapes.clear();
+
+		selection.stream()
+				.filter ((component) -> component instanceof ShapeGroup)
+				.forEach(groups::add);
+
+		selection.stream()
+				.filter ((component) -> component instanceof IShape)
+				.forEach(ungroupedShapes::add);
+
+		groups.stream()
+				.map(Optional::of)
+				.filter(Optional::isPresent)
+				.flatMap((c)->Stream.of(c.get()))
+				.map(ShapeComponent::getShapes)
+				.flatMap((l) ->
+						l.stream()
+								.map((s) -> (ShapeComponent) s))
+				.forEach(groupedShapes::add);
+
+		ungroup();
 		CommandHistory.add(this);
 		ModelAPI.notifyCanvasObservers();
 
@@ -52,30 +72,12 @@ public class UngroupTask extends AbstractControllerCommand
 
 	private void ungroup()
 	{
-		this.groups = selection.stream()
-				.filter ((component) -> component instanceof ShapeGroup)
-				.collect(Collectors.toList());
-
-		this.ungroupedShapes = selection.stream()
-				.filter ((component) -> component instanceof IShape)
-				.collect(Collectors.toList());
-
-		this.groupedShapes = groups.stream()
-				.map(Optional::of)
-                .filter(Optional::isPresent)
-				.flatMap((c)->Stream.of(c.get()))
-                .map(ShapeComponent::getShapes)
-                .flatMap((l) ->
-						l.stream()
-						 .map((s) -> (ShapeComponent) s))
-				.collect(Collectors.toList());
-
 		//TODO: emit model commands for better unit test
 		ModelAPI.removeShapes(groups);
 		ModelAPI.addShapes(groupedShapes);
 		ModelAPI.clearSelection();
-		ModelAPI.addComponentSelection(ungroupedShapes);
-		ModelAPI.addComponentSelection(groupedShapes);
+		ModelAPI.addComponentToSelection(ungroupedShapes);
+		ModelAPI.addComponentToSelection(groupedShapes);
 	}
 
 	// Remove shapes from canvas and add back group.
@@ -93,6 +95,6 @@ public class UngroupTask extends AbstractControllerCommand
 	@Override
 	public void redo()
 	{
-		ungroup();
+	    ungroup();
 	}
 }
