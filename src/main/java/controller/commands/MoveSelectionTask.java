@@ -15,6 +15,13 @@ public class MoveSelectionTask extends AbstractControllerCommand
 	private final Integer deltaX;
 	private final Integer deltaY;
 	private final List<ShapeComponent> shapes;
+	private final BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
+
+	@SuppressWarnings("unused")
+	private MoveSelectionTask() throws Exception
+	{
+		throw new Exception("DeleteTask must be parameterized");
+	}
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
@@ -52,8 +59,6 @@ public class MoveSelectionTask extends AbstractControllerCommand
 	// Move selection components by a delta relative point.
 	private void move()
 	{
-		BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
-
 		shapes.stream()
 			.map((shapeComponent) -> Map.of(
 				shapeComponent,
@@ -65,7 +70,6 @@ public class MoveSelectionTask extends AbstractControllerCommand
 
 	private void moveBack()
 	{
-		BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
 		shapes.stream()
 			.map((shapeComponent) -> Map.of(
 					shapeComponent,
@@ -74,5 +78,4 @@ public class MoveSelectionTask extends AbstractControllerCommand
 							shapeComponent.getAnchor().getY() - deltaY)))
 			.forEach((entry) -> entry.forEach(moveShapeInModel));
 	}
-
 }

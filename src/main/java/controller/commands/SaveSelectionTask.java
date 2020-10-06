@@ -15,40 +15,30 @@ import java.util.stream.Collectors;
  */
 public class SaveSelectionTask extends AbstractControllerCommand
 {
-	private List<ShapeComponent> components;
-	private ShapePosition selectionBox;
 	private List<ShapeComponent> selection;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public SaveSelectionTask(PointInt startPoint, PointInt endPoint)
+	public SaveSelectionTask(PointInt startPoint, PointInt endPoint, List<ShapeComponent> components)
 	{
-		this.components = ModelAPI.getComponents();
-		this.selectionBox = new ShapePosition(startPoint, endPoint);
-	}
-	
-	public void execute()
-	{
-		addComponentsToSelection();
-		ModelAPI.notifyCanvasObservers();
-	}
+		var selectionBox = new ShapePosition(startPoint, endPoint);
 
-	/* Create a selection by storing components bounded by the mouse in a selection
-	 * list stored in model.
-	 */ 
-	private void addComponentsToSelection()
-	{
-		addOverlappingShapeComponents(components, selectionBox);
-		ModelAPI.clearSelection();
-		ModelAPI.addComponentToSelection(selection);
-	}
-
-	// Create a selection of objects that intersect with the bounds of mouse press and release.
-	private void addOverlappingShapeComponents(List<ShapeComponent> components, ShapePosition selectionBox)
-	{
 		selection = components.stream()
 				.filter ((component) -> CanvasUtils.compareRects(component.getPosition(), selectionBox))
 				.collect (Collectors.toList());
 	}
+
+	/* Create a selection by storing components bounded by the mouse in a selection
+	 * list stored in model.
+	 */
+	public void execute()
+	{
+		ModelAPI.clearSelection();
+		ModelAPI.addComponentToSelection(selection);
+		ModelAPI.notifyCanvasObservers();
+	}
+
+
+
 }

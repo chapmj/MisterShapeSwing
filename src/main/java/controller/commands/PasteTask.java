@@ -7,6 +7,7 @@ import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /* Responsible for updating the model's canvas state.
@@ -16,9 +17,25 @@ import java.util.stream.Collectors;
 public class PasteTask extends AbstractControllerCommand
 {
 
-	private List<ShapeComponent> shapeCopies;
-	private Integer incX = 20;
-	private Integer incY = 20;
+	private final PointInt pasteLocation;
+	private final List<ShapeComponent> shapeCopies;
+	private final Integer incX = 20;
+	private final Integer incY = 20;
+	private final BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
+
+	@SuppressWarnings("unused")
+	private PasteTask() throws Exception
+	{
+		throw new Exception("PasteTask must be parameterized");
+	}
+
+	public PasteTask(PointInt pasteLocation, List<ShapeComponent> copyBuffer)
+	{
+	    this.pasteLocation = pasteLocation;
+		this.shapeCopies = copyBuffer.stream()
+				.map(ShapeComponent::clone)
+				.collect(Collectors.toList());
+	}
 
 	/* Get copy buffer and add shapes to model.  Positions remain relative to their
 	 * original position, but set at a paste position initialized to the corner of
@@ -27,22 +44,17 @@ public class PasteTask extends AbstractControllerCommand
 	@Override
 	public void execute()
 	{
-		PointInt pasteLocation = ModelAPI.getPasteLocation();
-
-		var copyBuffer = ModelAPI.getComponentBuffer();
-
-		this.shapeCopies = copyBuffer.stream()
-				.map(ShapeComponent::clone)
-				.collect(Collectors.toList());
-
 		shapeCopies.stream().forEach((shapeComponent) -> {
 			var moveGroup = new ShapeGroup(shapeCopies);
 			var pasteDelta = new PointInt(
 					(pasteLocation.getX() + incX) - moveGroup.getAnchor().getX(),
 					(pasteLocation.getY() + incY) - moveGroup.getAnchor().getY());
+
 			var x = shapeComponent.getAnchor().getX() + pasteDelta.getX();
 			var y = shapeComponent.getAnchor().getY() + pasteDelta.getY();
-			ModelAPI.setShapeLocation(shapeComponent, x ,y);
+
+			ModelAPI.setShapeLocation(shapeComponent, new PointInt(x, y));
+
 		});
 
 		incrementPasteLocation();
@@ -78,14 +90,14 @@ public class PasteTask extends AbstractControllerCommand
 	{
 		Integer deltaX = incX * shapeCopies.size();
 		Integer deltaY = incY * shapeCopies.size();
-		ModelAPI.getPasteLocation().subtract(new PointInt(deltaX,deltaY));
+		pasteLocation.subtract(new PointInt(deltaX, deltaY));
 	}
 
 	public void incrementPasteLocation()
 	{
 		Integer deltaX = incX * shapeCopies.size();
 		Integer deltaY = incY * shapeCopies.size();
-		ModelAPI.getPasteLocation().add(new PointInt(deltaX,deltaY));
+		pasteLocation.add(new PointInt(deltaX, deltaY));
 	}
 	
 }

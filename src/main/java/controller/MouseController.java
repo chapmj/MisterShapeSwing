@@ -59,7 +59,7 @@ public class MouseController {
 					break;
 				case SELECT: 
 					//CanvasControllerCommands.saveSelection(startPoint, endPoint);
-					var saveSelection = new SaveSelectionTask(startPoint, endPoint);
+					var saveSelection = new SaveSelectionTask(startPoint, endPoint, ModelAPI.getComponents());
 					saveSelection.execute();
 					break;
 				case MOVE: 

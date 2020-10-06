@@ -3,6 +3,7 @@ package controller;
 import controller.commands.*;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
+import model.PointInt;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
 import view.EventName;
@@ -19,7 +20,9 @@ import java.util.function.Supplier;
 public class JPaintController implements IJPaintController, ISingleton {
 	private static JPaintController instance;
 
-	Supplier<List<ShapeComponent>> selectionSupplier = () -> ModelAPI.getSelection();
+	Supplier<List<ShapeComponent>> selectionSupplier = ModelAPI::getSelection;
+	private final Supplier<PointInt> pasteLocationSupplier = ModelAPI::getPasteLocation;
+	private final Supplier<List<ShapeComponent>> copyBufferSupplier = ModelAPI::getComponentBuffer;
 
 	public JPaintController() throws Exception
 	{
@@ -46,13 +49,13 @@ public class JPaintController implements IJPaintController, ISingleton {
 	private void registerEvents() throws Exception
 	{
 		var ui = ViewState.getUI();
-		ui.addEvent(EventName.COPY, () -> (new CopyTask()).execute());
-		ui.addEvent(EventName.PASTE, () -> (new PasteTask()).execute());
-		ui.addEvent(EventName.DELETE, () -> (new DeleteTask(selectionSupplier.get())).execute());
-		ui.addEvent(EventName.GROUP, ()-> (new GroupTask(selectionSupplier.get())).execute());
+		ui.addEvent(EventName.COPY,    () -> (new CopyTask()).execute());
+		ui.addEvent(EventName.PASTE,   () -> (new PasteTask(pasteLocationSupplier.get(), copyBufferSupplier.get())).execute());
+		ui.addEvent(EventName.DELETE,  () -> (new DeleteTask(selectionSupplier.get())).execute());
+		ui.addEvent(EventName.GROUP,   () -> (new GroupTask(selectionSupplier.get())).execute());
 		ui.addEvent(EventName.UNGROUP, () -> (new UngroupTask(selectionSupplier.get())).execute());
-		ui.addEvent(EventName.UNDO, () -> (new UndoTask()).execute());
-		ui.addEvent(EventName.REDO, () -> (new RedoTask()).execute());
+		ui.addEvent(EventName.UNDO,    () -> (new UndoTask()).execute());
+		ui.addEvent(EventName.REDO,    () -> (new RedoTask()).execute());
 	}
 
 	// Observe CanvasState fields that concern this controller.

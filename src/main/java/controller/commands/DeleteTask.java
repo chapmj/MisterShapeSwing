@@ -20,7 +20,7 @@ public class DeleteTask extends AbstractControllerCommand
 	@SuppressWarnings("unused")
 	private DeleteTask() throws Exception
 	{
-		throw new Exception("GroupTask must be parameterized");
+		throw new Exception("DeleteTask must be parameterized");
 	}
 
 	public DeleteTask(List<ShapeComponent> selection)

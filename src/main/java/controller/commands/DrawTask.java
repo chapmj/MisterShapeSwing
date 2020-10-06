@@ -13,6 +13,11 @@ public class DrawTask extends AbstractControllerCommand
 {
 	private final ShapeComponent shape;
 
+	@SuppressWarnings("unused")
+	private DrawTask() throws Exception
+	{
+		throw new Exception("DrawTask must be parameterized");
+	}
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
