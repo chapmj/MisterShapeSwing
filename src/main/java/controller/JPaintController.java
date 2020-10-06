@@ -4,8 +4,12 @@ import controller.commands.*;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
 import model.api.ModelAPI;
+import model.shape.ShapeComponent;
 import view.EventName;
 import view.viewstate.ViewState;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 /* JPaintController is responsible for application UI widgets and events 
  * outside the canvas.
@@ -14,6 +18,8 @@ import view.viewstate.ViewState;
 
 public class JPaintController implements IJPaintController, ISingleton {
 	private static JPaintController instance;
+
+	Supplier<List<ShapeComponent>> selectionSupplier = () -> ModelAPI.getSelection();
 
 	public JPaintController() throws Exception
 	{
@@ -42,9 +48,9 @@ public class JPaintController implements IJPaintController, ISingleton {
 		var ui = ViewState.getUI();
 		ui.addEvent(EventName.COPY, () -> (new CopyTask()).execute());
 		ui.addEvent(EventName.PASTE, () -> (new PasteTask()).execute());
-		ui.addEvent(EventName.DELETE, () -> (new DeleteTask(ModelAPI.getSelection())).execute());
-		ui.addEvent(EventName.GROUP, ()-> (new GroupTask(ModelAPI.getSelection())).execute());
-		ui.addEvent(EventName.UNGROUP, () -> (new UngroupTask(ModelAPI.getSelection())).execute());
+		ui.addEvent(EventName.DELETE, () -> (new DeleteTask(selectionSupplier.get())).execute());
+		ui.addEvent(EventName.GROUP, ()-> (new GroupTask(selectionSupplier.get())).execute());
+		ui.addEvent(EventName.UNGROUP, () -> (new UngroupTask(selectionSupplier.get())).execute());
 		ui.addEvent(EventName.UNDO, () -> (new UndoTask()).execute());
 		ui.addEvent(EventName.REDO, () -> (new RedoTask()).execute());
 	}

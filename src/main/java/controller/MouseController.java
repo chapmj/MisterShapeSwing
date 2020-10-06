@@ -52,8 +52,9 @@ public class MouseController {
 		if (startPoint != null && endPoint != null) {
 			switch(ModelState.getApplicationState().getStartAndEndPointMode()) {
 				case DRAW: 
-					var appstate = ModelState.getApplicationState();
-					var draw = new DrawTask(startPoint, endPoint, appstate);
+					var shapeType = ModelState.getApplicationState().getShapeType();
+					var shapeStyle = ModelState.getApplicationState().getShapeStyle();
+					var draw = new DrawTask(startPoint, endPoint, shapeType, shapeStyle);
 					draw.execute();
 					break;
 				case SELECT: 
