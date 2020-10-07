@@ -9,7 +9,7 @@ import model.shape.*;
 /* Responsible for updating the model's canvas state.
  * Used to add shapes to the canvas.
  */
-public class DrawTask extends AbstractControllerCommand
+public class DrawTask extends AbstractControllerTask
 {
 	private final ShapeComponent shape;
 

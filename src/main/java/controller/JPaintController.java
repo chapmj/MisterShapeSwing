@@ -1,6 +1,7 @@
 package controller;
 
 import controller.commands.*;
+import controller.commands.factory.*;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
 import model.PointInt;
@@ -20,9 +21,15 @@ import java.util.function.Supplier;
 public class JPaintController implements IJPaintController, ISingleton {
 	private static JPaintController instance;
 
-	Supplier<List<ShapeComponent>> selectionSupplier = ModelAPI::getSelection;
 	private final Supplier<PointInt> pasteLocationSupplier = ModelAPI::getPasteLocation;
 	private final Supplier<List<ShapeComponent>> copyBufferSupplier = ModelAPI::getComponentBuffer;
+	private AbstractTaskFactory copyTaskFactory = new CopyTaskFactory();
+	private AbstractTaskFactory deleteTaskFactory = new DeleteTaskFactory(ModelAPI::getSelection);
+	private AbstractTaskFactory pasteTaskFactory = new PasteTaskFactory(ModelAPI::getPasteLocation, ModelAPI::getComponentBuffer);
+	private AbstractTaskFactory groupTaskFactory = new GroupTaskFactory(ModelAPI::getSelection);
+	private AbstractTaskFactory ungroupTaskFactory = new UngroupTaskFactory(ModelAPI::getSelection);
+	private AbstractTaskFactory undoTaskFactory = new UndoTaskFactory();
+	private AbstractTaskFactory redoTaskFactory = new RedoTaskFactory();
 
 	public JPaintController() throws Exception
 	{
@@ -49,13 +56,13 @@ public class JPaintController implements IJPaintController, ISingleton {
 	private void registerEvents() throws Exception
 	{
 		var ui = ViewState.getUI();
-		ui.addEvent(EventName.COPY,    () -> (new CopyTask()).execute());
-		ui.addEvent(EventName.PASTE,   () -> (new PasteTask(pasteLocationSupplier.get(), copyBufferSupplier.get())).execute());
-		ui.addEvent(EventName.DELETE,  () -> (new DeleteTask(selectionSupplier.get())).execute());
-		ui.addEvent(EventName.GROUP,   () -> (new GroupTask(selectionSupplier.get())).execute());
-		ui.addEvent(EventName.UNGROUP, () -> (new UngroupTask(selectionSupplier.get())).execute());
-		ui.addEvent(EventName.UNDO,    () -> (new UndoTask()).execute());
-		ui.addEvent(EventName.REDO,    () -> (new RedoTask()).execute());
+		ui.addEvent(EventName.COPY,    () -> copyTaskFactory.createTask().execute());
+		ui.addEvent(EventName.PASTE,   () -> pasteTaskFactory.createTask().execute());
+		ui.addEvent(EventName.DELETE,  () -> deleteTaskFactory.createTask().execute());
+		ui.addEvent(EventName.GROUP,   () -> groupTaskFactory.createTask().execute());
+		ui.addEvent(EventName.UNGROUP, () -> ungroupTaskFactory.createTask().execute());
+		ui.addEvent(EventName.UNDO,    () -> undoTaskFactory.createTask().execute());
+		ui.addEvent(EventName.REDO,    () -> redoTaskFactory.createTask().execute());
 	}
 
 	// Observe CanvasState fields that concern this controller.

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * Used to add shapes to the canvas based on shape components
  * stored in the copy buffer.
  */
-public class SaveSelectionTask extends AbstractControllerCommand
+public class SaveSelectionTask extends AbstractControllerTask
 {
 	private List<ShapeComponent> selection;
 

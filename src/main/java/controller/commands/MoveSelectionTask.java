@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 // Responsible for moving all ShapeComponents in a selection to new coordinates.
-public class MoveSelectionTask extends AbstractControllerCommand
+public class MoveSelectionTask extends AbstractControllerTask
 {
 	private final Integer deltaX;
 	private final Integer deltaY;

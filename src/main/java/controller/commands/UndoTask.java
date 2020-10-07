@@ -3,7 +3,7 @@ package controller.commands;
 import model.CommandHistory;
 import model.api.ModelAPI;
 
-public class UndoTask extends AbstractControllerCommand
+public class UndoTask extends AbstractControllerTask
 {
     @Override
     public void execute()

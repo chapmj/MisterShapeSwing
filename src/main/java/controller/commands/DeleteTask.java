@@ -4,15 +4,14 @@ import model.CommandHistory;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /* Responsible for updating the model's canvas state.
  * Used to remove shapes from the canvas.
  */
-public class DeleteTask extends AbstractControllerCommand
+public class DeleteTask extends AbstractControllerTask
 {
-	private final List<ShapeComponent> shapes = new ArrayList<>();
+	private final List<ShapeComponent> shapes;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
@@ -25,7 +24,7 @@ public class DeleteTask extends AbstractControllerCommand
 
 	public DeleteTask(List<ShapeComponent> selection)
 	{
-		this.shapes.addAll(selection);
+		this.shapes = selection;
 	}
 
 	// Remove the shape from the model's shape list

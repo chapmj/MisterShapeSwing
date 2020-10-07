@@ -1,18 +1,18 @@
 package model.persistence;
 
-import controller.interfaces.ICanvasControllerCommand;
+import controller.interfaces.IControllerTask;
 import model.interfaces.IObservable;
 
 /* Observes the canvasState object for changes
  */
 public class CanvasStateObserver implements IObservable
 {
-	ICanvasControllerCommand command;
+	IControllerTask command;
 
 	private CanvasStateObserver() {
 	}
 
-	public CanvasStateObserver(ICanvasControllerCommand command)
+	public CanvasStateObserver(IControllerTask command)
 	{
 		this.command = command;
 	}

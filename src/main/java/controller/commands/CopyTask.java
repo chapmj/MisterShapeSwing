@@ -6,7 +6,7 @@ import model.api.ModelAPI;
  * the current selection on the canvas.
  */
 
-public class CopyTask extends AbstractControllerCommand
+public class CopyTask extends AbstractControllerTask
 {
 	@Override
 	public void execute()

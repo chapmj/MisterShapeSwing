@@ -14,15 +14,13 @@ public class DialogProvider implements IDialogProvider {
     private final IDialogChoice<ShapeColor> chooseSecondaryColorDialog;
     private final IDialogChoice<ShapeShadingType> chooseShadingTypeDialog;
     private final IDialogChoice<StartAndEndPointMode> chooseStartAndEndPointModeDialog;
-    private final IApplicationState applicationState;
 
     public DialogProvider(IApplicationState applicationState) {
-        this.applicationState = applicationState;
-        chooseShapeDialog = new ChooseShapeDialog(this.applicationState);
-        choosePrimaryColorDialog = new ChoosePrimaryColorDialog(this.applicationState);
-        chooseSecondaryColorDialog = new ChooseSecondaryColorDialog(this.applicationState);
-        chooseShadingTypeDialog = new ChooseShadingTypeDialog(this.applicationState);
-        chooseStartAndEndPointModeDialog = new ChooseStartAndEndPointModeDialog(this.applicationState);
+        chooseShapeDialog = new ChooseShapeDialog(applicationState);
+        choosePrimaryColorDialog = new ChoosePrimaryColorDialog(applicationState);
+        chooseSecondaryColorDialog = new ChooseSecondaryColorDialog(applicationState);
+        chooseShadingTypeDialog = new ChooseShadingTypeDialog(applicationState);
+        chooseStartAndEndPointModeDialog = new ChooseStartAndEndPointModeDialog(applicationState);
     }
 
     @Override

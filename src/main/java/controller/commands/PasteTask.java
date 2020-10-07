@@ -7,21 +7,20 @@ import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 /* Responsible for updating the model's canvas state.
  * Used to add shapes to the canvas based on shape components
  * stored in the copy buffer.
  */
-public class PasteTask extends AbstractControllerCommand
+public class PasteTask extends AbstractControllerTask
 {
 
+	private static final Integer INC_X = 20;
+	private static final Integer INC_Y = 20;
+
 	private final PointInt pasteLocation;
-	private final List<ShapeComponent> shapeCopies;
-	private final Integer incX = 20;
-	private final Integer incY = 20;
-	private final BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
+	private final List<ShapeComponent> shapes;
+	//private final BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
 
 	@SuppressWarnings("unused")
 	private PasteTask() throws Exception
@@ -29,12 +28,10 @@ public class PasteTask extends AbstractControllerCommand
 		throw new Exception("PasteTask must be parameterized");
 	}
 
-	public PasteTask(PointInt pasteLocation, List<ShapeComponent> copyBuffer)
+	public PasteTask(PointInt pasteLocation, List<ShapeComponent> shapes)
 	{
 	    this.pasteLocation = pasteLocation;
-		this.shapeCopies = copyBuffer.stream()
-				.map(ShapeComponent::clone)
-				.collect(Collectors.toList());
+	    this.shapes = shapes;
 	}
 
 	/* Get copy buffer and add shapes to model.  Positions remain relative to their
@@ -44,21 +41,22 @@ public class PasteTask extends AbstractControllerCommand
 	@Override
 	public void execute()
 	{
-		shapeCopies.stream().forEach((shapeComponent) -> {
-			var moveGroup = new ShapeGroup(shapeCopies);
+		shapes.stream().forEach((shapeComponent) -> {
+			var moveGroup = new ShapeGroup(shapes);
 			var pasteDelta = new PointInt(
-					(pasteLocation.getX() + incX) - moveGroup.getAnchor().getX(),
-					(pasteLocation.getY() + incY) - moveGroup.getAnchor().getY());
+					(pasteLocation.getX() + INC_X) - moveGroup.getAnchor().getX(),
+					(pasteLocation.getY() + INC_Y) - moveGroup.getAnchor().getY());
 
 			var x = shapeComponent.getAnchor().getX() + pasteDelta.getX();
 			var y = shapeComponent.getAnchor().getY() + pasteDelta.getY();
 
 			ModelAPI.setShapeLocation(shapeComponent, new PointInt(x, y));
+			//moveShapeInModel.accept(shapeComponent, new PointInt(x, y));
 
 		});
 
 		incrementPasteLocation();
-		ModelAPI.addShapes(shapeCopies);
+		ModelAPI.addShapes(shapes);
 		ModelAPI.commit();//changes are made, update observers to redraw
 
 		CommandHistory.add(this);
@@ -74,7 +72,7 @@ public class PasteTask extends AbstractControllerCommand
 	public void undo()
 	{
 		decrementPasteLocation();
-		ModelAPI.removeShapes(shapeCopies);
+		ModelAPI.removeShapes(shapes);
 	}
 
 	// Put the objects back in the shape list.
@@ -82,21 +80,21 @@ public class PasteTask extends AbstractControllerCommand
 	public void redo()
 	{
 		incrementPasteLocation();
-		ModelAPI.addShapes(shapeCopies);
+		ModelAPI.addShapes(shapes);
 	}
 
 	// Track where to paste something on the canvas.
 	public void decrementPasteLocation()
 	{
-		Integer deltaX = incX * shapeCopies.size();
-		Integer deltaY = incY * shapeCopies.size();
+		Integer deltaX = INC_X * shapes.size();
+		Integer deltaY = INC_Y * shapes.size();
 		pasteLocation.subtract(new PointInt(deltaX, deltaY));
 	}
 
 	public void incrementPasteLocation()
 	{
-		Integer deltaX = incX * shapeCopies.size();
-		Integer deltaY = incY * shapeCopies.size();
+		Integer deltaX = INC_X * shapes.size();
+		Integer deltaY = INC_Y * shapes.size();
 		pasteLocation.add(new PointInt(deltaX, deltaY));
 	}
 	
