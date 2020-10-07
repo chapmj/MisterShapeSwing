@@ -1,6 +1,6 @@
 package model.api;
 
-import controller.interfaces.ICanvasControllerCommand;
+import controller.interfaces.IControllerTask;
 import model.PointInt;
 import model.persistence.CanvasStateObserver;
 import model.persistence.ModelState;
@@ -109,7 +109,7 @@ public class ModelAPI
                 return ModelState.getCanvasState().getComponentList();
         }
 
-        public static void registerOnCanvasNotify(ICanvasControllerCommand command)
+        public static void registerOnCanvasNotify(IControllerTask command)
         {
                 var obs = new CanvasStateObserver(command);
                 ModelState.getCanvasStateSubject().registerObserver(obs);

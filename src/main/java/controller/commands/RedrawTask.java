@@ -3,7 +3,7 @@ package controller.commands;
 import model.api.ModelAPI;
 import view.Redraw;
 
-public class RedrawTask extends AbstractControllerCommand
+public class RedrawTask extends AbstractControllerTask
 {
     @Override
     public void execute()

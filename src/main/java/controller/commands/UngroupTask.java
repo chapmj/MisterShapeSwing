@@ -3,6 +3,7 @@ package controller.commands;
 import model.CommandHistory;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
+import model.shape.Shape;
 import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
@@ -16,11 +17,11 @@ import java.util.stream.Stream;
 /* Responsible for taking a selection containing shapes or groups
  * and combining them in a group. Add this data to model state.
  */
-public class UngroupTask extends AbstractControllerCommand
+public class UngroupTask extends AbstractControllerTask
 {
-	private final List<ShapeComponent> groups = new ArrayList<>();
-	private final List<ShapeComponent> groupedShapes = new ArrayList<>();
-	private final List<ShapeComponent> ungroupedShapes = new ArrayList<>();
+	private final List<ShapeComponent> groups;
+	private final List<ShapeComponent> groupedShapes;
+	private final List<ShapeComponent> ungroupedShapes;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
@@ -31,29 +32,11 @@ public class UngroupTask extends AbstractControllerCommand
 	    throw new Exception("UngroupTask must be parameterized");
 	}
 
-	public UngroupTask(List<ShapeComponent> selection)
+	public UngroupTask(List<ShapeComponent> groups, List<ShapeComponent>groupedShapes, List<ShapeComponent>ungroupedShapes)
 	{
-	    /* populate shapes into two categories: ungroupedShapes (shapeleafs), groups (shapeGroup composite) */
-		Predicate<ShapeComponent> isShapeGroup = component -> component instanceof ShapeGroup;
-		Predicate<ShapeComponent> isShape = shapeComponent -> shapeComponent instanceof IShape;
-
-		selection.stream().filter(isShapeGroup)
-				  .forEach(groups::add);
-
-		selection.stream().filter(isShape)
-				  .forEach(ungroupedShapes::add);
-
-		/* Flatten all shapes in a group into just a shape collection */
-		Function<List<IShape>, Stream<ShapeComponent>> toComponentStream = l -> l.stream().map(shape -> (ShapeComponent)shape);
-		Function<Optional<ShapeComponent>, Stream<ShapeComponent>> optionToStream = (comp)->Stream.of(comp.get());
-
-		groups.stream()
-				.map(Optional::of)
-				.filter(Optional::isPresent)
-				.flatMap(optionToStream)
-				.map(ShapeComponent::getShapes)
-				.flatMap(toComponentStream)
-				.forEach(groupedShapes::add);
+	    this.groups = groups;
+	    this.groupedShapes = groupedShapes;
+	    this.ungroupedShapes = ungroupedShapes;
 	}
 
 
