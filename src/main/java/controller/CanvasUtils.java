@@ -6,7 +6,6 @@ import model.shape.ShapeColor;
 import model.shape.ShapePosition;
 
 import java.awt.*;
-import java.util.List;
 
 public class CanvasUtils
 {

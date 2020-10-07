@@ -1,7 +1,6 @@
 package model.interfaces;
 
 import model.Dimensions;
-import model.PointInt;
 import model.shape.*;
 
 /* IShape is an interface to represent

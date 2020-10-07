@@ -4,7 +4,6 @@ import model.CommandHistory;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /* Responsible for updating the model's canvas state.

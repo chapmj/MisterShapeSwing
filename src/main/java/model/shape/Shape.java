@@ -6,7 +6,6 @@ import model.PointInt;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.CanvasUtils;
 import model.interfaces.IShape;
 
 // A shape component that represents a drawable object for the canvas.

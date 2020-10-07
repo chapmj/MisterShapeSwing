@@ -2,17 +2,9 @@ package controller.commands;
 
 import model.CommandHistory;
 import model.api.ModelAPI;
-import model.interfaces.IShape;
-import model.shape.Shape;
 import model.shape.ShapeComponent;
-import model.shape.ShapeGroup;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /* Responsible for taking a selection containing shapes or groups
  * and combining them in a group. Add this data to model state.
@@ -54,6 +46,7 @@ public class UngroupTask extends AbstractControllerTask
 		//TODO: emit model commands for better unit test
 		ModelAPI.removeShapes(groups);
 		ModelAPI.addShapes(groupedShapes);
+		ModelAPI.addShapes(ungroupedShapes);
 		ModelAPI.clearSelection();
 		ModelAPI.addComponentToSelection(ungroupedShapes);
 		ModelAPI.addComponentToSelection(groupedShapes);

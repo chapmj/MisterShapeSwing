@@ -6,8 +6,8 @@ import controller.interfaces.IUndoRedo;
 
 // Template code provided.  Maintain undo and redo command stacks
 public class CommandHistory {
-	private static final Stack<IUndoRedo> undoStack = new Stack<IUndoRedo>();
-	private static final Stack<IUndoRedo> redoStack = new Stack<IUndoRedo>();
+	private static final Stack<IUndoRedo> undoStack = new Stack<>();
+	private static final Stack<IUndoRedo> redoStack = new Stack<>();
 
 	public static void add(IUndoRedo cmd) {
 		undoStack.push(cmd);

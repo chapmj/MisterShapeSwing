@@ -5,7 +5,6 @@ import model.api.ModelAPI;
 import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /* Responsible for taking a selection containing shapes or groups
