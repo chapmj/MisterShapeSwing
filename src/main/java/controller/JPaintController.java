@@ -1,6 +1,5 @@
 package controller;
 
-import controller.commands.*;
 import controller.commands.factory.*;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
@@ -23,13 +22,17 @@ public class JPaintController implements IJPaintController, ISingleton {
 
 	private final Supplier<PointInt> pasteLocationSupplier = ModelAPI::getPasteLocation;
 	private final Supplier<List<ShapeComponent>> copyBufferSupplier = ModelAPI::getComponentBuffer;
-	private AbstractTaskFactory copyTaskFactory = new CopyTaskFactory();
-	private AbstractTaskFactory deleteTaskFactory = new DeleteTaskFactory(ModelAPI::getSelection);
-	private AbstractTaskFactory pasteTaskFactory = new PasteTaskFactory(ModelAPI::getPasteLocation, ModelAPI::getComponentBuffer);
-	private AbstractTaskFactory groupTaskFactory = new GroupTaskFactory(ModelAPI::getSelection);
-	private AbstractTaskFactory ungroupTaskFactory = new UngroupTaskFactory(ModelAPI::getSelection);
-	private AbstractTaskFactory undoTaskFactory = new UndoTaskFactory();
-	private AbstractTaskFactory redoTaskFactory = new RedoTaskFactory();
+	private final Supplier<List<ShapeComponent>> selectionSupplier = ModelAPI::getSelection;
+	private final Supplier<List<ShapeComponent>> allShapesSupplier = ModelAPI::getComponents;
+
+	private final AbstractTaskFactory copyTaskFactory = new CopyTaskFactory();
+	private final AbstractTaskFactory deleteTaskFactory = new DeleteTaskFactory(selectionSupplier);
+	private final AbstractTaskFactory pasteTaskFactory = new PasteTaskFactory(pasteLocationSupplier, copyBufferSupplier);
+	private final AbstractTaskFactory groupTaskFactory = new GroupTaskFactory(selectionSupplier);
+	private final AbstractTaskFactory ungroupTaskFactory = new UngroupTaskFactory(selectionSupplier);
+	private final AbstractTaskFactory undoTaskFactory = new UndoTaskFactory();
+	private final AbstractTaskFactory redoTaskFactory = new RedoTaskFactory();
+	private final AbstractTaskFactory redrawTaskFactory = new RedrawTaskFactory(allShapesSupplier);
 
 	public JPaintController() throws Exception
 	{
@@ -68,7 +71,9 @@ public class JPaintController implements IJPaintController, ISingleton {
 	// Observe CanvasState fields that concern this controller.
 	private void registerObservers()
 	{
-	    ModelAPI.registerOnCanvasNotify(new RedrawTask());
+	    ModelAPI.registerCanvasStateSubscriber(redrawTaskFactory.createTask());
+
+
 	}
 
 
