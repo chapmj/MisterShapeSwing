@@ -109,7 +109,7 @@ public class ModelAPI
                 return ModelState.getCanvasState().getComponentList();
         }
 
-        public static void registerOnCanvasNotify(IControllerTask command)
+        public static void registerCanvasStateSubscriber(IControllerTask command)
         {
                 var obs = new CanvasStateObserver(command);
                 ModelState.getCanvasStateSubject().registerObserver(obs);
