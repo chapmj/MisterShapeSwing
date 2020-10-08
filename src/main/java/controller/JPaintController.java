@@ -72,9 +72,5 @@ public class JPaintController implements IJPaintController, ISingleton {
 	private void registerObservers()
 	{
 	    ModelAPI.registerCanvasStateSubscriber(redrawTaskFactory.createTask());
-
-
 	}
-
-
 }
