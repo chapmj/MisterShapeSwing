@@ -17,17 +17,13 @@ public class DrawStrategyEllipse extends DrawStrategy {
 
 	private Stroke stroke;
 	private Graphics2D graphics;
-	private IShape shape;
 	private Color primaryColor;
 	private Color secondaryColor;
 	private ShapeShadingType shadingType;
-	private DrawStrategyCommon common;
 
 	public DrawStrategyEllipse(ShapeComponent shape) {
-		super();
+		super((IShape) shape);
 		this.graphics = ViewState.getGraphics();
-		this.shape = (IShape) shape;
-		this.common = new DrawStrategyCommon((IShape) shape);
 		setStyleParams();
 	}
 
@@ -38,10 +34,10 @@ public class DrawStrategyEllipse extends DrawStrategy {
 	}
 
 	private void setStyleParams() {
-		stroke = DrawStrategyCommon.makeStroke();
-		primaryColor = common.getPrimaryColor();
-		secondaryColor = common.getSecondaryColor();
-		shadingType = common.getShadingType();
+		stroke = DrawStrategy.makeStroke();
+		primaryColor = this.getPrimaryColor();
+		secondaryColor = this.getSecondaryColor();
+		shadingType = this.getShadingType();
 	}
 
 	private void paintShapeWithShading() {

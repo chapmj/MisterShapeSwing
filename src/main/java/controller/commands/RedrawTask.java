@@ -1,30 +1,25 @@
 package controller.commands;
 
 import model.shape.ShapeComponent;
-import view.Redraw;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class RedrawTask extends AbstractControllerTask
 {
+    private List<ShapeComponent> shapeComponents;
+    private Consumer<List<ShapeComponent>> redrawer;
 
-    private final List<ShapeComponent> shapeComponents;
-
-    public RedrawTask(List<ShapeComponent> shapeComponents)
+    public RedrawTask(List<ShapeComponent> shapeComponents, Consumer<List<ShapeComponent>> redrawer)
     {
+
         this.shapeComponents = shapeComponents;
+        this.redrawer = redrawer;
     }
 
     @Override
     public void execute()
     {
-        try
-        {
-            Redraw.execute(this.shapeComponents);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        redrawer.accept(shapeComponents);
     }
 }

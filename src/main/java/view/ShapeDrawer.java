@@ -33,7 +33,7 @@ public class ShapeDrawer {
 			case INVISIBLE_RECT:
 				return new DrawStrategyInvisibleRect(component);
 			default:
-				return new DrawStrategyRectangle(component);
+				return new DrawStrategyNull(component);
 		}
 	}
 

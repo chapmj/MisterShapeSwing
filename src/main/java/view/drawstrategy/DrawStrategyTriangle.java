@@ -1,16 +1,13 @@
 package view.drawstrategy;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.Stroke;
-
-import model.shape.ShapeCardinality;
-import model.shape.ShapeShadingType;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 import model.persistence.ModelState;
+import model.shape.ShapeCardinality;
+import model.shape.ShapeComponent;
+import model.shape.ShapeShadingType;
 import view.viewstate.ViewState;
+
+import java.awt.*;
 
 /* Create Graphics objects and paint them to canvas.
  * Specific graphic type in class name.
@@ -18,22 +15,19 @@ import view.viewstate.ViewState;
  */
 public class DrawStrategyTriangle extends DrawStrategy {
 	private Stroke stroke;
-	private IShape shape;
 	private Graphics2D graphics;
 	private Color primaryColor;
 	private Color secondaryColor;
 	private ShapeShadingType shadingType;
 	private ShapeCardinality cardinality;
 	private Graphics2D graphicsSelection;
-	private DrawStrategyCommon common;
 
 	public DrawStrategyTriangle(ShapeComponent shape)
 	{
-		super();
+		super((IShape) shape);
 		this.graphics = ViewState.getGraphics();
 		this.graphicsSelection = ViewState.getGraphics();
 		this.shape = (IShape) shape;
-		this.common = new DrawStrategyCommon((IShape) shape);
 		setStyleParams();
 	}
 
@@ -45,10 +39,10 @@ public class DrawStrategyTriangle extends DrawStrategy {
 	}
 	
 	private void setStyleParams() {
-		stroke = DrawStrategyCommon.makeStroke();
-		primaryColor = common.getPrimaryColor();
-		secondaryColor = common.getSecondaryColor();
-		shadingType = common.getShadingType();
+		stroke = DrawStrategy.makeStroke();
+		primaryColor = this.getPrimaryColor();
+		secondaryColor = this.getSecondaryColor();
+		shadingType = this.getShadingType();
 		cardinality = shape.getCardinality();
 	}
 	
@@ -68,18 +62,8 @@ public class DrawStrategyTriangle extends DrawStrategy {
 	}
 
 	private void drawSelection() {
-		/*
-		var selectedShapes = canvasController.getShapeSelectionList();
-		double scale = 1.2;
-		if (selectedShapes.contains(shape)) {
-			g2Dselected.setColor(Color.BLACK);
-			g2Dselected.setStroke(stroke);
-			RawPoly rp = createTrianglePolygon(shape);
-			Polygon selectionTriangle = dilateTriangle(rp.xs, rp.ys, scale);
-			g2Dselected.drawPolygon(selectionTriangle);
-		}*/
 
-		double scale = 1.2;
+		double scale = 1.2f;
 		ModelState.getShapeComponentSelectionList().stream()
 				.filter((s) -> s.equals(shape))
                 .limit(1)
@@ -103,8 +87,8 @@ public class DrawStrategyTriangle extends DrawStrategy {
 			ysum+=ys[i];
 		}
 
-		double xcent = xsum / 3;
-		double ycent = ysum / 3;
+		double xcent = xsum / 3.0;
+		double ycent = ysum / 3.0;
 		
 		int[] xs_new = new int[3];
 		int[] ys_new = new int[3];
@@ -130,17 +114,15 @@ public class DrawStrategyTriangle extends DrawStrategy {
 
 	private RawPoly createTrianglePolygon(IShape shape) {
 		IShape triangle = (IShape) shape.clone();
-		Integer x = triangle.getAnchor().getX();
-		Integer y = triangle.getAnchor().getY();
 		Integer width = triangle.getWidth();
 		Integer height = triangle.getHeight();
 		Polygon trianglePoly = new Polygon();
-		Integer x1 = x;
-		Integer x2 = x;
-		Integer x3 = x;
-		Integer y1 = y;
-		Integer y2 = y;
-		Integer y3 = y;
+		Integer x1 = triangle.getAnchor().getX();
+		Integer x2 = triangle.getAnchor().getX();
+		Integer x3 = triangle.getAnchor().getX();
+		Integer y1 = triangle.getAnchor().getY();
+		Integer y2 = triangle.getAnchor().getY();
+		Integer y3 = triangle.getAnchor().getY();
 
 		switch (cardinality) {
 			case NE:
@@ -178,7 +160,7 @@ public class DrawStrategyTriangle extends DrawStrategy {
 		return rp;
 	}
 
-	class RawPoly {
+	static class RawPoly {
 		Polygon poly;
 		int[] xs;
 		int[] ys;

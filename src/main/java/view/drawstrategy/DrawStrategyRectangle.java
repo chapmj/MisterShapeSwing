@@ -1,10 +1,10 @@
 package view.drawstrategy;
 
 import model.Selection;
-import model.shape.ShapeShadingType;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 import model.persistence.ModelState;
+import model.shape.ShapeComponent;
+import model.shape.ShapeShadingType;
 import view.viewstate.ViewState;
 
 import java.awt.*;
@@ -16,8 +16,6 @@ import java.awt.*;
 public class DrawStrategyRectangle extends DrawStrategy {
 
 	private final Graphics2D graphics;
-	private final IShape shape;
-	private final DrawStrategyCommon common;
 	private Stroke stroke;
 	private Color primaryColor;
 	private Color secondaryColor;
@@ -25,11 +23,10 @@ public class DrawStrategyRectangle extends DrawStrategy {
 
 	public DrawStrategyRectangle(ShapeComponent shape)
 	{
-		super();
+		super((IShape) shape);
 		this.graphics = ViewState.getGraphics();
 		this.shape = (IShape) shape;
-		this.common = new DrawStrategyCommon((IShape) shape);
-		setStyleParams();	
+		setStyleParams();
 	}
 
 
@@ -41,10 +38,10 @@ public class DrawStrategyRectangle extends DrawStrategy {
 	}
 
 	private void setStyleParams() {
-		stroke = DrawStrategyCommon.makeStroke();
-		primaryColor = common.getPrimaryColor(); 
-		secondaryColor = common.getSecondaryColor(); 
-		shadingType = common.getShadingType();
+		stroke = DrawStrategy.makeStroke();
+		primaryColor = this.getPrimaryColor();
+		secondaryColor = this.getSecondaryColor();
+		shadingType = this.getShadingType();
 	}
 
 	private void paintShapeWithShading() {

@@ -25,7 +25,7 @@ public class DrawStrategyInvisibleRect extends DrawStrategy {
 
 	public DrawStrategyInvisibleRect(ShapeComponent group)
 	{
-		super();
+		super((IShape) group);
 		this.graphics = ViewState.getGraphics();
 		this.group = group;
 		setStyleParams();	
@@ -38,7 +38,7 @@ public class DrawStrategyInvisibleRect extends DrawStrategy {
 
 	private void setStyleParams()
 	{
-		stroke = DrawStrategyCommon.makeStroke();
+		stroke = DrawStrategy.makeStroke();
 	}
 	
 	private void drawSelection() {

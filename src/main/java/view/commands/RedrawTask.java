@@ -1,22 +1,31 @@
-package view;
+package view.commands;
 
 import model.*;
 import model.shape.*;
+import view.ShapeDrawer;
 import view.viewstate.ViewState;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 // Check canvas state and redraw everything.
-public class Redraw {
+public class RedrawTask
+{
+	private final List<ShapeComponent> shapeComponents;
 
-	public static void execute(List<ShapeComponent> shapeComponents) {
+    public RedrawTask(List<ShapeComponent> shapeComponents)
+	{
+		this.shapeComponents = shapeComponents;
+	}
+
+	public void execute() {
 		ShapeDrawer shapeDrawer = new ShapeDrawer();
 		shapeDrawer.add(clearCanvas());
 		shapeDrawer.add(shapeComponents);
 		shapeDrawer.draw();
 	}
 	
-	// Make a big white triangle the size of the canvas.
+	// Make a big white rectangle the size of the canvas.
 	static ShapeComponent clearCanvas()
 	{
 		var canvas = ViewState.getCanvas();
