@@ -3,8 +3,8 @@ package controller;
 import controller.commands.DrawTask;
 import controller.commands.MoveSelectionTask;
 import controller.commands.SaveSelectionTask;
+import controller.suppliersvc.SupplierSvc;
 import model.PointInt;
-import model.api.ModelAPI;
 import model.persistence.ModelState;
 import model.persistence.MouseReleaseObserver;
 import model.persistence.MouseReleaseSubject;
@@ -41,7 +41,6 @@ public class MouseController {
 	
 	// Assign an observer to watch CanvasState for mouse related state changes.
 	private static void registerMouse() {
-        //canvasController.getPaintCanvas().addMouseListener(new MouseHandler());
         ViewState.getCanvas().addMouseListener(new MouseHandler());
 	}
 
@@ -54,21 +53,34 @@ public class MouseController {
 				case DRAW: 
 					var shapeType = ModelState.getApplicationState().getShapeType();
 					var shapeStyle = ModelState.getApplicationState().getShapeStyle();
+
 					var draw = new DrawTask(startPoint, endPoint, shapeType, shapeStyle);
 					draw.execute();
+
 					break;
-				case SELECT: 
-					//CanvasControllerCommands.saveSelection(startPoint, endPoint);
-					var saveSelection = new SaveSelectionTask(startPoint, endPoint, ModelAPI.getComponents());
+
+				case SELECT:
+				    var allShapesSupplier = SupplierSvc.getInstance().getShapeList(SupplierSvc.ShapeListType.ALL_SHAPES);
+					var allShapes = allShapesSupplier.get();
+
+					var saveSelection = new SaveSelectionTask(startPoint, endPoint, allShapes);
 					saveSelection.execute();
+
 					break;
+
 				case MOVE: 
-					//CanvasControllerCommands.moveSelection(startPoint, endPoint);
-					var move = new MoveSelectionTask(startPoint, endPoint, ModelAPI.getSelection());
+					var selectionSupplier = SupplierSvc.getInstance().getShapeList(SupplierSvc.ShapeListType.ALL_SHAPES);
+					var selection = selectionSupplier.get();
+
+					var move = new MoveSelectionTask(startPoint, endPoint, selection);
 					move.execute();
+
 					break;
+
 				default:
-					throw new Exception("Release Mode not implemented");
+				    //log that release mode is not implemented
+					//throw new Exception("Release Mode not implemented");
+
 			}
 		}
 	}

@@ -4,6 +4,7 @@ import controller.commands.factory.*;
 import controller.interfaces.IControllerTask;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
+import controller.suppliersvc.SupplierSvc;
 import model.PointInt;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
@@ -24,24 +25,25 @@ public class JPaintController implements IJPaintController, ISingleton {
 	private static JPaintController instance;
 
 	//Using Functional interfaces to decouple Controller from Model.
-	private final Supplier<PointInt> pasteLocationSupplier = ModelAPI::getPasteLocation;
-	private final Supplier<List<ShapeComponent>> copyBufferSupplier = ModelAPI::getComponentBuffer;
-	private final Supplier<List<ShapeComponent>> selectionSupplier = ModelAPI::getSelection;
-	private final Supplier<List<ShapeComponent>> allShapesSupplier = ModelAPI::getComponents;
+	//private final Supplier<PointInt> pasteLocationSupplier = ModelAPI::getPasteLocation;
+	//private final Supplier<List<ShapeComponent>> copyBufferSupplier = ModelAPI::getComponentBuffer;
+	//private final Supplier<List<ShapeComponent>> selectionSupplier = ModelAPI::getSelection;
+	//private final Supplier<List<ShapeComponent>> allShapesSupplier = ModelAPI::getComponents;
 	private final Consumer<IControllerTask> registerCanvasStateSubscriber = ModelAPI::registerCanvasStateSubscriber;
 	final Consumer<List<ShapeComponent>> redrawer = ViewAPI::redraw;
 
 	//Initialize object constructors to perform tasks on model based on functional interfaces
+	SupplierSvc supplierSvc = SupplierSvc.getInstance();
 	private final AbstractTaskFactory copyTaskFactory = new CopyTaskFactory();
-	private final AbstractTaskFactory deleteTaskFactory = new DeleteTaskFactory(selectionSupplier);
-	private final AbstractTaskFactory pasteTaskFactory = new PasteTaskFactory(pasteLocationSupplier, copyBufferSupplier);
-	private final AbstractTaskFactory groupTaskFactory = new GroupTaskFactory(selectionSupplier);
-	private final AbstractTaskFactory ungroupTaskFactory = new UngroupTaskFactory(selectionSupplier);
+	private final AbstractTaskFactory deleteTaskFactory = new DeleteTaskFactory(supplierSvc.getShapeList(SupplierSvc.ShapeListType.SELECTION));
+	private final AbstractTaskFactory pasteTaskFactory = new PasteTaskFactory(supplierSvc.getPasteLocation(), supplierSvc.getShapeList(SupplierSvc.ShapeListType.COPY_BUFFER));
+	private final AbstractTaskFactory groupTaskFactory = new GroupTaskFactory(supplierSvc.getShapeList(SupplierSvc.ShapeListType.SELECTION));
+	private final AbstractTaskFactory ungroupTaskFactory = new UngroupTaskFactory(supplierSvc.getShapeList(SupplierSvc.ShapeListType.SELECTION));
 	private final AbstractTaskFactory undoTaskFactory = new UndoTaskFactory();
 	private final AbstractTaskFactory redoTaskFactory = new RedoTaskFactory();
 
 
-	private final AbstractTaskFactory redrawTaskFactory = new RedrawTaskFactory(allShapesSupplier, redrawer);
+	private final AbstractTaskFactory redrawTaskFactory = new RedrawTaskFactory(SupplierSvc.getInstance().getShapeList(SupplierSvc.ShapeListType.ALL_SHAPES), redrawer);
 
 	public JPaintController() throws Exception
 	{
