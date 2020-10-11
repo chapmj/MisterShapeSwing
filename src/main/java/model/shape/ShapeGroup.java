@@ -121,7 +121,31 @@ public class ShapeGroup extends ShapeComponent {
 		}
 		return new PointInt(xMin, yMin);
 	}
-	
+
+	@Override
+	public ShapeCardinality getCardinality()
+	{
+		return null;
+	}
+
+	@Override
+	public ShapeStyle getStyle()
+	{
+		return null;
+	}
+
+	@Override
+	public ShapeColor getPrimaryColor()
+	{
+		return null;
+	}
+
+	@Override
+	public ShapeColor getSecondaryColor()
+	{
+		return null;
+	}
+
 	public Dimensions getDimensions() {
 		return new Dimensions(cachedHeight, cachedWidth);
 	}

@@ -4,8 +4,10 @@ import controller.commands.factory.*;
 import controller.interfaces.IControllerTask;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
-import controller.suppliersvc.SupplierSvc;
-import model.PointInt;
+import controller.suppliersvc.CanvasShapesSvc;
+import controller.suppliersvc.CopyBufferSvc;
+import controller.suppliersvc.PasteLocationSvc;
+import controller.suppliersvc.SelectionSvc;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
 import view.EventName;
@@ -14,7 +16,6 @@ import view.viewstate.ViewState;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /* JPaintController is responsible for application UI widgets and events 
  * outside the canvas.
@@ -33,17 +34,16 @@ public class JPaintController implements IJPaintController, ISingleton {
 	final Consumer<List<ShapeComponent>> redrawer = ViewAPI::redraw;
 
 	//Initialize object constructors to perform tasks on model based on functional interfaces
-	SupplierSvc supplierSvc = SupplierSvc.getInstance();
 	private final AbstractTaskFactory copyTaskFactory = new CopyTaskFactory();
-	private final AbstractTaskFactory deleteTaskFactory = new DeleteTaskFactory(supplierSvc.getShapeList(SupplierSvc.ShapeListType.SELECTION));
-	private final AbstractTaskFactory pasteTaskFactory = new PasteTaskFactory(supplierSvc.getPasteLocation(), supplierSvc.getShapeList(SupplierSvc.ShapeListType.COPY_BUFFER));
-	private final AbstractTaskFactory groupTaskFactory = new GroupTaskFactory(supplierSvc.getShapeList(SupplierSvc.ShapeListType.SELECTION));
-	private final AbstractTaskFactory ungroupTaskFactory = new UngroupTaskFactory(supplierSvc.getShapeList(SupplierSvc.ShapeListType.SELECTION));
+	private final AbstractTaskFactory deleteTaskFactory = new DeleteTaskFactory(SelectionSvc.get());
+	private final AbstractTaskFactory pasteTaskFactory = new PasteTaskFactory(PasteLocationSvc.get(), CopyBufferSvc.get());
+	private final AbstractTaskFactory groupTaskFactory = new GroupTaskFactory(SelectionSvc.get());
+	private final AbstractTaskFactory ungroupTaskFactory = new UngroupTaskFactory(SelectionSvc.get());
 	private final AbstractTaskFactory undoTaskFactory = new UndoTaskFactory();
 	private final AbstractTaskFactory redoTaskFactory = new RedoTaskFactory();
 
 
-	private final AbstractTaskFactory redrawTaskFactory = new RedrawTaskFactory(SupplierSvc.getInstance().getShapeList(SupplierSvc.ShapeListType.ALL_SHAPES), redrawer);
+	private final AbstractTaskFactory redrawTaskFactory = new RedrawTaskFactory(CanvasShapesSvc.get(), redrawer);
 
 	public JPaintController() throws Exception
 	{

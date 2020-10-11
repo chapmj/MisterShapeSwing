@@ -89,12 +89,6 @@ public class Shape extends ShapeComponent implements IShape, Cloneable {
 		this.anchor = anchor;
 	}
 
-	/*
-	public void translate(PointInt translation) {
-		CanvasUtils.moveShape(this, translation);
-	}
-	 */
-	
 	@Override
 	public ShapeComponent clone() {
 	    return (ShapeComponent) ShapeFactory.duplicateShape(this);
@@ -116,7 +110,7 @@ public class Shape extends ShapeComponent implements IShape, Cloneable {
 
 	@Override
 	public List<IShape> getShapes() {
-		ArrayList<IShape> list = new ArrayList<>();
+		List<IShape> list = new ArrayList<>();
 		list.add(this);
 		return list;
 	}

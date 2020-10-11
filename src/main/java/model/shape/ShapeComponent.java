@@ -10,7 +10,7 @@ import java.util.List;
 /* Abstract ShapeComponent is a super type of Shape and ShapeGroup.  
  * COMPOSITE PATTERN
  */
-public abstract class ShapeComponent implements IBoundary, Cloneable
+public abstract class ShapeComponent implements IBoundary, Cloneable, IShape
 {
 	public abstract Integer getHeight();
 	public abstract Integer getWidth();

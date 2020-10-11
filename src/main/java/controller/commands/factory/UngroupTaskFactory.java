@@ -16,22 +16,22 @@ import java.util.stream.Stream;
 
 public class UngroupTaskFactory extends AbstractTaskFactory
 {
-    private final Supplier<List<ShapeComponent>> selectionSupplier;
+    private final List<ShapeComponent> selection;
+    Predicate<ShapeComponent> isShapeGroup = component -> component instanceof ShapeGroup;
+    Predicate<ShapeComponent> isShape = shapeComponent -> shapeComponent instanceof IShape;
+    Function<List<IShape>, Stream<ShapeComponent>> toComponentStream = shapes -> shapes.stream().map(shape -> (ShapeComponent)shape);
+    Function<Optional<ShapeComponent>, Stream<ShapeComponent>> optionToStream = (comp)->Stream.of(comp.get());
 
-    public UngroupTaskFactory(Supplier<List<ShapeComponent>> selectionSupplier)
+    public UngroupTaskFactory(List<ShapeComponent> selection)
     {
-        this.selectionSupplier = selectionSupplier;
+        this.selection = selection;
     }
 
     @Override
     public AbstractControllerTask createTask()
     {
-        Predicate<ShapeComponent> isShapeGroup = component -> component instanceof ShapeGroup;
-        Predicate<ShapeComponent> isShape = shapeComponent -> shapeComponent instanceof IShape;
-        Function<List<IShape>, Stream<ShapeComponent>> toComponentStream = shapes -> shapes.stream().map(shape -> (ShapeComponent)shape);
-        Function<Optional<ShapeComponent>, Stream<ShapeComponent>> optionToStream = (comp)->Stream.of(comp.get());
 
-        var shapes = selectionSupplier.get();
+        var shapes = selection;
 
         /* populate shapes into two categories: ungroupedShapes (shapeleafs), groups (shapeGroup composite) */
         var groups = shapes.stream().filter(isShapeGroup).collect(Collectors.toList());

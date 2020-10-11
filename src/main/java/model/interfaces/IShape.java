@@ -11,13 +11,9 @@ import model.shape.*;
 public interface IShape extends IBoundary {
 	ShapeCardinality getCardinality();
 	ShapeStyle getStyle();
-	//void translate(PointInt translation);
 	ShapeColor getPrimaryColor();
 	ShapeColor getSecondaryColor();
 	Dimensions getDimensions();
 	ShapeType getType();
 	ShapeComponent clone();
-//	void setAnchor(PointInt anchor);
-//	void setHeight(Integer height);
-//	void setWidth(Integer width);
 }

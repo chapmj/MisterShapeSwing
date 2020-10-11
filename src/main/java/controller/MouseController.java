@@ -3,7 +3,8 @@ package controller;
 import controller.commands.DrawTask;
 import controller.commands.MoveSelectionTask;
 import controller.commands.SaveSelectionTask;
-import controller.suppliersvc.SupplierSvc;
+import controller.suppliersvc.CanvasShapesSvc;
+import controller.suppliersvc.SelectionSvc;
 import model.PointInt;
 import model.persistence.ModelState;
 import model.persistence.MouseReleaseObserver;
@@ -60,21 +61,15 @@ public class MouseController {
 					break;
 
 				case SELECT:
-				    var allShapesSupplier = SupplierSvc.getInstance().getShapeList(SupplierSvc.ShapeListType.ALL_SHAPES);
-					var allShapes = allShapesSupplier.get();
-
+					var allShapes = CanvasShapesSvc.get();
 					var saveSelection = new SaveSelectionTask(startPoint, endPoint, allShapes);
 					saveSelection.execute();
-
 					break;
 
 				case MOVE: 
-					var selectionSupplier = SupplierSvc.getInstance().getShapeList(SupplierSvc.ShapeListType.ALL_SHAPES);
-					var selection = selectionSupplier.get();
-
+					var selection = SelectionSvc.get();
 					var move = new MoveSelectionTask(startPoint, endPoint, selection);
 					move.execute();
-
 					break;
 
 				default:
