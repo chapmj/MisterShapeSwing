@@ -3,7 +3,6 @@ package model.shape;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.CanvasUtils;
 import model.Dimensions;
 import model.PointInt;
 import model.interfaces.IShape;
@@ -180,7 +179,9 @@ public class ShapeGroup extends ShapeComponent {
 		Integer dX = anchor.getX() - cachedAnchor.getX();
 		Integer dY = anchor.getY() - cachedAnchor.getY();
 		PointInt delta = new PointInt(dX,dY);
-		children.forEach((child) -> CanvasUtils.moveShape(child, delta));
+		children.forEach((shape) -> new PointInt(
+				shape.getAnchor().getX() + delta.getX(),
+				shape.getAnchor().getY() + delta.getY()));
 		setGroupBounds();
 		getAnchor();
 	}

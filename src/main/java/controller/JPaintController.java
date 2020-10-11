@@ -25,11 +25,6 @@ import java.util.function.Consumer;
 public class JPaintController implements IJPaintController, ISingleton {
 	private static JPaintController instance;
 
-	//Using Functional interfaces to decouple Controller from Model.
-	//private final Supplier<PointInt> pasteLocationSupplier = ModelAPI::getPasteLocation;
-	//private final Supplier<List<ShapeComponent>> copyBufferSupplier = ModelAPI::getComponentBuffer;
-	//private final Supplier<List<ShapeComponent>> selectionSupplier = ModelAPI::getSelection;
-	//private final Supplier<List<ShapeComponent>> allShapesSupplier = ModelAPI::getComponents;
 	private final Consumer<IControllerTask> registerCanvasStateSubscriber = ModelAPI::registerCanvasStateSubscriber;
 	final Consumer<List<ShapeComponent>> redrawer = ViewAPI::redraw;
 
