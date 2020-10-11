@@ -10,17 +10,17 @@ import java.util.function.Supplier;
 
 public class DeleteTaskFactory extends AbstractTaskFactory
 {
-    private final List<ShapeComponent> selection;
+    private final Supplier<List<ShapeComponent>> selectionSupplier;
 
-    public DeleteTaskFactory(List<ShapeComponent> selection)
+    public DeleteTaskFactory(Supplier<List<ShapeComponent>> selectionSupplier)
     {
-        this.selection= selection;
+        this.selectionSupplier = selectionSupplier;
     }
 
     @Override
     public AbstractControllerTask createTask()
     {
-        var shapes = new ArrayList<>(selection);
+        var shapes = new ArrayList<>(selectionSupplier.get());
 	    return new DeleteTask(shapes);
     }
 

@@ -1,5 +1,9 @@
 package controller.commands;
 
+import controller.api.AddShapesSvc;
+import controller.api.AddToSelectionSvc;
+import controller.api.ClearSelectionSvc;
+import controller.api.RemoveShapeSvc;
 import model.CommandHistory;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
@@ -44,23 +48,23 @@ public class UngroupTask extends AbstractControllerTask
 	private void ungroup()
 	{
 		//TODO: emit model commands for better unit test
-		ModelAPI.removeShapes(groups);
-		ModelAPI.addShapes(groupedShapes);
-		ModelAPI.addShapes(ungroupedShapes);
-		ModelAPI.clearSelection();
-		ModelAPI.addComponentToSelection(ungroupedShapes);
-		ModelAPI.addComponentToSelection(groupedShapes);
+		RemoveShapeSvc.accept(groups);
+		AddShapesSvc.accept(groupedShapes);
+		AddShapesSvc.accept(ungroupedShapes);
+		ClearSelectionSvc.apply();
+		AddToSelectionSvc.accept(ungroupedShapes);
+		AddToSelectionSvc.accept(groupedShapes);
 	}
 
 	// Remove shapes from canvas and add back group.
 	@Override
 	public void undo()
 	{
-		ModelAPI.removeShapes(groupedShapes);
-		ModelAPI.addShapes(groups);
-		ModelAPI.clearSelection();
-		ModelAPI.addShapes(ungroupedShapes);
-		ModelAPI.addShapes(groups);
+		RemoveShapeSvc.accept(groupedShapes);
+		AddShapesSvc.accept(groups);
+		ClearSelectionSvc.apply();
+		AddShapesSvc.accept(ungroupedShapes);
+		AddShapesSvc.accept(groups);
 	}
 
 	// Remove group and add back shapes.

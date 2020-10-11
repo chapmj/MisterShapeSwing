@@ -1,5 +1,8 @@
 package controller.commands;
 
+import controller.api.AddShapesSvc;
+import controller.api.ClearSelectionSvc;
+import controller.api.RemoveShapeSvc;
 import model.CommandHistory;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
@@ -31,8 +34,8 @@ public class DeleteTask extends AbstractControllerTask
 	@Override
 	public void execute()
 	{
-		ModelAPI.removeShapes(shapes);
-		ModelAPI.clearSelection();
+		RemoveShapeSvc.accept(shapes);
+		ClearSelectionSvc.apply();
 		CommandHistory.add(this);
 		ModelAPI.notifyCanvasObservers();
 	}
@@ -43,14 +46,14 @@ public class DeleteTask extends AbstractControllerTask
 	@Override
 	public void undo()
 	{
-		ModelAPI.addShapes(shapes);
+		AddShapesSvc.accept(shapes);
 	}
 
 	// Remove the shape from the model's shape list 
 	@Override
 	public void redo()
 	{
-		ModelAPI.removeShapes(shapes);
+		RemoveShapeSvc.accept(shapes);
 	}
 
 }

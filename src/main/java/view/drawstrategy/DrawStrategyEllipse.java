@@ -21,8 +21,8 @@ public class DrawStrategyEllipse extends DrawStrategy {
 	private Color secondaryColor;
 	private ShapeShadingType shadingType;
 
-	public DrawStrategyEllipse(ShapeComponent shape) {
-		super((IShape) shape);
+	public DrawStrategyEllipse(IShape shape) {
+		super(shape);
 		this.graphics = ViewState.getGraphics();
 		setStyleParams();
 	}
@@ -56,9 +56,10 @@ public class DrawStrategyEllipse extends DrawStrategy {
 	}
 		
 	private void drawSelection() {
-		var selectedShapes = ModelState.getShapeSelectionList();
+		//var selectedShapes = ModelState.getShapeSelectionList();
+		var selectedShapes = ModelState.getShapeComponentSelectionList();
 		if (selectedShapes.contains(shape)) {
-			IShape selection = (IShape) (new Selection((ShapeComponent) shape, 10).getSelectionShape());
+			IShape selection = new Selection(shape, 10).getSelectionShape();
 			
 			graphics.setColor(Color.BLACK);
 			graphics.setStroke(stroke);

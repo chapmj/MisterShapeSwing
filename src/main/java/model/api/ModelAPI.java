@@ -126,4 +126,9 @@ public class ModelAPI
                         e.printStackTrace();
                 }
         }
+
+        public static void putComponentBuffer(List<ShapeComponent> shapeComponents)
+        {
+                ModelState.getCanvasState().setComponentCopyBuffer(shapeComponents);
+        }
 }

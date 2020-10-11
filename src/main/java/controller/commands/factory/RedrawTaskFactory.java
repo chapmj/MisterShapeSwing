@@ -6,13 +6,14 @@ import model.shape.ShapeComponent;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class RedrawTaskFactory extends AbstractTaskFactory
 {
-    private final List<ShapeComponent> allShapes;
+    private final Supplier<List<ShapeComponent>> allShapes;
     private final Consumer<List<ShapeComponent>> redrawer;
 
-    public RedrawTaskFactory(List<ShapeComponent> allShapes, Consumer<List<ShapeComponent>> redrawer)
+    public RedrawTaskFactory(Supplier<List<ShapeComponent>> allShapes, Consumer<List<ShapeComponent>> redrawer)
     {
         this.allShapes = allShapes;
         this.redrawer = redrawer;
@@ -21,6 +22,6 @@ public class RedrawTaskFactory extends AbstractTaskFactory
     @Override
     public AbstractControllerTask createTask()
     {
-        return new RedrawTask(allShapes, redrawer);
+        return new RedrawTask(allShapes.get(), redrawer);
     }
 }

@@ -1,5 +1,7 @@
 package controller.commands;
 
+import controller.api.AddToSelectionSvc;
+import controller.api.ClearSelectionSvc;
 import model.PointInt;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class SaveSelectionTask extends AbstractControllerTask
 {
-	private List<ShapeComponent> selection;
+	private final List<ShapeComponent> selection;
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
@@ -32,8 +34,8 @@ public class SaveSelectionTask extends AbstractControllerTask
 	 */
 	public void execute()
 	{
-		ModelAPI.clearSelection();
-		ModelAPI.addComponentToSelection(selection);
+		ClearSelectionSvc.apply();
+		AddToSelectionSvc.accept(selection);
 		ModelAPI.notifyCanvasObservers();
 	}
 

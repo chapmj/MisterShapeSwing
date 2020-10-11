@@ -57,13 +57,14 @@ public class ShapeGroup extends ShapeComponent {
 		Integer yMin = Integer.MAX_VALUE;
 
 		for (ShapeComponent child : children) {
-			Integer width = child.getWidth();
-			Integer height = child.getHeight();
 			PointInt anchor = child.getAnchor();
-			int xRight = width + anchor.getX();
-			int yRight = height + anchor.getY();
-			Integer xLeft = anchor.getX();
-			Integer yLeft = anchor.getY();
+
+			Integer xLeft = child.getAnchor().getX();
+			Integer yLeft = child.getAnchor().getY();
+
+			int xRight = child.getWidth() + xLeft;
+			int yRight = child.getHeight() + xRight;
+
 			if (xRight > xMax) xMax = xRight;
 			if (yRight > yMax) yMax = yRight;
 			if (xLeft < xMin) xMin = xLeft;

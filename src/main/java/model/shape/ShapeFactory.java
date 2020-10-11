@@ -18,10 +18,10 @@ public class ShapeFactory  {
 			shape.getAnchor().clone());
 	}
 
-	public static ShapeComponent duplicateShapeComponent(ShapeComponent shape) {
+	public static ShapeComponent duplicateShapeComponent(IShape shape) {
 
 		if (shape instanceof Shape)
-			return (ShapeComponent) duplicateShape((IShape) shape);
+			return (ShapeComponent) duplicateShape(shape);
 
 		return new Shape(
 			shape.getType(), 

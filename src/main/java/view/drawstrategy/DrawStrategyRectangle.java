@@ -1,7 +1,6 @@
 package view.drawstrategy;
 
 import model.Selection;
-import model.interfaces.IShape;
 import model.persistence.ModelState;
 import model.shape.ShapeComponent;
 import model.shape.ShapeShadingType;
@@ -23,9 +22,9 @@ public class DrawStrategyRectangle extends DrawStrategy {
 
 	public DrawStrategyRectangle(ShapeComponent shape)
 	{
-		super((IShape) shape);
+		super(shape);
 		this.graphics = ViewState.getGraphics();
-		this.shape = (IShape) shape;
+		this.shape = shape;
 		setStyleParams();
 	}
 
@@ -79,9 +78,10 @@ public class DrawStrategyRectangle extends DrawStrategy {
 	}
 
 	private void drawSelection() {
-		var selectedShapes = ModelState.getShapeSelectionList();
+		//var selectedShapes = ModelState.getShapeSelectionList();
+		var selectedShapes = ModelState.getShapeComponentSelectionList();
 		if (selectedShapes.contains(shape)) {
-			IShape selection = (IShape) (new Selection((ShapeComponent) shape, 10).getSelectionShape());
+			var selection = new Selection(shape, 10).getSelectionShape();
 			graphics.setColor(Color.BLACK);
 			graphics.setStroke(stroke);
 			graphics.drawRect(

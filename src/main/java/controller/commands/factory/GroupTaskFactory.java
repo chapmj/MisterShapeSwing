@@ -7,12 +7,13 @@ import model.shape.ShapeGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class GroupTaskFactory extends AbstractTaskFactory
 {
-    private final List<ShapeComponent> selection;
+    private final Supplier<List<ShapeComponent>> selection;
 
-    public GroupTaskFactory(List<ShapeComponent> selection)
+    public GroupTaskFactory(Supplier<List<ShapeComponent>> selection)
     {
         this.selection = selection;
     }
@@ -20,7 +21,7 @@ public class GroupTaskFactory extends AbstractTaskFactory
     @Override
     public AbstractControllerTask createTask()
     {
-        var shapes = new ArrayList<>(selection);
+        var shapes = new ArrayList<>(selection.get());
         var shapeGroup = new ShapeGroup(shapes);
 
         return new GroupTask(shapes, shapeGroup);

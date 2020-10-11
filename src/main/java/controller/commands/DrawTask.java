@@ -1,5 +1,7 @@
 package controller.commands;
 
+import controller.api.AddShapesSvc;
+import controller.api.RemoveShapeSvc;
 import model.CommandHistory;
 import model.Dimensions;
 import model.PointInt;
@@ -39,20 +41,20 @@ public class DrawTask extends AbstractControllerTask
 	@Override
 	public void undo()
 	{
-		ModelAPI.removeShape(shape);
+		RemoveShapeSvc.accept(shape);
 	}
 
 	// To redo, put the shape back on the canvas.
 	@Override
 	public void redo()
 	{
-		ModelAPI.addShape(shape);
+		AddShapesSvc.accept(shape);
 	}
 
 	@Override
 	public void execute()
 	{
-		ModelAPI.addShape(shape);
+		AddShapesSvc.accept(shape);
 		CommandHistory.add(this);
 		ModelAPI.notifyCanvasObservers();
 	}

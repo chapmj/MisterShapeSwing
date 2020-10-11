@@ -1,21 +1,22 @@
 package model;
 
 import model.interfaces.IBoundary;
+import model.interfaces.IShape;
 import model.shape.ShapeComponent;
 import model.shape.ShapeFactory;
 
 /* A selection is like a shape component, but it doesn't persist on the canvas.
  * Its purpose is to outline which shapes the user has selected.
  */
-public class Selection implements IBoundary{
+public class Selection implements IBoundary {
 
 	private Integer selectionFactor;
-	private ShapeComponent shape;
+	private IShape shape;
 	private Integer height;
 	private Integer width;
 	private PointInt anchor;
 
-	public Selection(ShapeComponent shape, Integer selectionFactor) {
+	public Selection(IShape shape, Integer selectionFactor) {
 		this.shape = shape;
 		this.selectionFactor = selectionFactor;
 	}

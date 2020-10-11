@@ -1,5 +1,6 @@
 package controller.commands;
 
+import controller.api.ShapeLocationSvc;
 import model.CommandHistory;
 import model.PointInt;
 import model.api.ModelAPI;
@@ -7,7 +8,6 @@ import model.shape.ShapeComponent;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 // Responsible for moving all ShapeComponents in a selection to new coordinates.
 public class MoveSelectionTask extends AbstractControllerTask
@@ -15,7 +15,7 @@ public class MoveSelectionTask extends AbstractControllerTask
 	private final Integer deltaX;
 	private final Integer deltaY;
 	private final List<ShapeComponent> shapes;
-	private final BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
+	//private final BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
 
 	@SuppressWarnings("unused")
 	private MoveSelectionTask() throws Exception
@@ -65,7 +65,7 @@ public class MoveSelectionTask extends AbstractControllerTask
 				new PointInt(
 					shapeComponent.getAnchor().getX() + deltaX,
 					shapeComponent.getAnchor().getY() + deltaY)))
-			.forEach((entry) -> entry.forEach(moveShapeInModel));
+			.forEach((entry) -> entry.forEach(ShapeLocationSvc::accept));
 	}
 
 	private void moveBack()
@@ -76,6 +76,6 @@ public class MoveSelectionTask extends AbstractControllerTask
 					new PointInt(
 							shapeComponent.getAnchor().getX() - deltaX,
 							shapeComponent.getAnchor().getY() - deltaY)))
-			.forEach((entry) -> entry.forEach(moveShapeInModel));
+			.forEach((entry) -> entry.forEach(ShapeLocationSvc::accept));
 	}
 }

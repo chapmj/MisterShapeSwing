@@ -3,8 +3,8 @@ package controller;
 import controller.commands.DrawTask;
 import controller.commands.MoveSelectionTask;
 import controller.commands.SaveSelectionTask;
-import controller.suppliersvc.CanvasShapesSvc;
-import controller.suppliersvc.SelectionSvc;
+import controller.api.CanvasShapesSvc;
+import controller.api.SelectionSvc;
 import model.PointInt;
 import model.persistence.ModelState;
 import model.persistence.MouseReleaseObserver;
@@ -81,6 +81,7 @@ public class MouseController {
 	}
 
 	// CanvasState interactions
+	// Todo create mouse input service
 	public PointInt getPress()
 	{
 		return ModelState.getCanvasState().getMousePressed();

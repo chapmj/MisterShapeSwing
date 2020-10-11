@@ -4,15 +4,14 @@ import controller.commands.factory.*;
 import controller.interfaces.IControllerTask;
 import controller.interfaces.IJPaintController;
 import controller.interfaces.ISingleton;
-import controller.suppliersvc.CanvasShapesSvc;
-import controller.suppliersvc.CopyBufferSvc;
-import controller.suppliersvc.PasteLocationSvc;
-import controller.suppliersvc.SelectionSvc;
+import controller.api.CanvasShapesSvc;
+import controller.api.CopyBufferSvc;
+import controller.api.PasteLocationSvc;
+import controller.api.SelectionSvc;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
 import view.EventName;
 import view.ViewAPI;
-import view.viewstate.ViewState;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,15 +29,15 @@ public class JPaintController implements IJPaintController, ISingleton {
 
 	//Initialize object constructors to perform tasks on model based on functional interfaces
 	private final AbstractTaskFactory copyTaskFactory = new CopyTaskFactory();
-	private final AbstractTaskFactory deleteTaskFactory = new DeleteTaskFactory(SelectionSvc.get());
-	private final AbstractTaskFactory pasteTaskFactory = new PasteTaskFactory(PasteLocationSvc.get(), CopyBufferSvc.get());
-	private final AbstractTaskFactory groupTaskFactory = new GroupTaskFactory(SelectionSvc.get());
-	private final AbstractTaskFactory ungroupTaskFactory = new UngroupTaskFactory(SelectionSvc.get());
+	private final AbstractTaskFactory deleteTaskFactory = new DeleteTaskFactory(SelectionSvc.getSupplier());
+	private final AbstractTaskFactory pasteTaskFactory = new PasteTaskFactory(PasteLocationSvc.getSupplier(), CopyBufferSvc.getSupplier());
+	private final AbstractTaskFactory groupTaskFactory = new GroupTaskFactory(SelectionSvc.getSupplier());
+	private final AbstractTaskFactory ungroupTaskFactory = new UngroupTaskFactory(SelectionSvc.getSupplier());
 	private final AbstractTaskFactory undoTaskFactory = new UndoTaskFactory();
 	private final AbstractTaskFactory redoTaskFactory = new RedoTaskFactory();
 
 
-	private final AbstractTaskFactory redrawTaskFactory = new RedrawTaskFactory(CanvasShapesSvc.get(), redrawer);
+	private final AbstractTaskFactory redrawTaskFactory = new RedrawTaskFactory(CanvasShapesSvc.getSupplier(), redrawer);
 
 	public JPaintController() throws Exception
 	{
@@ -64,14 +63,13 @@ public class JPaintController implements IJPaintController, ISingleton {
 
 	private void registerEvents() throws Exception
 	{
-		var ui = ViewState.getUI();
-		ui.addEvent(EventName.COPY,    () -> copyTaskFactory.createTask().execute());
-		ui.addEvent(EventName.PASTE,   () -> pasteTaskFactory.createTask().execute());
-		ui.addEvent(EventName.DELETE,  () -> deleteTaskFactory.createTask().execute());
-		ui.addEvent(EventName.GROUP,   () -> groupTaskFactory.createTask().execute());
-		ui.addEvent(EventName.UNGROUP, () -> ungroupTaskFactory.createTask().execute());
-		ui.addEvent(EventName.UNDO,    () -> undoTaskFactory.createTask().execute());
-		ui.addEvent(EventName.REDO,    () -> redoTaskFactory.createTask().execute());
+		ViewAPI.addGuiEvent(EventName.COPY,    () -> copyTaskFactory.createTask().execute());
+		ViewAPI.addGuiEvent(EventName.PASTE,   () -> pasteTaskFactory.createTask().execute());
+		ViewAPI.addGuiEvent(EventName.DELETE,  () -> deleteTaskFactory.createTask().execute());
+		ViewAPI.addGuiEvent(EventName.GROUP,   () -> groupTaskFactory.createTask().execute());
+		ViewAPI.addGuiEvent(EventName.UNGROUP, () -> ungroupTaskFactory.createTask().execute());
+		ViewAPI.addGuiEvent(EventName.UNDO,    () -> undoTaskFactory.createTask().execute());
+		ViewAPI.addGuiEvent(EventName.REDO,    () -> redoTaskFactory.createTask().execute());
 	}
 
 	// Observe CanvasState fields that concern this controller.

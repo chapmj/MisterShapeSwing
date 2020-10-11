@@ -1,5 +1,7 @@
 package controller.commands;
 
+import controller.api.CopyBufferSvc;
+import controller.api.SelectionSvc;
 import model.api.ModelAPI;
 
 /* Responsible for updating the model's copy buffer with
@@ -11,7 +13,8 @@ public class CopyTask extends AbstractControllerTask
 	@Override
 	public void execute()
 	{
-		ModelAPI.transferSelectionToBuffer();
+		var selection = SelectionSvc.get();
+		CopyBufferSvc.put(selection);
 	}
 
 }

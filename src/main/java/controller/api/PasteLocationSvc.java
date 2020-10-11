@@ -1,4 +1,4 @@
-package controller.suppliersvc;
+package controller.api;
 
 import model.PointInt;
 import model.api.ModelAPI;
@@ -12,5 +12,10 @@ public class PasteLocationSvc
     public static PointInt get()
     {
         return supplier.get();
+    }
+
+    public static Supplier<PointInt> getSupplier()
+    {
+        return supplier;
     }
 }

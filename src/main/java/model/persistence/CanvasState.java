@@ -1,6 +1,7 @@
 package model.persistence;
 
 import model.PointInt;
+import model.shape.Shape;
 import model.shape.ShapeGroup;
 import model.interfaces.ICanvasState;
 import model.interfaces.IShape;
@@ -152,14 +153,15 @@ public class CanvasState implements ICanvasState
 				.collect(Collectors.toList());
 
 	}
-	
+
+	/*
 	public List<IShape> getShapeSelectionList() {
 		return Stream.of(componentSelectionList)
-				.filter ((component) -> component instanceof IShape)
+				.filter ((component) -> component instanceof Shape)
 				.map((component) -> (IShape) component)
 				.collect (Collectors.toList());
 
-	}
+	}*/
 
 	public void addShapeGroup(ShapeGroup group) {
 		ArrayList<ShapeComponent> list = new ArrayList<>();

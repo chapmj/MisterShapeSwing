@@ -47,10 +47,11 @@ public class ModelState
         ModelState.applicationState = applicationState;
     }
 
+    /*
     public static List<IShape> getShapeSelectionList()
     {
         return ModelState.canvasState.getShapeSelectionList();
-    }
+    }*/
 
     public static List<ShapeComponent> getShapeComponentSelectionList()
     {

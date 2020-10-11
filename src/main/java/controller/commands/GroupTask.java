@@ -1,5 +1,9 @@
 package controller.commands;
 
+import controller.api.AddShapesSvc;
+import controller.api.AddToSelectionSvc;
+import controller.api.ClearSelectionSvc;
+import controller.api.RemoveShapeSvc;
 import model.CommandHistory;
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
@@ -42,10 +46,11 @@ public class GroupTask extends AbstractControllerTask
 
 	private void group()
 	{
-		ModelAPI.removeShapes(shapes);
-		ModelAPI.addShapeGroup(group);
-		ModelAPI.clearSelection();
-		ModelAPI.addComponentToSelection(group);
+		RemoveShapeSvc.accept(shapes);
+		AddShapesSvc.accept(group);
+		ClearSelectionSvc.apply();
+
+		AddToSelectionSvc.accept(group);
 
 	}
 
@@ -53,19 +58,19 @@ public class GroupTask extends AbstractControllerTask
 	@Override
 	public void undo()
 	{
-		ModelAPI.removeShape(group);
-		ModelAPI.addShapes(shapes);
-        ModelAPI.clearSelection();
-		ModelAPI.addComponentToSelection(shapes);
+		RemoveShapeSvc.accept(group);
+		AddShapesSvc.accept(shapes);
+        ClearSelectionSvc.apply();
+		AddToSelectionSvc.accept(shapes);
 	}
 
 	// Add the group back to the model state.
 	@Override
 	public void redo()
 	{
-		ModelAPI.removeShapes(shapes);
-		ModelAPI.addShapeGroup(group);
-        ModelAPI.clearSelection();
-		ModelAPI.addComponentToSelection(group);
+		RemoveShapeSvc.accept(shapes);
+		AddShapesSvc.accept(group);
+        ClearSelectionSvc.apply();
+		AddToSelectionSvc.accept(group);
 	}
 }

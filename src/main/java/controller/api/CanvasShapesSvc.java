@@ -1,4 +1,4 @@
-package controller.suppliersvc;
+package controller.api;
 
 import model.api.ModelAPI;
 import model.shape.ShapeComponent;
@@ -13,5 +13,10 @@ public class CanvasShapesSvc
     public static List<ShapeComponent> get()
     {
         return supplier.get();
+    }
+
+    public static Supplier<List<ShapeComponent>> getSupplier()
+    {
+        return supplier;
     }
 }

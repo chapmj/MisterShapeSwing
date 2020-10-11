@@ -7,13 +7,14 @@ import model.shape.ShapeComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class PasteTaskFactory extends AbstractTaskFactory
 {
-    private final PointInt pasteLocation;
-    private final List<ShapeComponent> componentBuffer;
+    private final Supplier<PointInt> pasteLocation;
+    private final Supplier<List<ShapeComponent>> componentBuffer;
 
-    public PasteTaskFactory(PointInt pasteLocation, List<ShapeComponent> componentBuffer)
+    public PasteTaskFactory(Supplier<PointInt> pasteLocation, Supplier<List<ShapeComponent>> componentBuffer)
     {
         this.pasteLocation = pasteLocation;
         this.componentBuffer = componentBuffer;
@@ -22,7 +23,7 @@ public class PasteTaskFactory extends AbstractTaskFactory
     @Override
     public AbstractControllerTask createTask()
     {
-        var shapeCopies = new ArrayList<>(componentBuffer);
-        return new PasteTask(pasteLocation, shapeCopies);
+        var shapeCopies = new ArrayList<>(componentBuffer.get());
+        return new PasteTask(pasteLocation.get(), shapeCopies);
     }
 }

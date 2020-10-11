@@ -1,5 +1,9 @@
 package controller.commands;
 
+import controller.api.AddShapesSvc;
+import controller.api.AddToSelectionSvc;
+import controller.api.RemoveShapeSvc;
+import controller.api.ShapeLocationSvc;
 import model.CommandHistory;
 import model.PointInt;
 import model.api.ModelAPI;
@@ -14,13 +18,11 @@ import java.util.List;
  */
 public class PasteTask extends AbstractControllerTask
 {
-
 	private static final Integer INC_X = 20;
 	private static final Integer INC_Y = 20;
 
 	private final PointInt pasteLocation;
 	private final List<ShapeComponent> shapes;
-	//private final BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
 
 	@SuppressWarnings("unused")
 	private PasteTask() throws Exception
@@ -50,13 +52,12 @@ public class PasteTask extends AbstractControllerTask
 			var x = shapeComponent.getAnchor().getX() + pasteDelta.getX();
 			var y = shapeComponent.getAnchor().getY() + pasteDelta.getY();
 
-			ModelAPI.setShapeLocation(shapeComponent, new PointInt(x, y));
-			//moveShapeInModel.accept(shapeComponent, new PointInt(x, y));
+			ShapeLocationSvc.accept(shapeComponent, new PointInt(x, y));
 
 		});
 
 		incrementPasteLocation();
-		ModelAPI.addShapes(shapes);
+		AddShapesSvc.accept(shapes);
 		ModelAPI.commit();//changes are made, update observers to redraw
 
 		CommandHistory.add(this);
@@ -72,7 +73,7 @@ public class PasteTask extends AbstractControllerTask
 	public void undo()
 	{
 		decrementPasteLocation();
-		ModelAPI.removeShapes(shapes);
+		RemoveShapeSvc.accept(shapes);
 	}
 
 	// Put the objects back in the shape list.
@@ -80,7 +81,7 @@ public class PasteTask extends AbstractControllerTask
 	public void redo()
 	{
 		incrementPasteLocation();
-		ModelAPI.addShapes(shapes);
+		AddShapesSvc.accept(shapes);
 	}
 
 	// Track where to paste something on the canvas.
