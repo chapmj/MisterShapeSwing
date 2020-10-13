@@ -19,13 +19,13 @@ public class DrawStrategyTriangle extends DrawStrategy {
 	private Color secondaryColor;
 	private ShapeShadingType shadingType;
 	private ShapeCardinality cardinality;
-	private Graphics2D graphicsSelection;
+	//private Graphics2D graphicsSelection;
 
 	public DrawStrategyTriangle(IShape shape, Graphics2D graphics)
 	{
 		super(shape);
-		this.graphics = ViewState.getGraphics();
-		this.graphicsSelection = ViewState.getGraphics();
+		this.graphics = graphics;
+		//this.graphicsSelection = graphics;
 		this.shape = shape;
 		setStyleParams();
 	}
@@ -38,7 +38,6 @@ public class DrawStrategyTriangle extends DrawStrategy {
 	}
 	
 	private void setStyleParams() {
-		stroke = DrawStrategy.makeStroke();
 		primaryColor = this.getPrimaryColor();
 		secondaryColor = this.getSecondaryColor();
 		shadingType = this.getShadingType();
@@ -68,11 +67,11 @@ public class DrawStrategyTriangle extends DrawStrategy {
                 .limit(1)
                 .forEach((shape) ->
 					{
-						graphicsSelection.setColor(Color.BLACK);
-						graphicsSelection.setStroke(stroke);
+						graphics.setColor(Color.BLACK);
+						graphics.setStroke(stroke);
 						RawPoly rp = createTrianglePolygon(shape);
 						Polygon selectionTriangle = dilateTriangle(rp.xs, rp.ys, scale);
-						graphicsSelection.drawPolygon(selectionTriangle);
+						graphics.drawPolygon(selectionTriangle);
 					});
 	}
 
@@ -81,9 +80,9 @@ public class DrawStrategyTriangle extends DrawStrategy {
 		// Citation https://stackoverflow.com/questions/8591991/algorithm-to-enlarge-scale-inflate-enbiggen-a-triangle
 		int xsum = 0;
 		int ysum = 0;
-		for (int i=0; i<3; i++) {
-			xsum+=xs[i];
-			ysum+=ys[i];
+		for (int i = 0; i < 3; i++) {
+			xsum += xs[i];
+			ysum += ys[i];
 		}
 
 		double xcent = xsum / 3.0;
@@ -113,15 +112,15 @@ public class DrawStrategyTriangle extends DrawStrategy {
 
 	private RawPoly createTrianglePolygon(IShape shape) {
 		IShape triangle = shape.clone();
-		Integer width = triangle.getWidth();
-		Integer height = triangle.getHeight();
+		int width = triangle.getWidth();
+		int height = triangle.getHeight();
 		Polygon trianglePoly = new Polygon();
-		Integer x1 = triangle.getAnchor().getX();
-		Integer x2 = triangle.getAnchor().getX();
-		Integer x3 = triangle.getAnchor().getX();
-		Integer y1 = triangle.getAnchor().getY();
-		Integer y2 = triangle.getAnchor().getY();
-		Integer y3 = triangle.getAnchor().getY();
+		int x1 = triangle.getAnchor().getX();
+		int x2 = triangle.getAnchor().getX();
+		int x3 = triangle.getAnchor().getX();
+		int y1 = triangle.getAnchor().getY();
+		int y2 = triangle.getAnchor().getY();
+		int y3 = triangle.getAnchor().getY();
 
 		switch (cardinality) {
 			case NE:

@@ -1,16 +1,13 @@
 package view.viewstate;
 
 import view.interfaces.IUiModule;
-import controller.PaintCanvasBase;
-
-import java.awt.*;
 
 public class ViewState
 {
     private static ViewState viewState;
 
     private final PaintCanvasBase paintCanvasBase;
-    public final IUiModule uiModule;
+    private final IUiModule uiModule;
 
     public ViewState (PaintCanvasBase paintCanvasBase, IUiModule uiModule)
     {
@@ -19,7 +16,12 @@ public class ViewState
         ViewState.viewState = this;
     }
 
-    public static Graphics2D getGraphics()
+    public static PaintCanvasBase getCanvas ()
+    {
+        return viewState.paintCanvasBase;
+    }
+
+    public static IUiModule getUI()
     {
         try
         {
@@ -27,35 +29,16 @@ public class ViewState
             {
                 throw new Exception("ViewState not found");
             }
-            else if (ViewState.viewState.paintCanvasBase == null)
-            {
-                throw new Exception("ViewState graphics object not found");
-            }
             else
             {
-                return ViewState.viewState.paintCanvasBase.getGraphics2D();
+                return viewState.uiModule;
             }
-        } catch (Exception e)
-        {
-           e.printStackTrace();
-           return null;
         }
-    }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
-    public static PaintCanvasBase getCanvas()
-    {
-        return ViewState.viewState.paintCanvasBase;
-    }
-
-    public static IUiModule getUI() throws Exception
-    {
-        if(ViewState.viewState == null)
-        {
-            throw new Exception("ViewState not found");
-        }
-        else
-        {
-            return viewState.uiModule;
-        }
+        return null;
     }
 }

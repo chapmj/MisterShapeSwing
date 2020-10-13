@@ -1,6 +1,7 @@
-package view;
+package view.api;
 
 import model.interfaces.IShape;
+import view.EventName;
 import view.commands.RedrawTask;
 import view.interfaces.IEventCallback;
 import view.viewstate.ViewState;

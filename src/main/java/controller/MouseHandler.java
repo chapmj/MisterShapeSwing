@@ -1,8 +1,7 @@
 package controller;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import controller.MouseController;
 
 // Catch mouse events
 public class MouseHandler extends MouseAdapter {

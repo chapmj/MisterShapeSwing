@@ -5,6 +5,7 @@ import model.PointInt;
 import model.interfaces.IShape;
 import model.shape.*;
 import view.ShapeDrawer;
+import view.api.CanvasSvc;
 import view.viewstate.ViewState;
 
 import java.util.List;
@@ -29,11 +30,12 @@ public class RedrawTask
 	// Make a big white rectangle the size of the canvas.
 	static ShapeComponent clearCanvas()
 	{
-		var canvas = ViewState.getCanvas();
+		var canvasWidth = CanvasSvc.getCanvasWidth();
+		var canvasHeight = CanvasSvc.getCanvasHeight();
 
 		return new Shape (
 			ShapeType.RECTANGLE,
-			new Dimensions(canvas.getHeight(),canvas.getWidth()),
+			new Dimensions(canvasHeight, canvasWidth),
 			new ShapeStyle(
 				ShapeColor.WHITE,
 				ShapeColor.WHITE,

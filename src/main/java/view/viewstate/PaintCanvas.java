@@ -1,8 +1,6 @@
-package controller;
+package view.viewstate;
 
 import java.awt.Graphics2D;
-
-import controller.PaintCanvasBase;
 
 public class PaintCanvas extends PaintCanvasBase {
 

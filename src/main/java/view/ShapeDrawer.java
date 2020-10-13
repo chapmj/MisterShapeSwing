@@ -1,15 +1,15 @@
 package view;
 
+import model.interfaces.IShape;
+import model.shape.Shape;
+import model.shape.ShapeComponent;
+import model.shape.ShapeGroup;
+import view.api.CanvasSvc;
+import view.drawstrategy.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
-
-import model.shape.Shape;
-import model.shape.ShapeGroup;
-import model.interfaces.IShape;
-import model.shape.ShapeComponent;
-import view.drawstrategy.*;
-import view.viewstate.ViewState;
 
 /* Draw shape data to canvas.
  * Shapes are appended to the shape drawer object prior to a call to draw them.
@@ -24,7 +24,7 @@ public class ShapeDrawer {
 
 	private DrawStrategy inferDrawStrategy(IShape component)
 	{
-	    var graphics = ViewState.getGraphics();
+	    var graphics = CanvasSvc.getGraphics();
 		switch (component.getType())
 		{
 			case RECTANGLE:

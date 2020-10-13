@@ -1,9 +1,7 @@
 package view.viewstate;
 
-import controller.PaintCanvas;
 import view.interfaces.IGuiWindow;
 import view.interfaces.IUiModule;
-import controller.PaintCanvasBase;
 
 public class MVCView
 {

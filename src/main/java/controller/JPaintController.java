@@ -10,9 +10,8 @@ import controller.api.PasteLocationSvc;
 import controller.api.SelectionSvc;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 import view.EventName;
-import view.ViewAPI;
+import view.api.ViewAPI;
 
 import java.util.List;
 import java.util.function.Consumer;

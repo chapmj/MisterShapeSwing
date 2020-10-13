@@ -9,6 +9,7 @@ import model.PointInt;
 import model.persistence.ModelState;
 import model.persistence.MouseReleaseObserver;
 import model.persistence.MouseReleaseSubject;
+import view.api.MouseListenerSvc;
 import view.viewstate.ViewState;
 
 /* Controller for mouse relate events
@@ -42,7 +43,8 @@ public class MouseController {
 	
 	// Assign an observer to watch CanvasState for mouse related state changes.
 	private static void registerMouse() {
-        ViewState.getCanvas().addMouseListener(new MouseHandler());
+        //ViewState.getCanvas().addMouseListener(new MouseHandler());
+		MouseListenerSvc.accept(new MouseHandler());
 	}
 
 	// Runs a command depending on application mode when the mouse button is unpressed.
