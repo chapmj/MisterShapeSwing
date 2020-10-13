@@ -47,24 +47,26 @@ public class UngroupTask extends AbstractControllerTask
 
 	private void ungroup()
 	{
-		//TODO: emit model commands for better unit test
+		//Perform ungrouping
 		RemoveShapeSvc.accept(groups);
-		//AddShapesSvc.accept(groupedShapes);
 		AddShapesSvc.accept(ungroupedShapes);
+
+		//Update selection
 		ClearSelectionSvc.apply();
 		AddToSelectionSvc.accept(ungroupedShapes);
-		//AddToSelectionSvc.accept(groupedShapes);
 	}
 
 	// Remove shapes from canvas and add back group.
 	@Override
 	public void undo()
 	{
-		RemoveShapeSvc.accept(groupedShapes);
-		AddShapesSvc.accept(groups);
+		//Perform grouping
+		RemoveShapeSvc.accept(ungroupedShapes);
+		AddShapesSvc.accept(groupedShapes);
+
+		//Update selection
 		ClearSelectionSvc.apply();
-		AddShapesSvc.accept(ungroupedShapes);
-		AddShapesSvc.accept(groups);
+		AddToSelectionSvc.accept(groupedShapes);
 	}
 
 	// Remove group and add back shapes.
