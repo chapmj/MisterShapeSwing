@@ -49,11 +49,11 @@ public class UngroupTask extends AbstractControllerTask
 	{
 		//TODO: emit model commands for better unit test
 		RemoveShapeSvc.accept(groups);
-		AddShapesSvc.accept(groupedShapes);
+		//AddShapesSvc.accept(groupedShapes);
 		AddShapesSvc.accept(ungroupedShapes);
 		ClearSelectionSvc.apply();
 		AddToSelectionSvc.accept(ungroupedShapes);
-		AddToSelectionSvc.accept(groupedShapes);
+		//AddToSelectionSvc.accept(groupedShapes);
 	}
 
 	// Remove shapes from canvas and add back group.
