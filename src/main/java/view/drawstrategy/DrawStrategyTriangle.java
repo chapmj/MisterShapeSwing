@@ -3,7 +3,6 @@ package view.drawstrategy;
 import model.interfaces.IShape;
 import model.persistence.ModelState;
 import model.shape.ShapeCardinality;
-import model.shape.ShapeComponent;
 import model.shape.ShapeShadingType;
 import view.viewstate.ViewState;
 
@@ -22,12 +21,12 @@ public class DrawStrategyTriangle extends DrawStrategy {
 	private ShapeCardinality cardinality;
 	private Graphics2D graphicsSelection;
 
-	public DrawStrategyTriangle(ShapeComponent shape)
+	public DrawStrategyTriangle(IShape shape, Graphics2D graphics)
 	{
-		super((IShape) shape);
+		super(shape);
 		this.graphics = ViewState.getGraphics();
 		this.graphicsSelection = ViewState.getGraphics();
-		this.shape = (IShape) shape;
+		this.shape = shape;
 		setStyleParams();
 	}
 
@@ -71,7 +70,7 @@ public class DrawStrategyTriangle extends DrawStrategy {
 					{
 						graphicsSelection.setColor(Color.BLACK);
 						graphicsSelection.setStroke(stroke);
-						RawPoly rp = createTrianglePolygon((IShape)shape);
+						RawPoly rp = createTrianglePolygon(shape);
 						Polygon selectionTriangle = dilateTriangle(rp.xs, rp.ys, scale);
 						graphicsSelection.drawPolygon(selectionTriangle);
 					});
@@ -113,7 +112,7 @@ public class DrawStrategyTriangle extends DrawStrategy {
 	}
 
 	private RawPoly createTrianglePolygon(IShape shape) {
-		IShape triangle = (IShape) shape.clone();
+		IShape triangle = shape.clone();
 		Integer width = triangle.getWidth();
 		Integer height = triangle.getHeight();
 		Polygon trianglePoly = new Polygon();

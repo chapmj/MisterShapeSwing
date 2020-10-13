@@ -9,6 +9,7 @@ import controller.api.CopyBufferSvc;
 import controller.api.PasteLocationSvc;
 import controller.api.SelectionSvc;
 import model.api.ModelAPI;
+import model.interfaces.IShape;
 import model.shape.ShapeComponent;
 import view.EventName;
 import view.ViewAPI;
@@ -25,7 +26,7 @@ public class JPaintController implements IJPaintController, ISingleton {
 	private static JPaintController instance;
 
 	private final Consumer<IControllerTask> registerCanvasStateSubscriber = ModelAPI::registerCanvasStateSubscriber;
-	final Consumer<List<ShapeComponent>> redrawer = ViewAPI::redraw;
+	final Consumer<List<IShape>> redrawer = ViewAPI::redraw;
 
 	//Initialize object constructors to perform tasks on model based on functional interfaces
 	private final AbstractTaskFactory copyTaskFactory = new CopyTaskFactory();

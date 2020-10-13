@@ -1,6 +1,7 @@
 package model.interfaces;
 
 import model.Dimensions;
+import model.PointInt;
 import model.shape.*;
 
 /* IShape is an interface to represent
@@ -16,4 +17,8 @@ public interface IShape extends IBoundary {
 	Dimensions getDimensions();
 	ShapeType getType();
 	ShapeComponent clone();
+	ShapePosition getPosition();
+
+	void setAnchor(PointInt anchor);
+
 }

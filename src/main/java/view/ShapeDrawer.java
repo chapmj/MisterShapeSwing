@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import model.shape.Shape;
 import model.shape.ShapeGroup;
 import model.interfaces.IShape;
 import model.shape.ShapeComponent;
 import view.drawstrategy.*;
+import view.viewstate.ViewState;
 
 /* Draw shape data to canvas.
  * Shapes are appended to the shape drawer object prior to a call to draw them.
@@ -20,41 +22,41 @@ public class ShapeDrawer {
 	public ShapeDrawer()
 	{ }
 
-	private DrawStrategy inferDrawStrategy(ShapeComponent component)
+	private DrawStrategy inferDrawStrategy(IShape component)
 	{
+	    var graphics = ViewState.getGraphics();
 		switch (component.getType())
 		{
 			case RECTANGLE:
-				return new DrawStrategyRectangle(component);
+				return new DrawStrategyRectangle(component, graphics);
 			case ELLIPSE:
-				return new DrawStrategyEllipse(component);
+				return new DrawStrategyEllipse(component, graphics);
 			case TRIANGLE:
-				return new DrawStrategyTriangle(component);
+				return new DrawStrategyTriangle(component, graphics);
 			case INVISIBLE_RECT:
-				return new DrawStrategyInvisibleRect(component);
+				return new DrawStrategyInvisibleRect(component, graphics);
 			default:
 				return new DrawStrategyNull(component);
 		}
 	}
 
 	// Divide ShapeComponents into IShapes and Shapegroups, then add all shapes to drawer.
-	public void add(List<ShapeComponent> component) {
+	public void add(List<IShape> component) {
 		// Add shapes to shapeDrawer pending
 		component.stream()
-			.filter(comp -> comp instanceof IShape)
-			.map(s -> (IShape) s)
+			.filter(Shape.class::isInstance)
 			.forEach(shapeDrawerShapes::add);
 		
 		// Store Groups
 		component.stream()
-			.filter(comp -> comp instanceof ShapeGroup)
-			.map(g -> (ShapeGroup) g)
+			.filter(ShapeGroup.class::isInstance)
+			.map(comp -> (ShapeGroup) comp)
 			.forEach(groups::add);
 	
 		// Store shapes and add to shapeDrawer pending
 		component.stream()
-			.filter(comp -> comp instanceof ShapeGroup)
-			.map(g -> (ShapeGroup) g)
+			.filter(ShapeGroup.class::isInstance)
+			.map(comp -> (ShapeGroup) comp)
 			.flatMap(c -> Stream.of(splitGroup(c)))
 			.forEach(shapeDrawerShapes::addAll);
 	}
@@ -73,9 +75,8 @@ public class ShapeDrawer {
 	// Builder execute
 	public void draw()
 	{
-
 		shapeDrawerShapes.stream()
-				.map((shape) -> (ShapeComponent)shape)
+				//.map((shape) -> (ShapeComponent)shape)
 				.map(this::inferDrawStrategy)
 				.forEach(DrawStrategy::draw);
 
@@ -85,8 +86,8 @@ public class ShapeDrawer {
 	}
 
 	// Builder append
-	public void add(ShapeComponent shape) {
-		var component = new ArrayList<ShapeComponent>();
+	public void add(IShape shape) {
+		var component = new ArrayList<IShape>();
 		component.add(shape);
 		add(component);
 	}

@@ -16,13 +16,13 @@ import java.util.stream.Stream;
 
 public class UngroupTaskFactory extends AbstractTaskFactory
 {
-    private final Supplier<List<ShapeComponent>> selection;
-    Predicate<ShapeComponent> isShapeGroup = component -> component instanceof ShapeGroup;
-    Predicate<ShapeComponent> isShape = shapeComponent -> shapeComponent instanceof IShape;
+    private final Supplier<List<IShape>> selection;
+    Predicate<IShape> isShapeGroup = component -> component instanceof ShapeGroup;
+    Predicate<IShape> isShape = shapeComponent -> shapeComponent instanceof IShape;
     Function<List<IShape>, Stream<ShapeComponent>> toComponentStream = shapes -> shapes.stream().map(shape -> (ShapeComponent)shape);
-    Function<Optional<ShapeComponent>, Stream<ShapeComponent>> optionToStream = (comp)->Stream.of(comp.get());
+    Function<Optional<IShape>, Stream<ShapeComponent>> optionToStream = (comp) -> Stream.of(comp.get()).map((shape) -> (ShapeComponent) shape);
 
-    public UngroupTaskFactory(Supplier<List<ShapeComponent>> selection)
+    public UngroupTaskFactory(Supplier<List<IShape>> selection)
     {
         this.selection = selection;
     }
@@ -38,7 +38,7 @@ public class UngroupTaskFactory extends AbstractTaskFactory
         var ungroupedShapes = shapes.stream().filter(isShape).collect(Collectors.toList());
 
         /* Flatten all shapes in a group into just a shape collection */
-        var groupedShapes = groups.stream()
+        List<IShape> groupedShapes = groups.stream()
                 .map(Optional::of)
                 .filter(Optional::isPresent)
                 .flatMap(optionToStream)

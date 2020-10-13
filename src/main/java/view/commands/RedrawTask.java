@@ -1,19 +1,20 @@
 package view.commands;
 
-import model.*;
+import model.Dimensions;
+import model.PointInt;
+import model.interfaces.IShape;
 import model.shape.*;
 import view.ShapeDrawer;
 import view.viewstate.ViewState;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 // Check canvas state and redraw everything.
 public class RedrawTask
 {
-	private final List<ShapeComponent> shapeComponents;
+	private final List<IShape> shapeComponents;
 
-    public RedrawTask(List<ShapeComponent> shapeComponents)
+    public RedrawTask(List<IShape> shapeComponents)
 	{
 		this.shapeComponents = shapeComponents;
 	}

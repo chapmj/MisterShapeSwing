@@ -21,13 +21,13 @@ public class Selection implements IBoundary {
 		this.selectionFactor = selectionFactor;
 	}
 	
-	public ShapeComponent getSelectionShape() {
+	public IShape getSelectionShape() {
 		int leftx = shape.getAnchor().getX() - selectionFactor;
 		int lefty = shape.getAnchor().getY() - selectionFactor;
 		this.anchor = new PointInt(leftx, lefty);
 		this.height = shape.getHeight() + (2 * selectionFactor);
 		this.width = shape.getWidth() + (2 * selectionFactor);
-		ShapeComponent s = ShapeFactory.duplicateShapeComponent(shape);
+		IShape s = ShapeFactory.duplicateShapeComponent(shape);
 		s.setAnchor(this.anchor);
 		s.setHeight(this.height);
 		s.setWidth(this.width);
@@ -47,5 +47,23 @@ public class Selection implements IBoundary {
 	@Override
 	public Integer getHeight() {
 		return height;
+	}
+
+	@Override
+	public void setAnchor(PointInt anchor)
+	{
+		this.anchor = anchor;
+	}
+
+	@Override
+	public void setHeight(Integer height)
+	{
+		this.height = height;
+	}
+
+	@Override
+	public void setWidth(Integer width)
+	{
+		this.width = width;
 	}
 }

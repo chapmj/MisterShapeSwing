@@ -5,12 +5,17 @@ import model.shape.ShapeColor;
 import model.shape.ShapeShadingType;
 import view.interfaces.IDrawStrategy;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
 
 public abstract class DrawStrategy implements IDrawStrategy
 {
 	public abstract void draw();
 	protected IShape shape;
+	protected BasicStroke stroke = makeStroke();
+
+	public DrawStrategy()
+	{ }
 
 	public DrawStrategy(IShape shape)
 	{

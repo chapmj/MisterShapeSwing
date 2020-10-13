@@ -1,6 +1,5 @@
 package view.viewstate;
 
-import controller.MouseHandler;
 import view.interfaces.IUiModule;
 import controller.PaintCanvasBase;
 
@@ -18,19 +17,6 @@ public class ViewState
         this.paintCanvasBase = paintCanvasBase;
         this.uiModule = uiModule;
         ViewState.viewState = this;
-    }
-
-    public ViewState(PaintCanvasBase paintCanvasBase, MouseHandler mouseHandler, IUiModule uiModule)
-    {
-        this.paintCanvasBase = paintCanvasBase;
-        this.uiModule = uiModule;
-        this.paintCanvasBase.addMouseListener(mouseHandler);
-        ViewState.viewState = this;
-    }
-
-    public static void update(ViewState viewState)
-    {
-        ViewState.viewState = viewState;
     }
 
     public static Graphics2D getGraphics()

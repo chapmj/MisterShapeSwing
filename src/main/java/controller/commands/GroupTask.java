@@ -6,6 +6,7 @@ import controller.api.ClearSelectionSvc;
 import controller.api.RemoveShapeSvc;
 import model.CommandHistory;
 import model.api.ModelAPI;
+import model.interfaces.IShape;
 import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class GroupTask extends AbstractControllerTask
 {
-	private final List<ShapeComponent> shapes;
+	private final List<IShape> shapes;
 	private final ShapeGroup group;
 
 	/* Initialize with data prior to execution. Data persists
@@ -28,7 +29,7 @@ public class GroupTask extends AbstractControllerTask
 		throw new Exception("GroupTask must be parameterized");
 	}
 
-	public GroupTask(List<ShapeComponent> shapes, ShapeGroup shapeGroup)
+	public GroupTask(List<IShape> shapes, ShapeGroup shapeGroup)
 	{
 	    this.shapes = shapes;
 	    this.group = shapeGroup;

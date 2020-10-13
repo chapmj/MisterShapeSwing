@@ -1,21 +1,21 @@
 package controller.api;
 
 import model.api.ModelAPI;
-import model.shape.ShapeComponent;
+import model.interfaces.IShape;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 public class SelectionSvc
 {
-    private static final Supplier<List<ShapeComponent>> supplier = ModelAPI::getSelection;
+    private static final Supplier<List<IShape>> supplier = ModelAPI::getSelection;
 
-    public static List<ShapeComponent> get()
+    public static List<IShape> get()
     {
         return supplier.get();
     }
 
-    public static Supplier<List<ShapeComponent>> getSupplier()
+    public static Supplier<List<IShape>> getSupplier()
     {
         return supplier;
     }

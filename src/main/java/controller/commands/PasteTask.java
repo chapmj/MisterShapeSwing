@@ -1,13 +1,12 @@
 package controller.commands;
 
 import controller.api.AddShapesSvc;
-import controller.api.AddToSelectionSvc;
 import controller.api.RemoveShapeSvc;
 import controller.api.ShapeLocationSvc;
 import model.CommandHistory;
 import model.PointInt;
 import model.api.ModelAPI;
-import model.shape.ShapeComponent;
+import model.interfaces.IShape;
 import model.shape.ShapeGroup;
 
 import java.util.List;
@@ -21,8 +20,8 @@ public class PasteTask extends AbstractControllerTask
 	private static final Integer INC_X = 20;
 	private static final Integer INC_Y = 20;
 
-	private final PointInt pasteLocation;
-	private final List<ShapeComponent> shapes;
+	private PointInt pasteLocation;
+	private final List<IShape> shapes;
 
 	@SuppressWarnings("unused")
 	private PasteTask() throws Exception
@@ -30,7 +29,7 @@ public class PasteTask extends AbstractControllerTask
 		throw new Exception("PasteTask must be parameterized");
 	}
 
-	public PasteTask(PointInt pasteLocation, List<ShapeComponent> shapes)
+	public PasteTask(PointInt pasteLocation, List<IShape> shapes)
 	{
 	    this.pasteLocation = pasteLocation;
 	    this.shapes = shapes;
@@ -89,14 +88,14 @@ public class PasteTask extends AbstractControllerTask
 	{
 		Integer deltaX = INC_X * shapes.size();
 		Integer deltaY = INC_Y * shapes.size();
-		pasteLocation.subtract(new PointInt(deltaX, deltaY));
+		pasteLocation = pasteLocation.subtract(deltaX, deltaY);
 	}
 
 	public void incrementPasteLocation()
 	{
 		Integer deltaX = INC_X * shapes.size();
 		Integer deltaY = INC_Y * shapes.size();
-		pasteLocation.add(new PointInt(deltaX, deltaY));
+		pasteLocation = pasteLocation.add(deltaX, deltaY);
 	}
 	
 }

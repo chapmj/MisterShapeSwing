@@ -1,6 +1,6 @@
 package view;
 
-import model.shape.ShapeComponent;
+import model.interfaces.IShape;
 import view.commands.RedrawTask;
 import view.interfaces.IEventCallback;
 import view.viewstate.ViewState;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ViewAPI
 {
-    public static void redraw(List<ShapeComponent> shapes)
+    public static void redraw(List<IShape> shapes)
     {
         var task = new RedrawTask(shapes);
         task.execute();

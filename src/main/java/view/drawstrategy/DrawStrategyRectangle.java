@@ -1,9 +1,12 @@
 package view.drawstrategy;
 
 import model.Selection;
+import model.interfaces.IBoundary;
+import model.interfaces.IShape;
 import model.persistence.ModelState;
 import model.shape.ShapeComponent;
 import model.shape.ShapeShadingType;
+import view.api.SelectionSvc;
 import view.viewstate.ViewState;
 
 import java.awt.*;
@@ -15,15 +18,14 @@ import java.awt.*;
 public class DrawStrategyRectangle extends DrawStrategy {
 
 	private final Graphics2D graphics;
-	private Stroke stroke;
 	private Color primaryColor;
 	private Color secondaryColor;
 	private ShapeShadingType shadingType;
 
-	public DrawStrategyRectangle(ShapeComponent shape)
+	public DrawStrategyRectangle(IShape shape, Graphics2D graphics)
 	{
 		super(shape);
-		this.graphics = ViewState.getGraphics();
+		this.graphics = graphics;
 		this.shape = shape;
 		setStyleParams();
 	}
@@ -37,7 +39,6 @@ public class DrawStrategyRectangle extends DrawStrategy {
 	}
 
 	private void setStyleParams() {
-		stroke = DrawStrategy.makeStroke();
 		primaryColor = this.getPrimaryColor();
 		secondaryColor = this.getSecondaryColor();
 		shadingType = this.getShadingType();
@@ -59,36 +60,43 @@ public class DrawStrategyRectangle extends DrawStrategy {
 	}
 
 	private void drawShape(Color color) {
+
+		IBoundary shapeBoundary = shape;
+		var x = shapeBoundary.getAnchor().getX();
+		var y = shapeBoundary.getAnchor().getY();
+		var w = shapeBoundary.getWidth();
+		var h = shapeBoundary.getHeight();
+
 		graphics.setColor(color);
 		graphics.setStroke(stroke);
-		graphics.drawRect(
-			shape.getAnchor().getX(),
-			shape.getAnchor().getY(),
-			shape.getWidth(),
-			shape.getHeight());
+		graphics.drawRect(x, y, w, h);
 	}
 
 	private void fillShape(Color color) {
+
+		IBoundary shapeBoundary = shape;
+	    var x = shapeBoundary.getAnchor().getX();
+		var y = shapeBoundary.getAnchor().getY();
+		var w = shapeBoundary.getWidth();
+		var h = shapeBoundary.getHeight();
+
 		graphics.setColor(color);
-		graphics.fillRect(
-			shape.getAnchor().getX(),
-			shape.getAnchor().getY(),
-			shape.getWidth(),
-			shape.getHeight());
+		graphics.fillRect(x, y, w, h);
 	}
 
 	private void drawSelection() {
-		//var selectedShapes = ModelState.getShapeSelectionList();
-		var selectedShapes = ModelState.getShapeComponentSelectionList();
-		if (selectedShapes.contains(shape)) {
-			var selection = new Selection(shape, 10).getSelectionShape();
+		var selection = SelectionSvc.get();
+		if(selection.contains(this.shape))
+		{
+			IBoundary selectionBoundary = new Selection(shape, 10).getSelectionShape();
+			var x = selectionBoundary.getAnchor().getX();
+			var y = selectionBoundary.getAnchor().getY();
+			var w = selectionBoundary.getWidth();
+			var h = selectionBoundary.getHeight();
+
 			graphics.setColor(Color.BLACK);
 			graphics.setStroke(stroke);
-			graphics.drawRect(
-				selection.getAnchor().getX(),
-				selection.getAnchor().getY(),
-				selection.getWidth(),
-				selection.getHeight());	
+			graphics.drawRect(x, y, w, h);
 		}
 	}
 }

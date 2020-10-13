@@ -1,18 +1,18 @@
 package model.shape;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import model.Dimensions;
 import model.PointInt;
 import model.interfaces.IShape;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /* Part of a composite pattern / tree data structure. Represents a node.
  * ShapeGroups contain other shape groups or shapes.  Collectively called ShapeComponents.
  * COMPOSITE PATTERN: Node
  */
 public class ShapeGroup extends ShapeComponent {
-	private final List<ShapeComponent> children = new ArrayList<>();
+	private final List<IShape> children = new ArrayList<>();
 	Integer cachedHeight = 0;
 	Integer cachedWidth = 0;
 	PointInt cachedAnchor = null;
@@ -23,23 +23,10 @@ public class ShapeGroup extends ShapeComponent {
 
 	}
 
-	public ShapeGroup(List<ShapeComponent> children)
+	public ShapeGroup(List<IShape> children)
 	{
-		//addChild(children);
 		this.children.addAll(children);
 		setGroupBounds();
-	}
-
-	public void addChild(List<ShapeComponent> selection)
-	{
-		children.addAll(selection);	
-		setGroupBounds();
-	}
-
-	public void removeChild(List<ShapeComponent> selection)
-	{
-		children.removeAll(selection);
-		setGroupBounds();	
 	}
 
 	private void setGroupBounds() {
@@ -53,14 +40,13 @@ public class ShapeGroup extends ShapeComponent {
 	// Recursively get boundaries $$
 		int xMax = Integer.MIN_VALUE;
 		int yMax = Integer.MIN_VALUE;
-		Integer xMin = Integer.MAX_VALUE;
-		Integer yMin = Integer.MAX_VALUE;
+		int xMin = Integer.MAX_VALUE;
+		int yMin = Integer.MAX_VALUE;
 
-		for (ShapeComponent child : children) {
-			PointInt anchor = child.getAnchor();
+		for (IShape child : children) {
 
-			Integer xLeft = child.getAnchor().getX();
-			Integer yLeft = child.getAnchor().getY();
+			int xLeft = child.getAnchor().getX();
+			int yLeft = child.getAnchor().getY();
 
 			int xRight = child.getWidth() + xLeft;
 			int yRight = child.getHeight() + xRight;
@@ -79,7 +65,7 @@ public class ShapeGroup extends ShapeComponent {
 		int xMax = Integer.MIN_VALUE;
 		Integer xMin = Integer.MAX_VALUE;
 
-		for (ShapeComponent child : children) {
+		for (IShape child : children) {
 			Integer width = child.getWidth();
 			PointInt anchor = child.getAnchor();
 			int xRight = width + anchor.getX();
@@ -95,7 +81,7 @@ public class ShapeGroup extends ShapeComponent {
 		int yMax = Integer.MIN_VALUE;
 		Integer yMin = Integer.MAX_VALUE;
 
-		for (ShapeComponent child : children) {
+		for (IShape child : children) {
 			Integer height = child.getHeight();
 			PointInt anchor = child.getAnchor();
 			int yRight = height + anchor.getY();
@@ -112,7 +98,7 @@ public class ShapeGroup extends ShapeComponent {
 		Integer yMin = Integer.MAX_VALUE;
 
 		// Excuse me, I must please recurse myself 
-		for (ShapeComponent child : children) {
+		for (IShape child : children) {
 			PointInt anchor = child.getAnchor();
 			Integer xLeft = anchor.getX();
 			Integer yLeft = anchor.getY();
@@ -163,8 +149,8 @@ public class ShapeGroup extends ShapeComponent {
 	public List<IShape> getShapes() {
 		List<IShape> list = new ArrayList<>();
 
-		for (ShapeComponent child : children) {
-			list.addAll(child.getShapes());
+		for (IShape child : children) {
+			list.addAll(((ShapeComponent)child).getShapes());
 		}
 
 		return list;
@@ -203,7 +189,7 @@ public class ShapeGroup extends ShapeComponent {
 		ShapeGroup dupeGroup;
 
 		var shapes = this.getShapes();
-		var dupeShapes = new ArrayList<ShapeComponent>();
+		var dupeShapes = new ArrayList<IShape>();
 			
 		shapes.stream()
 			.map((shape) -> ShapeFactory.duplicateShapeComponent((ShapeComponent) shape))
