@@ -46,31 +46,31 @@ public class GroupTask extends AbstractControllerTask
 
 	private void group()
 	{
+	    //Perform Grouping
 		RemoveShapeSvc.accept(shapes);
 		AddShapesSvc.accept(group);
-		ClearSelectionSvc.apply();
 
+		//Update selection
+		ClearSelectionSvc.apply();
 		AddToSelectionSvc.accept(group);
 
 	}
 
-	// The opposite of adding a group to the model is removing it.
 	@Override
 	public void undo()
 	{
+		//Perform Ungrouping
 		RemoveShapeSvc.accept(group);
 		AddShapesSvc.accept(shapes);
+
+		//Update selection
         ClearSelectionSvc.apply();
 		AddToSelectionSvc.accept(shapes);
 	}
 
-	// Add the group back to the model state.
 	@Override
 	public void redo()
 	{
-		RemoveShapeSvc.accept(shapes);
-		AddShapesSvc.accept(group);
-        ClearSelectionSvc.apply();
-		AddToSelectionSvc.accept(group);
+		group();
 	}
 }
