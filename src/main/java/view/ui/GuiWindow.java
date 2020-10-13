@@ -1,4 +1,4 @@
-package view.viewstate;
+package view.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

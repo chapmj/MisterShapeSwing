@@ -1,26 +1,29 @@
 package view.viewstate;
 
 import view.interfaces.IUiModule;
+import view.paintcanvas.AbstractPaintCanvas;
 
 public class ViewState
 {
     private static ViewState viewState;
 
-    private final PaintCanvasBase paintCanvasBase;
+    private final AbstractPaintCanvas abstractPaintCanvas;
     private final IUiModule uiModule;
 
-    public ViewState (PaintCanvasBase paintCanvasBase, IUiModule uiModule)
+    public ViewState (AbstractPaintCanvas abstractPaintCanvas, IUiModule uiModule)
     {
-        this.paintCanvasBase = paintCanvasBase;
+        this.abstractPaintCanvas = abstractPaintCanvas;
         this.uiModule = uiModule;
         ViewState.viewState = this;
     }
 
-    public static PaintCanvasBase getCanvas ()
+    /*
+    public static AbstractPaintCanvas getCanvas ()
     {
-        return viewState.paintCanvasBase;
-    }
+        return viewState.abstractPaintCanvas;
+    }*/
 
+    /*
     public static IUiModule getUI()
     {
         try
@@ -40,5 +43,5 @@ public class ViewState
         }
 
         return null;
-    }
+    }*/
 }

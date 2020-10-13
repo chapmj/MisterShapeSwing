@@ -1,4 +1,4 @@
-package view.viewstate;
+package view.ui;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;

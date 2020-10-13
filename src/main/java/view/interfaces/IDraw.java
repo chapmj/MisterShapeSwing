@@ -1,8 +1,8 @@
 package view.interfaces;
 
 
-import view.viewstate.PaintCanvasBase;
+import view.paintcanvas.AbstractPaintCanvas;
 
 public interface IDraw {
-	void draw(PaintCanvasBase paintCanvas);
+	void draw(AbstractPaintCanvas paintCanvas);
 }
