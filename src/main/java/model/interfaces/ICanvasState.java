@@ -1,7 +1,5 @@
 package model.interfaces;
 
-import model.shape.ShapeComponent;
-
 import java.util.List;
 
 public interface ICanvasState {

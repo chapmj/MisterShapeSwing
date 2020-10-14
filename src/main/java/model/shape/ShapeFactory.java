@@ -3,6 +3,7 @@ package model.shape;
 import model.Dimensions;
 import model.PointInt;
 import model.interfaces.IShape;
+import model.persistence.ModelState;
 
 public class ShapeFactory  {
 	public static IShape createShape(ShapeType type, Dimensions dimensions, ShapeStyle style, ShapeCardinality cardinality, PointInt anchor) {
@@ -27,6 +28,19 @@ public class ShapeFactory  {
 			shape.getType(), 
 			shape.getDimensions().clone(), 
 			shape.getAnchor().clone());
+	}
+
+	public static IShape createShape(PointInt startPoint, PointInt endPoint)
+	{
+		var shapeType = ModelState.getApplicationState().getShapeType();
+		var shapeStyle = ModelState.getApplicationState().getShapeStyle();
+
+		var position = new ShapePosition(startPoint, endPoint);
+		var dimensions = new Dimensions(position);
+		var shapeCardinality = ShapeCardinality.calculateCardinality(position);
+
+		return new Shape(shapeType, dimensions, shapeStyle, shapeCardinality, position.getLeft());
+
 	}
 }
 

@@ -7,7 +7,6 @@ import controller.api.RemoveShapeSvc;
 import model.CommandHistory;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
 import java.util.List;

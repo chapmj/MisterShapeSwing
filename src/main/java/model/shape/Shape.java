@@ -61,7 +61,7 @@ public class Shape extends ShapeComponent implements IShape, Cloneable {
 	}
 
 	public ShapeCardinality getCardinality() {
-		return cardinality;
+		return this.cardinality;
 	}
 
 	public Integer getHeight() {

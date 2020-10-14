@@ -192,7 +192,7 @@ public class ShapeGroup extends ShapeComponent {
 		var dupeShapes = new ArrayList<IShape>();
 			
 		shapes.stream()
-			.map((shape) -> ShapeFactory.duplicateShapeComponent((ShapeComponent) shape))
+			.map((shape) -> ShapeFactory.duplicateShapeComponent(shape))
 			.forEach(dupeShapes::add);
 			
 		dupeGroup = new ShapeGroup(dupeShapes);

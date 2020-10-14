@@ -23,7 +23,7 @@ public class DrawStrategyTriangle extends DrawStrategy {
 		this.graphics = graphics;
 		this.shape = shape;
 		setStyleParams();
-		selectionDrawStrat = new DrawStrategyRectangleSelection(shape, graphics);
+		selectionDrawStrat = new DrawStrategyTriangleSelection(shape, graphics);
 	}
 
 	// Draw shape to canvas and then determine if a selection should be drawn as well.

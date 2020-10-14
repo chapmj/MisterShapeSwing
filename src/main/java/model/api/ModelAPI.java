@@ -95,7 +95,7 @@ public class ModelAPI
                 ModelState.refresh();
         }
 
-        public static void removeShape(ShapeComponent shape)
+        public static void removeShape(IShape shape)
         {
                 ModelState.getCanvasState().removeComponent(shape);
         }

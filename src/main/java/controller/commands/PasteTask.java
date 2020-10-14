@@ -42,7 +42,8 @@ public class PasteTask extends AbstractControllerTask
 	@Override
 	public void execute()
 	{
-		shapes.stream().forEach((shapeComponent) -> {
+		shapes.stream().forEach((shapeComponent) ->
+		{
 			var moveGroup = new ShapeGroup(shapes);
 			var pasteDelta = new PointInt(
 					(pasteLocation.getX() + INC_X) - moveGroup.getAnchor().getX(),
@@ -61,7 +62,6 @@ public class PasteTask extends AbstractControllerTask
 
 		CommandHistory.add(this);
 		ModelAPI.notifyCanvasObservers();
-
 	}
 
 	/* The opposite of Pasting a objects is removing them from the canvas.

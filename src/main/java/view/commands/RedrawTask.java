@@ -1,7 +1,6 @@
 package view.commands;
 
 import model.interfaces.IShape;
-import view.api.CanvasSvc;
 import view.drawstrategy.ShapeDrawer;
 
 import java.util.List;
@@ -18,7 +17,6 @@ public class RedrawTask
 
 	public void execute() {
 		ShapeDrawer shapeDrawer = new ShapeDrawer();
-		shapeDrawer.add(CanvasSvc.clearCanvasShape());
 		shapeDrawer.add(shapeComponents);
 		shapeDrawer.draw();
 	}

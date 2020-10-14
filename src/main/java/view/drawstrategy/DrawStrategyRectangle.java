@@ -1,10 +1,8 @@
 package view.drawstrategy;
 
-import model.Selection;
 import model.interfaces.IBoundary;
 import model.interfaces.IShape;
 import model.shape.ShapeShadingType;
-import view.api.SelectionSvc;
 
 import java.awt.*;
 

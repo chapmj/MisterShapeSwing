@@ -1,6 +1,5 @@
 package view;
 
-import model.shape.Shape;
 import model.shape.ShapeCardinality;
 
 public class Polygon
@@ -19,36 +18,30 @@ public class Polygon
 
     private static int[] getPoints(int x, int y, int w, int h, ShapeCardinality cardinality)
     {
-        //width, height, cardinality
-        int width = w;
-        int height = h;
-
         int[] xs = { x, x, x };
         int[] ys = { y, y, y };
 
         switch (cardinality) {
             case NE:
-                //x2 += width;
-                //y3 += height;
-                xs[1] += width;
-                ys[2] += height;
+                xs[1] += w;
+                ys[2] += h;
                 break;
             case NW:
-                xs[1] += width;
-                xs[2] += width;
-                ys[2] += height;
+                xs[1] += w;
+                xs[2] += w;
+                ys[2] += h;
 
                 break;
             case SE:
-                ys[1] += height;
-                xs[2] += width;
-                ys[2] += height;
+                ys[1] += h;
+                xs[2] += w;
+                ys[2] += h;
                 break;
             case SW:
-                xs[0] += width;
-                ys[1] += height;
-                xs[2] += width;
-                ys[2] += height;
+                xs[0] += w;
+                ys[1] += h;
+                xs[2] += w;
+                ys[2] += h;
                 break;
         }
 
@@ -57,9 +50,10 @@ public class Polygon
     }
 
     public static java.awt.Polygon dilateTriangle(int x, int y, int w, int h, ShapeCardinality cardinality, Double scale) {
+        // Citation https://stackoverflow.com/questions/8591991/algorithm-to-enlarge-scale-inflate-enbiggen-a-triangle
+
         var points = getPoints(x, y, w, h, cardinality);
 
-        // Citation https://stackoverflow.com/questions/8591991/algorithm-to-enlarge-scale-inflate-enbiggen-a-triangle
         int xsum = 0;
         int ysum = 0;
         for (int i = 0, j = 3; i < 3; i++, j++) {

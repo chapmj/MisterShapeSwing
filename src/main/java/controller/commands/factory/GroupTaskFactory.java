@@ -3,7 +3,6 @@ package controller.commands.factory;
 import controller.commands.AbstractControllerTask;
 import controller.commands.GroupTask;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
 import java.util.ArrayList;

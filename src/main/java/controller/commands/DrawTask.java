@@ -3,9 +3,9 @@ package controller.commands;
 import controller.api.AddShapesSvc;
 import controller.api.RemoveShapeSvc;
 import model.CommandHistory;
-import model.Dimensions;
 import model.PointInt;
 import model.api.ModelAPI;
+import model.interfaces.IShape;
 import model.shape.*;
 
 /* Responsible for updating the model's canvas state.
@@ -13,7 +13,7 @@ import model.shape.*;
  */
 public class DrawTask extends AbstractControllerTask
 {
-	private final ShapeComponent shape;
+	private final IShape shape;
 
 	@SuppressWarnings("unused")
 	private DrawTask() throws Exception
@@ -26,15 +26,7 @@ public class DrawTask extends AbstractControllerTask
 	public DrawTask(PointInt startPoint, PointInt endPoint, ShapeType shapeType, ShapeStyle shapeStyle)
 	{
 		//Create shape to draw
-		ShapePosition pos = new ShapePosition(startPoint, endPoint);
-		Dimensions dim = new Dimensions(pos);
-		ShapeCardinality card = ShapeCardinality.calculateCardinality(pos);
-		this.shape = (ShapeComponent) ShapeFactory.createShape(
-				shapeType,
-				dim,
-				shapeStyle,
-				card,
-				pos.getLeft());
+		this.shape = ShapeFactory.createShape(startPoint, endPoint);
 	}
 
 	// The opposite of drawing is for the shape to not exist on the canvas.

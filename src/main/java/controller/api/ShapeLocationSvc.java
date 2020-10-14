@@ -3,7 +3,6 @@ package controller.api;
 import model.PointInt;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 
 import java.util.function.BiConsumer;
 

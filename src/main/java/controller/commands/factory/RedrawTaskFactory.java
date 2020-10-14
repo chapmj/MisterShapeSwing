@@ -3,7 +3,6 @@ package controller.commands.factory;
 import controller.commands.AbstractControllerTask;
 import controller.commands.RedrawTask;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 
 import java.util.List;
 import java.util.function.Consumer;

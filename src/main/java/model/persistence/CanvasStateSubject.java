@@ -1,6 +1,5 @@
 package model.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import model.interfaces.IObservable;
@@ -33,7 +32,7 @@ public class CanvasStateSubject implements IObservableSubject {
 
 	@Override
 	public void notifyObservers() throws Exception {
-		observers.stream().forEach(IObservable::update);
+	observers.stream().forEach(IObservable::update);
 	}
 
 }

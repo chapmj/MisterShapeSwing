@@ -2,7 +2,6 @@ package model;
 
 import model.interfaces.IBoundary;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 import model.shape.ShapeFactory;
 
 /* A selection is like a shape component, but it doesn't persist on the canvas.
