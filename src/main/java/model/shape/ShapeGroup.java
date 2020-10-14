@@ -11,7 +11,8 @@ import java.util.List;
  * ShapeGroups contain other shape groups or shapes.  Collectively called ShapeComponents.
  * COMPOSITE PATTERN: Node
  */
-public class ShapeGroup extends ShapeComponent {
+public class ShapeGroup extends ShapeComponent
+{
 	private final List<IShape> children = new ArrayList<>();
 	Integer cachedHeight = 0;
 	Integer cachedWidth = 0;
@@ -19,9 +20,7 @@ public class ShapeGroup extends ShapeComponent {
 	ShapeType shapeType = ShapeType.INVISIBLE_RECT;
 
 	public ShapeGroup()
-	{
-
-	}
+	{ }
 
 	public ShapeGroup(List<IShape> children)
 	{
@@ -29,21 +28,24 @@ public class ShapeGroup extends ShapeComponent {
 		setGroupBounds();
 	}
 
-	private void setGroupBounds() {
+	private void setGroupBounds()
+	{
 		ShapeComponent bounds = getBoundingPoints();
 		cachedAnchor = bounds.getAnchor();
 		cachedHeight = bounds.getHeight();
 		cachedWidth = bounds.getWidth();
 	}	
 
-	public ShapeComponent getBoundingPoints() {
+	public ShapeComponent getBoundingPoints()
+	{
 	// Recursively get boundaries $$
 		int xMax = Integer.MIN_VALUE;
 		int yMax = Integer.MIN_VALUE;
 		int xMin = Integer.MAX_VALUE;
 		int yMin = Integer.MAX_VALUE;
 
-		for (IShape child : children) {
+		for (IShape child : children)
+		{
 
 			int xLeft = child.getAnchor().getX();
 			int yLeft = child.getAnchor().getY();
@@ -60,12 +62,14 @@ public class ShapeGroup extends ShapeComponent {
 		return new Shape(ShapeType.RECTANGLE,new Dimensions(xMax - xMin, yMax - yMin), new PointInt(xMin,yMin));
 	}
 	
-	public Integer getWidth() {
+	public Integer getWidth()
+	{
 	// Recursively get width $$
 		int xMax = Integer.MIN_VALUE;
 		Integer xMin = Integer.MAX_VALUE;
 
-		for (IShape child : children) {
+		for (IShape child : children)
+		{
 			Integer width = child.getWidth();
 			PointInt anchor = child.getAnchor();
 			int xRight = width + anchor.getX();
@@ -73,15 +77,18 @@ public class ShapeGroup extends ShapeComponent {
 			if (xRight > xMax) xMax = xRight;
 			if (xLeft < xMin) xMin = xLeft;
 		}
+
 		return xMax - xMin;
 	}
 
-	public Integer getHeight() {
+	public Integer getHeight()
+	{
 	// Recursively get height $$
 		int yMax = Integer.MIN_VALUE;
 		Integer yMin = Integer.MAX_VALUE;
 
-		for (IShape child : children) {
+		for (IShape child : children)
+		{
 			Integer height = child.getHeight();
 			PointInt anchor = child.getAnchor();
 			int yRight = height + anchor.getY();
@@ -89,22 +96,26 @@ public class ShapeGroup extends ShapeComponent {
 			if (yRight > yMax) yMax = yRight;
 			if (yLeft < yMin) yMin = yLeft;
 		}
+
 		return yMax - yMin;
 	}
 
-	public PointInt getAnchor() {
+	public PointInt getAnchor()
+	{
 	// Recursively get anchor $$
 		Integer xMin = Integer.MAX_VALUE;
 		Integer yMin = Integer.MAX_VALUE;
 
 		// Excuse me, I must please recurse myself 
-		for (IShape child : children) {
+		for (IShape child : children)
+		{
 			PointInt anchor = child.getAnchor();
 			Integer xLeft = anchor.getX();
 			Integer yLeft = anchor.getY();
 			if (xLeft < xMin) xMin = xLeft;
 			if (yLeft < yMin) yMin = yLeft;
 		}
+
 		return new PointInt(xMin, yMin);
 	}
 
@@ -132,12 +143,14 @@ public class ShapeGroup extends ShapeComponent {
 		return null;
 	}
 
-	public Dimensions getDimensions() {
+	public Dimensions getDimensions()
+	{
 		return new Dimensions(cachedHeight, cachedWidth);
 	}
 
 	@Override
-	public ShapePosition getPosition() {
+	public ShapePosition getPosition()
+	{
 		return new ShapePosition(
 			getAnchor(), 
 			new PointInt(
@@ -146,10 +159,12 @@ public class ShapeGroup extends ShapeComponent {
 	}
 
 	@Override
-	public List<IShape> getShapes() {
+	public List<IShape> getShapes()
+	{
 		List<IShape> list = new ArrayList<>();
 
-		for (IShape child : children) {
+		for (IShape child : children)
+		{
 			list.addAll(((ShapeComponent)child).getShapes());
 		}
 
@@ -157,12 +172,14 @@ public class ShapeGroup extends ShapeComponent {
 	}
 
 	@Override
-	public ShapeType getType() {
+	public ShapeType getType()
+	{
 		return shapeType;
 	}
 
 	@Override
-	public void setAnchor(PointInt anchor) {
+	public void setAnchor(PointInt anchor)
+	{
 		Integer dX = anchor.getX() - cachedAnchor.getX();
 		Integer dY = anchor.getY() - cachedAnchor.getY();
 		PointInt delta = new PointInt(dX,dY);
@@ -174,18 +191,17 @@ public class ShapeGroup extends ShapeComponent {
 	}
 
 	@Override
-	public void setHeight(Integer height) {
-		
-	}
+	public void setHeight(Integer height)
+	{ }
 
 	@Override
-	public void setWidth(Integer width) {
-		
-	}
+	public void setWidth(Integer width)
+	{ }
 
 	// Deep copy the ShapeGroup and all of its children.
 	@Override
-	public ShapeComponent clone() {
+	public ShapeComponent clone()
+	{
 		ShapeGroup dupeGroup;
 
 		var shapes = this.getShapes();
@@ -199,5 +215,4 @@ public class ShapeGroup extends ShapeComponent {
 
 		return dupeGroup;
 	}
-
 }
