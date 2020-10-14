@@ -14,7 +14,7 @@ public class MVCModel
     public MVCModel()
     { }
 
-    public static void createModel() throws Exception
+    public static void createModel()
     {
         var applicationState = createApplicationState();
         var canvasState = new CanvasState();
@@ -22,7 +22,7 @@ public class MVCModel
         MVCModel.modelState = new ModelState(applicationState, canvasState);
     }
 
-    private static IApplicationState createApplicationState() throws Exception
+    private static IApplicationState createApplicationState()
     {
         var ui = UISvc.getUI();
         var applicationState = new ApplicationState(ui);

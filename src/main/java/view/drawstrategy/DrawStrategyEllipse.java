@@ -16,17 +16,19 @@ public class DrawStrategyEllipse extends DrawStrategy {
 
 	private final Graphics2D graphics;
 	private ShapeShadingType shadingType;
+	private DrawStrategyEllipseSelection selectionDrawStrat;
 
 	public DrawStrategyEllipse(IShape shape, Graphics2D graphics) {
 		super(shape);
 		this.graphics = graphics;
+		selectionDrawStrat = new DrawStrategyEllipseSelection(shape, graphics);
 		setStyleParams();
 	}
 
 	@Override
 	public void draw() {
 		paintShapeWithShading();
-		drawSelection();
+		selectionDrawStrat.draw();
 	}
 
 	private void setStyleParams() {
@@ -47,7 +49,8 @@ public class DrawStrategyEllipse extends DrawStrategy {
 				break;
 		}
 	}
-		
+
+	/*
 	private void drawSelection() {
 		var selection = SelectionSvc.get();
 		if(selection.contains(this.shape))
@@ -62,7 +65,7 @@ public class DrawStrategyEllipse extends DrawStrategy {
 			graphics.setStroke(stroke);
 			graphics.drawOval(x, y, w, h);
 		}
-	}
+	}*/
 
 	private void drawShape(Color color)
 	{

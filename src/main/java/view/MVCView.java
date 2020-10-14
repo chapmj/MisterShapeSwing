@@ -14,7 +14,6 @@ public class MVCView
     {
         var paintCanvas = new PaintCanvas();
         CanvasSvc.init(paintCanvas);
-
         IGuiWindow guiWindow = new GuiWindow(paintCanvas, 1250, 800, "MisterShape");
         IUiModule ui = new Gui(guiWindow);
         UISvc.init(ui);

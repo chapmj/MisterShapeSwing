@@ -1,11 +1,8 @@
 package view.commands;
 
-import model.Dimensions;
-import model.PointInt;
 import model.interfaces.IShape;
-import model.shape.*;
-import view.drawstrategy.ShapeDrawer;
 import view.api.CanvasSvc;
+import view.drawstrategy.ShapeDrawer;
 
 import java.util.List;
 

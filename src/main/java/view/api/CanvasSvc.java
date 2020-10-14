@@ -20,6 +20,7 @@ public class CanvasSvc
     public static void init(PaintCanvas paintCanvas)
     {
         CanvasSvc.paintCanvas = paintCanvas;
+
         CanvasSvc.clearRectangle = new Shape(
             ShapeType.RECTANGLE,
             new Dimensions(getCanvasHeight(), getCanvasWidth()),

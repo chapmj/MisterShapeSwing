@@ -15,6 +15,7 @@ import java.awt.*;
 public class DrawStrategyRectangle extends DrawStrategy {
 
 	private final Graphics2D graphics;
+	private final DrawStrategy selectionDrawStrat;
 	private Color primaryColor;
 	private Color secondaryColor;
 	private ShapeShadingType shadingType;
@@ -25,6 +26,7 @@ public class DrawStrategyRectangle extends DrawStrategy {
 		this.graphics = graphics;
 		this.shape = shape;
 		setStyleParams();
+		selectionDrawStrat = new DrawStrategyRectangleSelection(shape, graphics);
 	}
 
 
@@ -32,7 +34,7 @@ public class DrawStrategyRectangle extends DrawStrategy {
 	@Override
 	public void draw() {
 		paintShapeWithShading();
-		drawSelection();
+		selectionDrawStrat.draw();
 	}
 
 	private void setStyleParams() {
@@ -81,19 +83,4 @@ public class DrawStrategyRectangle extends DrawStrategy {
 		graphics.fillRect(x, y, w, h);
 	}
 
-	private void drawSelection() {
-		var selection = SelectionSvc.get();
-		if(selection.contains(this.shape))
-		{
-			IBoundary selectionBoundary = new Selection(shape, 10).getSelectionShape();
-			var x = selectionBoundary.getAnchor().getX();
-			var y = selectionBoundary.getAnchor().getY();
-			var w = selectionBoundary.getWidth();
-			var h = selectionBoundary.getHeight();
-
-			graphics.setColor(Color.BLACK);
-			graphics.setStroke(stroke);
-			graphics.drawRect(x, y, w, h);
-		}
-	}
 }

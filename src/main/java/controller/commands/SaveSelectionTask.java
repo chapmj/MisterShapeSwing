@@ -5,7 +5,6 @@ import controller.api.ClearSelectionSvc;
 import model.PointInt;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 import model.shape.ShapePosition;
 
 import java.util.List;
@@ -57,8 +56,4 @@ public class SaveSelectionTask extends AbstractControllerTask
 				|| (r1TopY > r2BotY)
 				|| (r1BotY < r2TopY));
 	}
-
-
-
-
 }
