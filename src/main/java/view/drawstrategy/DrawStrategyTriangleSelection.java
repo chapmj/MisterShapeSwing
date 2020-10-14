@@ -1,9 +1,6 @@
 package view.drawstrategy;
 
-import model.Selection;
-import model.interfaces.IBoundary;
 import model.interfaces.IShape;
-import model.persistence.ModelState;
 import view.api.SelectionSvc;
 
 import java.awt.*;
