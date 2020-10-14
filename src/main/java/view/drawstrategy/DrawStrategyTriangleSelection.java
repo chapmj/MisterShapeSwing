@@ -26,37 +26,24 @@ public class DrawStrategyTriangleSelection extends DrawStrategy
         drawSelection();
     }
 
-    private void drawSelection() {
-        var selection = SelectionSvc.get();
-        if(selection.contains(this.shape))
-        {
-            IBoundary selectionBoundary = new Selection(shape, 10).getSelectionShape();
-            var x = selectionBoundary.getAnchor().getX();
-            var y = selectionBoundary.getAnchor().getY();
-            var w = selectionBoundary.getWidth();
-            var h = selectionBoundary.getHeight();
-
-            graphics.setColor(Color.BLACK);
-            graphics.setStroke(stroke);
-            graphics.drawRect(x, y, w, h);
-        }
-
+    private void drawSelection()
+    {
         double scale = 1.2f;
-        ModelState.getShapeComponentSelectionList().stream()
-                .filter((s) -> s.equals(shape))
-                .limit(1)
-                .forEach((shape) ->
-                {
-                    var x = shape.getAnchor().getX();
-                    var y = shape.getAnchor().getY();
-                    var w = shape.getWidth();
-                    var h = shape.getHeight();
-                    var cardinality = shape.getCardinality();
+        SelectionSvc.get().stream()
+            .filter((s) -> s.equals(shape))
+            .limit(1)
+            .forEach((shape) ->
+            {
+                var x = shape.getAnchor().getX();
+                var y = shape.getAnchor().getY();
+                var w = shape.getWidth();
+                var h = shape.getHeight();
+                var cardinality = shape.getCardinality();
 
-                    graphics.setColor(Color.BLACK);
-                    graphics.setStroke(stroke);
-                    Polygon selectionTriangle = dilateTriangle(x, y, w, h, cardinality, scale);
-                    graphics.drawPolygon(selectionTriangle);
-                });
+                graphics.setColor(Color.BLACK);
+                graphics.setStroke(stroke);
+                Polygon selectionTriangle = dilateTriangle(x, y, w, h, cardinality, scale);
+                graphics.drawPolygon(selectionTriangle);
+            });
     }
 }

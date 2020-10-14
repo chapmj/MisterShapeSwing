@@ -31,17 +31,17 @@ public abstract class DrawStrategy implements IDrawStrategy
 		return new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, miterlimit, dash1, dash_phase);
 	}
 
-	public Color getPrimaryColor()
+	protected Color getPrimaryColor()
 	{
 		return toColor(shape.getPrimaryColor());
 	}
 
-	public Color getSecondaryColor()
+	protected Color getSecondaryColor()
 	{
 		return toColor(shape.getSecondaryColor());
 	}
 
-	public ShapeShadingType getShadingType()
+	protected ShapeShadingType getShadingType()
 	{
 		return shape.getStyle().shadingType;
 	}
