@@ -4,8 +4,11 @@ import model.Dimensions;
 import model.PointInt;
 import model.interfaces.IShape;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /* Part of a composite pattern / tree data structure. Represents a node.
  * ShapeGroups contain other shape groups or shapes.  Collectively called ShapeComponents.
@@ -151,23 +154,26 @@ public class ShapeGroup extends ShapeComponent
 	@Override
 	public ShapePosition getPosition()
 	{
-		return new ShapePosition(
-			getAnchor(), 
-			new PointInt(
-				getAnchor().getX() + getWidth(), 
-				getAnchor().getY() + getHeight()));	
+	    var x = getAnchor().getX();
+	    var y = getAnchor().getY();
+	    var w = getWidth();
+	    var h = getHeight();
+	    var anchorLeft = getAnchor();
+	    var anchorRight = new PointInt( x + w, y + h);
+
+		return new ShapePosition(anchorLeft, anchorRight);
 	}
 
 	@Override
 	public List<IShape> getShapes()
 	{
-		List<IShape> list = new ArrayList<>();
+		var list = new ArrayList<IShape>();
 
 		for (IShape child : children)
 		{
-			list.addAll(((ShapeComponent)child).getShapes());
+		    var component = (ShapeComponent) child;
+			list.addAll((component.getShapes()));
 		}
-
 		return list;
 	}
 
@@ -180,14 +186,18 @@ public class ShapeGroup extends ShapeComponent
 	@Override
 	public void setAnchor(PointInt anchor)
 	{
-		Integer dX = anchor.getX() - cachedAnchor.getX();
-		Integer dY = anchor.getY() - cachedAnchor.getY();
-		PointInt delta = new PointInt(dX,dY);
-		children.forEach((shape) -> new PointInt(
-				shape.getAnchor().getX() + delta.getX(),
-				shape.getAnchor().getY() + delta.getY()));
+		int dX = anchor.getX() - cachedAnchor.getX();
+		int dY = anchor.getY() - cachedAnchor.getY();
+
+		children.forEach((shape) ->
+		{
+			var x = shape.getAnchor().getX();
+			var y = shape.getAnchor().getY();
+
+		    shape.setAnchor(new PointInt(x + dX, y + dY));
+		});
+
 		setGroupBounds();
-		getAnchor();
 	}
 
 	@Override
