@@ -2,7 +2,7 @@ package app;
 
 import controller.MVCController;
 import model.MVCModel;
-import view.viewstate.MVCView;
+import view.MVCView;
 
 public class App
 {

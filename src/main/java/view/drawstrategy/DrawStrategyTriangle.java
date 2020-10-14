@@ -4,7 +4,6 @@ import model.interfaces.IShape;
 import model.persistence.ModelState;
 import model.shape.ShapeCardinality;
 import model.shape.ShapeShadingType;
-import view.viewstate.ViewState;
 
 import java.awt.*;
 

@@ -3,11 +3,8 @@ package view.drawstrategy;
 import model.Selection;
 import model.interfaces.IBoundary;
 import model.interfaces.IShape;
-import model.persistence.ModelState;
-import model.shape.ShapeComponent;
 import model.shape.ShapeShadingType;
 import view.api.SelectionSvc;
-import view.viewstate.ViewState;
 
 import java.awt.*;
 

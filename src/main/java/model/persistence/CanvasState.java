@@ -16,7 +16,6 @@ import java.util.stream.Stream;
  */
 public class CanvasState implements ICanvasState
 {
-
 	private PointInt lastPasteLocation;
 	private PointInt mousePressedCoord;
 	private PointInt mouseReleasedCoord;
@@ -34,10 +33,10 @@ public class CanvasState implements ICanvasState
 		this.componentList = new ArrayList<>();
 		this.componentCopyBuffer  = new ArrayList<>();
 		this.lastPasteLocation = new PointInt(0,0);
-		this.canvasStateSubject = new CanvasStateSubject();
+		this.canvasStateSubject = new CanvasStateSubject(new ArrayList<>());
 	}
 
-	// DRAWABLES
+	// DRAWABLES get, add, remove
 
 	public void addComponent(IShape component)
 	{
@@ -62,7 +61,8 @@ public class CanvasState implements ICanvasState
 		return componentList;
 	}
 
-	// SELECTABLES
+
+	// SELECTABLES add, get, clear
 	public void addComponentSelection(List<IShape> componentSelection)
 	{
 		componentSelectionList.addAll(componentSelection);
@@ -82,7 +82,8 @@ public class CanvasState implements ICanvasState
 		componentSelectionList.clear();
 	}
 
-	// COPYABLES
+
+	// COPYABLES  //get and set
 	public List<IShape> getComponentCopyBuffer()
 	{
 		return componentCopyBuffer;
@@ -93,7 +94,8 @@ public class CanvasState implements ICanvasState
 		this.componentCopyBuffer = copyBuffer;
 	}
 
-	// PASTEABLES
+
+	// PASTEABLES //get and set
 	public PointInt getLastPasteLocation() {
 		return lastPasteLocation;
 	}
@@ -102,7 +104,8 @@ public class CanvasState implements ICanvasState
 		this.lastPasteLocation = lastPasteLocation;
 	}
 
-	// MOUSE 
+
+	// MOUSE  //get set
 	public void setMousePressed(PointInt point)
 	{
 		mousePressedCoord = point;
@@ -113,6 +116,7 @@ public class CanvasState implements ICanvasState
 		return mousePressedCoord;
 	}
 
+	//get set
 	public void setMouseReleased(PointInt point)
 	{
 		mouseReleasedCoord = point;
@@ -123,22 +127,7 @@ public class CanvasState implements ICanvasState
 		return mouseReleasedCoord;
 	}
 
-	// GROUPABLES
-	public List<ShapeGroup> getShapeGroups() {
-		return this.componentList.stream()
-				.filter((c) -> c instanceof ShapeGroup)
-				.map((c) -> (ShapeGroup) c)
-				.collect(Collectors.toList());
-	}
-
-	public void addSelectionGroup(ShapeGroup group) {
-		shapeGroups.add(group);
-	}
-	
-	public void removeSelectionGroup(ShapeGroup group) {
-		shapeGroups.remove(group);
-	}
-
+	// GROUPABLES  //get
 	public List<ShapeGroup> getGroupList() {
 		return shapeGroups;
 	}

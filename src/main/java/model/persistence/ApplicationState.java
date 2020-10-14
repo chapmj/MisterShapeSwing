@@ -1,16 +1,12 @@
 package model.persistence;
 
-import java.io.Serializable;
-
-import model.shape.ShapeColor;
-import model.shape.ShapeShadingType;
-import model.shape.ShapeStyle;
-import model.shape.ShapeType;
-import model.shape.StartAndEndPointMode;
 import model.dialogs.DialogProvider;
 import model.interfaces.IApplicationState;
 import model.interfaces.IDialogProvider;
+import model.shape.*;
 import view.interfaces.IUiModule;
+
+import java.io.Serializable;
 
 /* Stores settings for application UI.
  */
@@ -99,16 +95,6 @@ public class ApplicationState implements IApplicationState, Serializable {
     
     public ShapeStyle getShapeStyle()
     {
-        var x = new ShapeStyle(null,null,null);
         return new ShapeStyle(this.getPrimaryColor(), this.getSecondaryColor(), this.getShadingType());
-    }
-    
-    private void setDefaults()
-    {
-        uiShapeType = ShapeType.ELLIPSE;
-        uiPrimaryColor = ShapeColor.BLUE;
-        uiSecondaryColor = ShapeColor.GREEN;
-        uiShapeShadingType = ShapeShadingType.FILLED_IN;
-        uiStartAndEndPointMode = StartAndEndPointMode.DRAW;
     }
 }

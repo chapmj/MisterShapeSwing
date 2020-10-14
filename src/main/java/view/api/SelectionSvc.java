@@ -2,7 +2,6 @@ package view.api;
 
 import model.api.ModelAPI;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 
 import java.util.List;
 import java.util.function.Supplier;

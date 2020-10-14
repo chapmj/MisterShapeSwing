@@ -5,8 +5,8 @@ import model.persistence.ApplicationState;
 import model.persistence.CanvasState;
 import model.persistence.ModelState;
 import view.EventName;
+import view.ui.UISvc;
 import view.interfaces.IUiModule;
-import view.viewstate.ViewState;
 
 public class MVCModel
 {
@@ -24,7 +24,7 @@ public class MVCModel
 
     private static IApplicationState createApplicationState() throws Exception
     {
-        var ui = ViewState.getUI();
+        var ui = UISvc.getUI();
         var applicationState = new ApplicationState(ui);
 
         registerAppStateUIEvents(applicationState, ui);

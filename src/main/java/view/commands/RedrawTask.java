@@ -4,9 +4,8 @@ import model.Dimensions;
 import model.PointInt;
 import model.interfaces.IShape;
 import model.shape.*;
-import view.ShapeDrawer;
+import view.drawstrategy.ShapeDrawer;
 import view.api.CanvasSvc;
-import view.viewstate.ViewState;
 
 import java.util.List;
 
@@ -22,25 +21,9 @@ public class RedrawTask
 
 	public void execute() {
 		ShapeDrawer shapeDrawer = new ShapeDrawer();
-		shapeDrawer.add(clearCanvas());
+		shapeDrawer.add(CanvasSvc.clearCanvasShape());
 		shapeDrawer.add(shapeComponents);
 		shapeDrawer.draw();
 	}
 	
-	// Make a big white rectangle the size of the canvas.
-	static ShapeComponent clearCanvas()
-	{
-		var canvasWidth = CanvasSvc.getCanvasWidth();
-		var canvasHeight = CanvasSvc.getCanvasHeight();
-
-		return new Shape (
-			ShapeType.RECTANGLE,
-			new Dimensions(canvasHeight, canvasWidth),
-			new ShapeStyle(
-				ShapeColor.WHITE,
-				ShapeColor.WHITE,
-				ShapeShadingType.FILLED_IN),
-			ShapeCardinality.NE,
-			new PointInt(0,0));
-	}
 }

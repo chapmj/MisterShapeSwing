@@ -1,11 +1,9 @@
-package view;
+package view.drawstrategy;
 
 import model.interfaces.IShape;
 import model.shape.Shape;
 import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
-import view.api.CanvasSvc;
-import view.drawstrategy.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,24 +19,6 @@ public class ShapeDrawer {
 	
 	public ShapeDrawer()
 	{ }
-
-	private DrawStrategy inferDrawStrategy(IShape component)
-	{
-	    var graphics = CanvasSvc.getGraphics();
-		switch (component.getType())
-		{
-			case RECTANGLE:
-				return new DrawStrategyRectangle(component, graphics);
-			case ELLIPSE:
-				return new DrawStrategyEllipse(component, graphics);
-			case TRIANGLE:
-				return new DrawStrategyTriangle(component, graphics);
-			case INVISIBLE_RECT:
-				return new DrawStrategyInvisibleRect(component, graphics);
-			default:
-				return new DrawStrategyNull(component);
-		}
-	}
 
 	// Divide ShapeComponents into IShapes and Shapegroups, then add all shapes to drawer.
 	public void add(List<IShape> component) {
@@ -76,12 +56,11 @@ public class ShapeDrawer {
 	public void draw()
 	{
 		shapeDrawerShapes.stream()
-				//.map((shape) -> (ShapeComponent)shape)
-				.map(this::inferDrawStrategy)
+				.map(DrawStrategyFactory::create)
 				.forEach(DrawStrategy::draw);
 
 		groups.stream()
-				.map(this::inferDrawStrategy)
+				.map(DrawStrategyFactory::create)
 				.forEach(DrawStrategy::draw);
 	}
 

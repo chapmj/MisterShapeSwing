@@ -9,10 +9,11 @@ import model.interfaces.IObservableSubject;
 // Store canvasState observers
 public class CanvasStateSubject implements IObservableSubject {
 
-	private final List<IObservable> observers = new ArrayList<>();
+	private final List<IObservable> observers;
 	
-	public CanvasStateSubject() {
-	
+	public CanvasStateSubject(List<IObservable> observers)
+	{
+		this.observers = observers;
 	}
 
 	@Override
