@@ -15,7 +15,7 @@ public abstract class ShapeComponent implements IBoundary, Cloneable, IShape
 	public abstract Integer getHeight();
 	public abstract Integer getWidth();
 	public abstract PointInt getAnchor();
-	protected abstract ShapeComponent getBoundingPoints();
+	protected abstract IBoundary getBoundingPoints();
 	public abstract Dimensions getDimensions();
 	public abstract ShapePosition getPosition();
 	public abstract List<IShape> getShapes();

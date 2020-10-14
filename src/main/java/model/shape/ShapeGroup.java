@@ -2,6 +2,7 @@ package model.shape;
 
 import model.Dimensions;
 import model.PointInt;
+import model.interfaces.IBoundary;
 import model.interfaces.IShape;
 
 import java.util.ArrayList;
@@ -30,13 +31,13 @@ public class ShapeGroup extends ShapeComponent
 
 	private void setGroupBounds()
 	{
-		ShapeComponent bounds = getBoundingPoints();
+		IBoundary bounds = getBoundingPoints();
 		cachedAnchor = bounds.getAnchor();
 		cachedHeight = bounds.getHeight();
 		cachedWidth = bounds.getWidth();
 	}	
 
-	public ShapeComponent getBoundingPoints()
+	public IBoundary getBoundingPoints()
 	{
 	// Recursively get boundaries $$
 		int xMax = Integer.MIN_VALUE;
@@ -59,7 +60,12 @@ public class ShapeGroup extends ShapeComponent
 			if (yLeft < yMin) yMin = yLeft;
 		}
 
-		return new Shape(ShapeType.RECTANGLE,new Dimensions(xMax - xMin, yMax - yMin), new PointInt(xMin,yMin));
+		var type = ShapeType.RECTANGLE;
+		var dim = new Dimensions(xMax - xMin, yMax - yMin);
+		var anchor = new PointInt(xMin, yMin);
+
+		return ShapeFactory.createShape(type, dim, null, null, anchor);
+		//return new Shape(ShapeType.RECTANGLE,new Dimensions(xMax - xMin, yMax - yMin), new PointInt(xMin,yMin));
 	}
 	
 	public Integer getWidth()
@@ -145,7 +151,7 @@ public class ShapeGroup extends ShapeComponent
 
 	public Dimensions getDimensions()
 	{
-		return new Dimensions(cachedHeight, cachedWidth);
+		return new Dimensions(cachedWidth, cachedHeight);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import model.PointInt;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -15,12 +16,11 @@ public class MoveSelectionTask extends AbstractControllerTask
 	private final Integer deltaX;
 	private final Integer deltaY;
 	private final List<IShape> shapes;
-	//private final BiConsumer<ShapeComponent, PointInt> moveShapeInModel = ModelAPI::setShapeLocation;
 
 	@SuppressWarnings("unused")
 	private MoveSelectionTask() throws Exception
 	{
-		throw new Exception("DeleteTask must be parameterized");
+		throw new Exception("MoveSelectionTask must be parameterized");
 	}
 
 	/* Initialize with data prior to execution. Data persists
@@ -60,22 +60,28 @@ public class MoveSelectionTask extends AbstractControllerTask
 	private void move()
 	{
 		shapes.stream()
-			.map((shapeComponent) -> Map.of(
-				shapeComponent,
-				new PointInt(
-					shapeComponent.getAnchor().getX() + deltaX,
-					shapeComponent.getAnchor().getY() + deltaY)))
+			.map((shapeComponent) ->
+			{
+				var x = shapeComponent.getAnchor().getX();
+				var y = shapeComponent.getAnchor().getY();
+				var position = new PointInt(x + deltaX, y + deltaY);
+
+				return Map.of(shapeComponent, position);
+			})
 			.forEach((entry) -> entry.forEach(ShapeLocationSvc::accept));
 	}
 
 	private void moveBack()
 	{
 		shapes.stream()
-			.map((shapeComponent) -> Map.of(
-					shapeComponent,
-					new PointInt(
-							shapeComponent.getAnchor().getX() - deltaX,
-							shapeComponent.getAnchor().getY() - deltaY)))
+			.map((shapeComponent) ->
+			{
+				var x = shapeComponent.getAnchor().getX();
+				var y = shapeComponent.getAnchor().getY();
+				var position = new PointInt(x - deltaX, y - deltaY);
+
+				return Map.of(shapeComponent, position);
+			})
 			.forEach((entry) -> entry.forEach(ShapeLocationSvc::accept));
 	}
 }

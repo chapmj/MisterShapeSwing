@@ -6,11 +6,13 @@ import model.interfaces.IShape;
 import model.persistence.ModelState;
 
 public class ShapeFactory  {
-	public static IShape createShape(ShapeType type, Dimensions dimensions, ShapeStyle style, ShapeCardinality cardinality, PointInt anchor) {
+	public static IShape createShape(ShapeType type, Dimensions dimensions, ShapeStyle style, ShapeCardinality cardinality, PointInt anchor)
+	{
 		return new Shape(type, dimensions, style, cardinality, anchor);
 	}
 	
-	public static IShape duplicateShape(IShape shape) {
+	public static IShape duplicateShape(IShape shape)
+	{
 		return new Shape(
 			shape.getType(), 
 			new Dimensions(shape.getDimensions()),
@@ -19,10 +21,12 @@ public class ShapeFactory  {
 			shape.getAnchor().clone());
 	}
 
-	public static ShapeComponent duplicateShapeComponent(IShape shape) {
-
+	public static ShapeComponent duplicateShapeComponent(IShape shape)
+	{
 		if (shape instanceof Shape)
+		{
 			return (ShapeComponent) duplicateShape(shape);
+		}
 
 		return new Shape(
 			shape.getType(), 
