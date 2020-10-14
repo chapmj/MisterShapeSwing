@@ -3,14 +3,15 @@ package model;
 import model.shape.ShapePosition;
 
 // Size of a shape object
-public class Dimensions {
+public class Dimensions
+{
 	Integer height;
 	Integer width;
 
-	public Dimensions(Integer XwX , Integer XhX)
+	public Dimensions(Integer width, Integer height)
 	{
-		this.width = XwX;
-		this.height = XhX;
+		this.width = width;
+		this.height = height;
 	}
 
 	public Dimensions(Dimensions dimensions)
@@ -19,31 +20,29 @@ public class Dimensions {
 		this.height = dimensions.getHeight();
 	}
 
-	public Dimensions(ShapePosition position) {
+	public Dimensions(ShapePosition position)
+	{
 		this.height = position.getRight().getY() - position.getLeft().getY();
 		this.width = position.getRight().getX() - position.getLeft().getX();
 	}
 
-	public Integer getHeight() {
+	public Integer getHeight()
+	{
 		return height;
 	}
-	public Integer getWidth() {
+
+	public Integer getWidth()
+	{
 		return width;
 	}
 	
-	public void setHeight(Integer h) {
+	public void setHeight(Integer h)
+	{
 		this.height = h;
-
 	}
 	
-	public void setWidth(Integer w) {
+	public void setWidth(Integer w)
+	{
 		this.width = w;
 	}
-	
-	// Create a deep copy of self.
-    /*
-	public Dimensions clone() {
-		
-		return new Dimensions(width,height);
-	}*/
 }

@@ -5,7 +5,6 @@ import model.PointInt;
 import model.interfaces.IShape;
 import model.persistence.CanvasStateObserver;
 import model.persistence.ModelState;
-import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
 import java.util.List;

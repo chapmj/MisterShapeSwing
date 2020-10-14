@@ -4,11 +4,8 @@ import model.Dimensions;
 import model.PointInt;
 import model.interfaces.IShape;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /* Part of a composite pattern / tree data structure. Represents a node.
  * ShapeGroups contain other shape groups or shapes.  Collectively called ShapeComponents.
