@@ -6,8 +6,6 @@ import model.PointInt;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
