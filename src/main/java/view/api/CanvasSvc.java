@@ -52,6 +52,4 @@ public class CanvasSvc
         task.execute();
 
     }
-
-    // Make a big white rectangle the size of the canvas.
 }

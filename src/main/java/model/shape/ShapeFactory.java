@@ -13,7 +13,7 @@ public class ShapeFactory  {
 	public static IShape duplicateShape(IShape shape) {
 		return new Shape(
 			shape.getType(), 
-			shape.getDimensions().clone(), 
+			new Dimensions(shape.getDimensions()),
 			shape.getStyle().clone(), 
 			shape.getCardinality(), 
 			shape.getAnchor().clone());
@@ -26,7 +26,7 @@ public class ShapeFactory  {
 
 		return new Shape(
 			shape.getType(), 
-			shape.getDimensions().clone(), 
+			new Dimensions(shape.getDimensions()),
 			shape.getAnchor().clone());
 	}
 

@@ -10,13 +10,15 @@ import java.awt.*;
  * Specific graphic type in class name.
  * STRATEGY PATTERN
  */
-public class DrawStrategyEllipse extends DrawStrategy {
+public class DrawStrategyEllipse extends DrawStrategy
+{
 
 	private final Graphics2D graphics;
 	private ShapeShadingType shadingType;
-	private DrawStrategyEllipseSelection selectionDrawStrat;
+	private DrawStrategy selectionDrawStrat;
 
-	public DrawStrategyEllipse(IShape shape, Graphics2D graphics) {
+	public DrawStrategyEllipse(IShape shape, Graphics2D graphics)
+	{
 		super(shape);
 		this.graphics = graphics;
 		selectionDrawStrat = new DrawStrategyEllipseSelection(shape, graphics);
@@ -24,17 +26,21 @@ public class DrawStrategyEllipse extends DrawStrategy {
 	}
 
 	@Override
-	public void draw() {
+	public void draw()
+	{
 		paintShapeWithShading();
 		selectionDrawStrat.draw();
 	}
 
-	private void setStyleParams() {
+	private void setStyleParams()
+	{
 		shadingType = this.getShadingType();
 	}
 
-	private void paintShapeWithShading() {
-		switch(shadingType) {
+	private void paintShapeWithShading()
+	{
+		switch(shadingType)
+		{
 			case FILLED_IN: 
 				fillShape(this.getPrimaryColor());
 				break;

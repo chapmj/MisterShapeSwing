@@ -7,9 +7,16 @@ public class Dimensions {
 	Integer height;
 	Integer width;
 
-	public Dimensions(Integer height, Integer width) {
-		this.height = height;
-		this.width = width;
+	public Dimensions(Integer XwX , Integer XhX)
+	{
+		this.width = XwX;
+		this.height = XhX;
+	}
+
+	public Dimensions(Dimensions dimensions)
+	{
+		this.width = dimensions.getWidth();
+		this.height = dimensions.getHeight();
 	}
 
 	public Dimensions(ShapePosition position) {
@@ -34,8 +41,9 @@ public class Dimensions {
 	}
 	
 	// Create a deep copy of self.
+    /*
 	public Dimensions clone() {
 		
-		return new Dimensions(height,width);
-	}
+		return new Dimensions(width,height);
+	}*/
 }

@@ -31,21 +31,25 @@ public abstract class DrawStrategy implements IDrawStrategy
 		return new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, miterlimit, dash1, dash_phase);
 	}
 
-	public Color getPrimaryColor() {
+	public Color getPrimaryColor()
+	{
 		return toColor(shape.getPrimaryColor());
 	}
 
-	public Color getSecondaryColor() {
+	public Color getSecondaryColor()
+	{
 		return toColor(shape.getSecondaryColor());
 	}
 
-	public ShapeShadingType getShadingType() {
+	public ShapeShadingType getShadingType()
+	{
 		return shape.getStyle().shadingType;
 	}
 
 	private Color toColor(ShapeColor color)
 	{
-		switch (color) {
+		switch (color)
+		{
 			case BLACK: return Color.BLACK;
 			case BLUE: return Color.BLUE;
 			case CYAN: return Color.CYAN;
@@ -59,7 +63,8 @@ public abstract class DrawStrategy implements IDrawStrategy
 			case RED: return Color.RED;
 			case WHITE: return Color.WHITE;
 			case YELLOW: return Color.YELLOW;
-			default: return Color.BLACK; }
+			default: return Color.BLACK;
+		}
 	}
 
 }
