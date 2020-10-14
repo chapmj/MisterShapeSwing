@@ -3,6 +3,7 @@ package controller.api;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -12,7 +13,7 @@ public class SelectionSvc
 
     public static List<IShape> get()
     {
-        return supplier.get();
+        return new ArrayList<>(supplier.get());
     }
 
     public static Supplier<List<IShape>> getSupplier()
