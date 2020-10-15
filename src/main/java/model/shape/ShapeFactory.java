@@ -5,35 +5,61 @@ import model.PointInt;
 import model.interfaces.IShape;
 import model.persistence.ModelState;
 
-public class ShapeFactory  {
-	public static IShape createShape(ShapeType type, Dimensions dimensions, ShapeStyle style, ShapeCardinality cardinality, PointInt anchor)
+import java.util.stream.Collectors;
+
+public class ShapeFactory
+{
+	//Leaf copy constructor
+	public static IShape createShape(Shape shape)
 	{
-		return new Shape(type, dimensions, style, cardinality, anchor);
-	}
-	
-	public static IShape duplicateShape(IShape shape)
-	{
-		return new Shape(
-			shape.getType(), 
-			new Dimensions(shape.getDimensions()),
-			shape.getStyle().clone(), 
-			shape.getCardinality(), 
-			shape.getAnchor().clone());
+		var type = shape.getType();
+		var dimensions = shape.getDimensions();
+		var style = shape.getStyle();
+		var cardinality = shape.getCardinality();
+		var anchor = shape.getAnchor();
+
+		return new Shape(type,Dimensions.newInstance(dimensions), ShapeStyle.newInstance(style), cardinality,
+				PointInt.newInstance(anchor));
 	}
 
-	public static ShapeComponent duplicateShapeComponent(IShape shape)
+	//Composite copy constructor
+	public static IShape createShape(ShapeGroup shapeGroup)
 	{
-		if (shape instanceof Shape)
+	    var children = shapeGroup.getShapes();
+
+		var dupChildren= children.stream()
+				.map((ishape) -> (Shape) ishape)
+				.map(ShapeFactory::createShape)
+				.collect(Collectors.toList());
+
+	    return new ShapeGroup(dupChildren);
+	}
+
+	public static IShape createShape(IShape ishape)
+	{
+		if (ishape instanceof Shape)
 		{
-			return (ShapeComponent) duplicateShape(shape);
+			return ShapeFactory.createShape((Shape)ishape);
 		}
 
-		return new Shape(
-			shape.getType(), 
-			new Dimensions(shape.getDimensions()),
-			shape.getAnchor().clone());
+		if (ishape instanceof ShapeGroup)
+		{
+			return ShapeFactory.createShape((ShapeGroup)ishape);
+		}
+
+		try
+		{
+			throw new Exception("ShapeFactory: unknown shape class");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
+	//position-based custom constructor
 	public static IShape createShape(PointInt startPoint, PointInt endPoint)
 	{
 		var shapeType = ModelState.getApplicationState().getShapeType();
@@ -46,5 +72,12 @@ public class ShapeFactory  {
 		return new Shape(shapeType, dimensions, shapeStyle, shapeCardinality, position.getLeft());
 
 	}
+
+	//detail-based custom constructor
+	public static IShape createShape(ShapeType type, Dimensions dimensions, ShapeStyle style, ShapeCardinality cardinality, PointInt anchor)
+	{
+		return new Shape(type, dimensions, style, cardinality, anchor);
+	}
+
 }
 

@@ -3,10 +3,14 @@ package controller.commands;
 import controller.api.CopyBufferSvc;
 import controller.api.SelectionSvc;
 import model.interfaces.IShape;
+import model.shape.Shape;
 import model.shape.ShapeComponent;
+import model.shape.ShapeFactory;
+import model.shape.ShapeGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /* Responsible for updating the model's copy buffer with
  * the current selection on the canvas.
@@ -25,16 +29,11 @@ public class CopyTask extends AbstractControllerTask
 	
 	public List<IShape> copy(List<IShape> shapes)
 	{
-		var shapeCopies = new ArrayList<>(shapes);
+		var shapeCopies = shapes.stream()
+				.map(ShapeFactory::createShape)
+				.collect(Collectors.toList());
 
-		for (IShape shape : shapes)
-		{
-			var component = (ShapeComponent) shape;
-			var componentCopy = component.clone();
-			shapeCopies.add(componentCopy);
-		}
 		return shapeCopies;
 	}
-
 }
 

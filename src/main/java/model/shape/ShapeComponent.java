@@ -23,4 +23,24 @@ public abstract class ShapeComponent implements IBoundary, IShape
 	public abstract void setAnchor(PointInt anchor);
 	public abstract void setHeight(Integer height);
 	public abstract void setWidth(Integer width);
+
+	//create null objects for these
+	public ShapeCardinality getCardinality()
+	{
+		return null;
+	}
+	public ShapeStyle getStyle()
+	{
+		return null;
+	}
+
+	public ShapeColor getPrimaryColor()
+	{
+		return null;
+	}
+	public ShapeColor getSecondaryColor()
+	{
+		return null;
+	}
+
 }

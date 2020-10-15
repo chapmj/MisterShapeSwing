@@ -15,12 +15,12 @@ import java.util.List;
 public class ShapeGroup extends ShapeComponent
 {
 	private final List<IShape> children = new ArrayList<>();
-	Integer cachedHeight = 0;
-	Integer cachedWidth = 0;
-	PointInt cachedAnchor = null;
-	ShapeType shapeType = ShapeType.INVISIBLE_RECT;
+	private final ShapeType shapeType = ShapeType.INVISIBLE_RECT;
+	private Integer cachedHeight = 0;
+	private Integer cachedWidth = 0;
+	private PointInt cachedAnchor = new PointInt(0, 0);
 
-	public ShapeGroup()
+	private ShapeGroup()
 	{ }
 
 	public ShapeGroup(List<IShape> children)
@@ -125,30 +125,6 @@ public class ShapeGroup extends ShapeComponent
 		return new PointInt(xMin, yMin);
 	}
 
-	@Override
-	public ShapeCardinality getCardinality()
-	{
-		return null;
-	}
-
-	@Override
-	public ShapeStyle getStyle()
-	{
-		return null;
-	}
-
-	@Override
-	public ShapeColor getPrimaryColor()
-	{
-		return null;
-	}
-
-	@Override
-	public ShapeColor getSecondaryColor()
-	{
-		return null;
-	}
-
 	public Dimensions getDimensions()
 	{
 		return new Dimensions(cachedWidth, cachedHeight);
@@ -170,14 +146,7 @@ public class ShapeGroup extends ShapeComponent
 	@Override
 	public List<IShape> getShapes()
 	{
-		var list = new ArrayList<IShape>();
-
-		for (IShape child : children)
-		{
-		    var component = (ShapeComponent) child;
-			list.addAll((component.getShapes()));
-		}
-		return list;
+		return new ArrayList<>(children);
 	}
 
 	@Override
@@ -211,21 +180,8 @@ public class ShapeGroup extends ShapeComponent
 	public void setWidth(Integer width)
 	{ }
 
-	// Deep copy the ShapeGroup and all of its children.
-	@Override
-	public ShapeComponent clone()
+	public void add(IShape shape)
 	{
-		ShapeGroup dupeGroup;
-
-		var shapes = this.getShapes();
-		var dupeShapes = new ArrayList<IShape>();
-			
-		shapes.stream()
-			.map((shape) -> ShapeFactory.duplicateShapeComponent(shape))
-			.forEach(dupeShapes::add);
-			
-		dupeGroup = new ShapeGroup(dupeShapes);
-
-		return dupeGroup;
+		children.add(shape);
 	}
 }
