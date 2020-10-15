@@ -3,12 +3,8 @@ package controller.commands;
 import controller.api.CopyBufferSvc;
 import controller.api.SelectionSvc;
 import model.interfaces.IShape;
-import model.shape.Shape;
-import model.shape.ShapeComponent;
 import model.shape.ShapeFactory;
-import model.shape.ShapeGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

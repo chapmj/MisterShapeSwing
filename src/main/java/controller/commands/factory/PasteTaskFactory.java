@@ -4,12 +4,10 @@ import controller.commands.AbstractControllerTask;
 import controller.commands.PasteTask;
 import model.PointInt;
 import model.interfaces.IShape;
-import model.shape.ShapeFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class PasteTaskFactory extends AbstractTaskFactory
 {

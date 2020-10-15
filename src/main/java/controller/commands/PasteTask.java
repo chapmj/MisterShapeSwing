@@ -8,8 +8,6 @@ import model.CommandHistory;
 import model.PointInt;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
-import model.persistence.ModelState;
-import model.shape.ShapeComponent;
 import model.shape.ShapeFactory;
 import model.shape.ShapeGroup;
 
