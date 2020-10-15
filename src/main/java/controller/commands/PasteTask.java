@@ -10,9 +10,11 @@ import model.api.ModelAPI;
 import model.interfaces.IShape;
 import model.persistence.ModelState;
 import model.shape.ShapeComponent;
+import model.shape.ShapeFactory;
 import model.shape.ShapeGroup;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /* Responsible for updating the model's canvas state.
  * Used to add shapes to the canvas based on shape components
@@ -25,6 +27,7 @@ public class PasteTask extends AbstractControllerTask
 
 	private PointInt pasteLocation;
 	private final List<IShape> shapes;
+	private List<IShape> dupes;
 
 	@SuppressWarnings("unused")
 	private PasteTask() throws Exception
@@ -47,15 +50,18 @@ public class PasteTask extends AbstractControllerTask
 	{
 		var pasteDelta = createPasteAnchor();
 
+		dupes = shapes.stream()
+				.map(ShapeFactory::createShape)
+				.collect(Collectors.toList());
 		//update shape coordinates
-		for (IShape shape : shapes)
+		for (IShape dupe : dupes)
 		{
-			var x = shape.getAnchor().getX() + pasteDelta.getX();
-			var y = shape.getAnchor().getY() + pasteDelta.getY();
-			ShapeLocationSvc.accept(shape, new PointInt(x, y));
+			var x = dupe.getAnchor().getX() + pasteDelta.getX();
+			var y = dupe.getAnchor().getY() + pasteDelta.getY();
+			ShapeLocationSvc.accept(dupe, new PointInt(x, y));
 		}
 
-		AddShapesSvc.accept(shapes);
+		AddShapesSvc.accept(dupes);
 
 		CommandHistory.add(this);
 		PasteLocationSvc.accept(pasteLocation);
@@ -83,7 +89,8 @@ public class PasteTask extends AbstractControllerTask
 	public void undo()
 	{
 		decrementPasteLocation();
-		RemoveShapeSvc.accept(shapes);
+		PasteLocationSvc.accept(pasteLocation);
+		RemoveShapeSvc.accept(dupes);
 	}
 
 	// Put the objects back in the shape list.
@@ -91,7 +98,8 @@ public class PasteTask extends AbstractControllerTask
 	public void redo()
 	{
 		incrementPasteLocation();
-		AddShapesSvc.accept(shapes);
+		PasteLocationSvc.accept(pasteLocation);
+		AddShapesSvc.accept(dupes);
 	}
 
 	// Track where to paste something on the canvas.

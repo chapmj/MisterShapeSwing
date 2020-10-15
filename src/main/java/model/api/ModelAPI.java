@@ -71,7 +71,8 @@ public class ModelAPI
 
         public static void setPasteLocation(PointInt point)
         {
-
+                var pointCopy = PointInt.newInstance(point);
+                ModelState.getCanvasState().setLastPasteLocation(pointCopy);
         }
 
         public static void setPasteLocation(int offsetX, int offSetY)
