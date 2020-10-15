@@ -6,7 +6,7 @@ import controller.api.ClearSelectionSvc;
 import controller.api.RemoveShapeSvc;
 import model.CommandHistory;
 import model.api.ModelAPI;
-import model.shape.ShapeComponent;
+import model.interfaces.IShape;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class UngroupTask extends AbstractControllerTask
 {
-	private final List<ShapeComponent> groups;
-	private final List<ShapeComponent> groupedShapes;
-	private final List<ShapeComponent> ungroupedShapes;
+	private final List<IShape> groups;
+	private final List<IShape> groupedShapes;
+	private final List<IShape> ungroupedShapes;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
@@ -28,7 +28,7 @@ public class UngroupTask extends AbstractControllerTask
 	    throw new Exception("UngroupTask must be parameterized");
 	}
 
-	public UngroupTask(List<ShapeComponent> groups, List<ShapeComponent>groupedShapes, List<ShapeComponent>ungroupedShapes)
+	public UngroupTask(List<IShape> groups, List<IShape>groupedShapes, List<IShape>ungroupedShapes)
 	{
 	    this.groups = groups;
 	    this.groupedShapes = groupedShapes;

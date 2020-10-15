@@ -1,13 +1,12 @@
 package model.interfaces;
 
-import model.shape.ShapeComponent;
-
 import java.util.List;
 
-public interface ICanvasState {
+public interface ICanvasState
+{
 	List<IShape> getShapeList();
-	void addComponent(List<ShapeComponent> components);
-	void removeComponent(List<ShapeComponent> components);
-	void removeComponent(ShapeComponent shapeComponent);
-	List<ShapeComponent> getComponentList();
+	void addComponent(List<IShape> components);
+	void removeComponent(List<IShape> components);
+	void removeComponent(IShape shapeComponent);
+	List<IShape> getComponentList();
 }

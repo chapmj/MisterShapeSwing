@@ -18,7 +18,9 @@ public class MouseReleaseObserver implements IObservable
 	{
 		try
 		{
-			mouseController.mouseReleaseAction();
+			var pressed = ModelState.getCanvasState().getMousePressed();
+			var released = ModelState.getCanvasState().getMouseReleased();
+			mouseController.mouseReleaseAction(pressed, released);
 		}
 		catch (Exception e)
 		{

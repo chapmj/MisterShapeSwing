@@ -8,10 +8,15 @@ public class UndoTask extends AbstractControllerTask
     @Override
     public void execute()
     {
-        try {
+        try
+        {
             CommandHistory.undo();
             ModelAPI.notifyCanvasObservers();
-        } catch (Exception exception) {exception.printStackTrace();}
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
 
     }
 }

@@ -4,7 +4,7 @@ import controller.api.AddToSelectionSvc;
 import controller.api.ClearSelectionSvc;
 import model.PointInt;
 import model.api.ModelAPI;
-import model.shape.ShapeComponent;
+import model.interfaces.IShape;
 import model.shape.ShapePosition;
 
 import java.util.List;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
  */
 public class SaveSelectionTask extends AbstractControllerTask
 {
-	private final List<ShapeComponent> selection;
+	private final List<IShape> selection;
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
 	 */
-	public SaveSelectionTask(PointInt startPoint, PointInt endPoint, List<ShapeComponent> components)
+	public SaveSelectionTask(PointInt startPoint, PointInt endPoint, List<IShape> components)
 	{
 		var selectionBox = new ShapePosition(startPoint, endPoint);
 
@@ -56,8 +56,4 @@ public class SaveSelectionTask extends AbstractControllerTask
 				|| (r1TopY > r2BotY)
 				|| (r1BotY < r2TopY));
 	}
-
-
-
-
 }

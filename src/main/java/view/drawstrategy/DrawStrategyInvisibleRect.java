@@ -1,10 +1,9 @@
 package view.drawstrategy;
 
 import model.Selection;
+import model.interfaces.IBoundary;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
-import model.persistence.ModelState;
-import view.viewstate.ViewState;
+import view.api.SelectionSvc;
 
 import java.awt.*;
 
@@ -20,15 +19,13 @@ import java.awt.*;
 
 public class DrawStrategyInvisibleRect extends DrawStrategy {
 	private Graphics2D graphics;
-	private ShapeComponent group;
-	private BasicStroke stroke;
+	private IShape  group;
 
-	public DrawStrategyInvisibleRect(ShapeComponent group)
+	public DrawStrategyInvisibleRect(IShape group, Graphics2D graphics)
 	{
-		super((IShape) group);
-		this.graphics = ViewState.getGraphics();
+		super(group);
+		this.graphics = graphics;
 		this.group = group;
-		setStyleParams();	
 	}
 	
 	public void draw()
@@ -36,23 +33,20 @@ public class DrawStrategyInvisibleRect extends DrawStrategy {
 		drawSelection();
 	}
 
-	private void setStyleParams()
+	private void drawSelection()
 	{
-		stroke = DrawStrategy.makeStroke();
-	}
-	
-	private void drawSelection() {
-		var selectedComponents= ModelState.getShapeComponentSelectionList();
+		var selection = SelectionSvc.get();
+		if (selection.contains(group))
+		{
+			IBoundary selectionBoundary = new Selection(group, 10).getSelectionShape();
+			var x = selectionBoundary.getAnchor().getX();
+			var y = selectionBoundary.getAnchor().getY();
+			var w = selectionBoundary.getWidth();
+			var h = selectionBoundary.getHeight();
 
-		if (selectedComponents.contains(group)) {
-			IShape selection = (IShape) (new Selection(group, 10).getSelectionShape());
 			graphics.setColor(Color.RED);
 			graphics.setStroke(stroke);
-			graphics.drawRect(
-				selection.getAnchor().getX(),
-				selection.getAnchor().getY(),
-				selection.getWidth(),
-				selection.getHeight());	
+			graphics.drawRect(x, y, w, h);
 		}
 	}
 }

@@ -5,7 +5,7 @@ import controller.api.ClearSelectionSvc;
 import controller.api.RemoveShapeSvc;
 import model.CommandHistory;
 import model.api.ModelAPI;
-import model.shape.ShapeComponent;
+import model.interfaces.IShape;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class DeleteTask extends AbstractControllerTask
 {
-	private final List<ShapeComponent> shapes;
+	private final List<IShape> shapes;
 
 	/* Initialize with data prior to execution. Data persists
 	 * with object's lifetime to make undo/redo methods useful.
@@ -25,7 +25,7 @@ public class DeleteTask extends AbstractControllerTask
 		throw new Exception("DeleteTask must be parameterized");
 	}
 
-	public DeleteTask(List<ShapeComponent> selection)
+	public DeleteTask(List<IShape> selection)
 	{
 		this.shapes = selection;
 	}

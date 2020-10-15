@@ -2,7 +2,6 @@ package model.persistence;
 
 import model.interfaces.IApplicationState;
 import model.interfaces.IShape;
-import model.shape.ShapeComponent;
 
 import java.util.List;
 
@@ -37,23 +36,7 @@ public class ModelState
         return ModelState.applicationState;
     }
 
-    public static void update(CanvasState canvasState)
-    {
-        ModelState.canvasState = canvasState;
-    }
-
-    public static void update(ApplicationState applicationState)
-    {
-        ModelState.applicationState = applicationState;
-    }
-
-    /*
-    public static List<IShape> getShapeSelectionList()
-    {
-        return ModelState.canvasState.getShapeSelectionList();
-    }*/
-
-    public static List<ShapeComponent> getShapeComponentSelectionList()
+    public static List<IShape> getShapeComponentSelectionList()
     {
         return ModelState.canvasState.getComponentSelectionList();
     }

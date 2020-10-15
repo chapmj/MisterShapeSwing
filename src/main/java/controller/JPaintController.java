@@ -9,9 +9,10 @@ import controller.api.CopyBufferSvc;
 import controller.api.PasteLocationSvc;
 import controller.api.SelectionSvc;
 import model.api.ModelAPI;
-import model.shape.ShapeComponent;
+import model.interfaces.IShape;
 import view.EventName;
-import view.ViewAPI;
+import view.api.CanvasSvc;
+import view.ui.UISvc;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -25,7 +26,7 @@ public class JPaintController implements IJPaintController, ISingleton {
 	private static JPaintController instance;
 
 	private final Consumer<IControllerTask> registerCanvasStateSubscriber = ModelAPI::registerCanvasStateSubscriber;
-	final Consumer<List<ShapeComponent>> redrawer = ViewAPI::redraw;
+	final Consumer<List<IShape>> redrawer = CanvasSvc::redraw;
 
 	//Initialize object constructors to perform tasks on model based on functional interfaces
 	private final AbstractTaskFactory copyTaskFactory = new CopyTaskFactory();
@@ -39,19 +40,20 @@ public class JPaintController implements IJPaintController, ISingleton {
 
 	private final AbstractTaskFactory redrawTaskFactory = new RedrawTaskFactory(CanvasShapesSvc.getSupplier(), redrawer);
 
-	public JPaintController() throws Exception
+	public JPaintController()
 	{
 		registerEvents();
 		registerObservers();
 	}
 
+	/*
 	public static JPaintController getInstance()
 	{
 		if (instance == null) 
 			return null;	
 		else 
 			return instance;
-	}
+	}*/
 	
 	public static void createInstance() throws Exception
 	{
@@ -61,15 +63,15 @@ public class JPaintController implements IJPaintController, ISingleton {
 		}
 	}
 
-	private void registerEvents() throws Exception
+	private void registerEvents()
 	{
-		ViewAPI.addGuiEvent(EventName.COPY,    () -> copyTaskFactory.createTask().execute());
-		ViewAPI.addGuiEvent(EventName.PASTE,   () -> pasteTaskFactory.createTask().execute());
-		ViewAPI.addGuiEvent(EventName.DELETE,  () -> deleteTaskFactory.createTask().execute());
-		ViewAPI.addGuiEvent(EventName.GROUP,   () -> groupTaskFactory.createTask().execute());
-		ViewAPI.addGuiEvent(EventName.UNGROUP, () -> ungroupTaskFactory.createTask().execute());
-		ViewAPI.addGuiEvent(EventName.UNDO,    () -> undoTaskFactory.createTask().execute());
-		ViewAPI.addGuiEvent(EventName.REDO,    () -> redoTaskFactory.createTask().execute());
+		UISvc.addGuiEvent(EventName.COPY,    () -> copyTaskFactory.createTask().execute());
+		UISvc.addGuiEvent(EventName.PASTE,   () -> pasteTaskFactory.createTask().execute());
+		UISvc.addGuiEvent(EventName.DELETE,  () -> deleteTaskFactory.createTask().execute());
+		UISvc.addGuiEvent(EventName.GROUP,   () -> groupTaskFactory.createTask().execute());
+		UISvc.addGuiEvent(EventName.UNGROUP, () -> ungroupTaskFactory.createTask().execute());
+		UISvc.addGuiEvent(EventName.UNDO,    () -> undoTaskFactory.createTask().execute());
+		UISvc.addGuiEvent(EventName.REDO,    () -> redoTaskFactory.createTask().execute());
 	}
 
 	// Observe CanvasState fields that concern this controller.

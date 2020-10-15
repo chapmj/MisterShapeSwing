@@ -9,7 +9,8 @@ import java.util.List;
 import model.interfaces.IShape;
 
 // A shape component that represents a drawable object for the canvas.
-public class Shape extends ShapeComponent implements IShape, Cloneable {
+public class Shape extends ShapeComponent implements IShape
+{
 
 	ShapeType type; 
 	Dimensions dimensions;
@@ -17,7 +18,8 @@ public class Shape extends ShapeComponent implements IShape, Cloneable {
 	ShapeCardinality cardinality;
 	PointInt anchor;
 
-	public Shape(ShapeType type, Dimensions dimensions, ShapeStyle style, ShapeCardinality cardinality, PointInt anchor) {
+	public Shape(ShapeType type, Dimensions dimensions, ShapeStyle style, ShapeCardinality cardinality, PointInt anchor)
+	{
 		this.dimensions = dimensions;
 		this.style = style;
 		this.cardinality = cardinality;
@@ -25,7 +27,8 @@ public class Shape extends ShapeComponent implements IShape, Cloneable {
 		this.anchor = anchor;
 	}
 
-	public Shape(ShapeType type, Dimensions dimensions, PointInt anchor) {
+	public Shape(ShapeType type, Dimensions dimensions, PointInt anchor)
+	{
 		this.type = type;
 		this.dimensions = dimensions;
 		this.anchor = anchor;
@@ -34,73 +37,83 @@ public class Shape extends ShapeComponent implements IShape, Cloneable {
 		this.cardinality = null;
 	}
 
-	public ShapeColor getPrimaryColor() {
+	public ShapeColor getPrimaryColor()
+	{
 		return style.primaryColor;
 	}
 
-	public ShapeColor getSecondaryColor() {
+	public ShapeColor getSecondaryColor()
+	{
 		return style.secondaryColor;
 	}
 
-	public ShapeType getType() {
+	public ShapeType getType()
+	{
 		return type;
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return "Shape [type=" + type + ", dimensions=" + dimensions + ", style=" + style + ", cardinality="
 				+ cardinality + ", anchor=" + anchor + "]";
 	}
 
-	public Dimensions getDimensions() {
+	public Dimensions getDimensions()
+	{
 		return dimensions;
 	}
 
-	public ShapeStyle getStyle() {
+	public ShapeStyle getStyle()
+	{
 		return style;
 	}
 
-	public ShapeCardinality getCardinality() {
-		return cardinality;
+	public ShapeCardinality getCardinality()
+	{
+		return this.cardinality;
 	}
 
-	public Integer getHeight() {
+	public Integer getHeight()
+	{
 		return dimensions.getHeight();	
 	}
 	
-	public Integer getWidth() {
+	public Integer getWidth()
+	{
 		return dimensions.getWidth();
 	}
 
-	public void setHeight(Integer h) {
+	public void setHeight(Integer h)
+	{
 		dimensions.setHeight(h);	
 	}
 
-	public void setWidth(Integer w) {
+	public void setWidth(Integer w)
+	{
 		dimensions.setWidth(w);	
 	}
 
 	
-	public PointInt getAnchor() {
+	public PointInt getAnchor()
+	{
 		return anchor;
 	}
 
-	public void setAnchor(PointInt anchor) {
+	public void setAnchor(PointInt anchor)
+	{
 		this.anchor = anchor;
 	}
 
 	@Override
-	public ShapeComponent clone() {
-	    return (ShapeComponent) ShapeFactory.duplicateShape(this);
-	}
-	
-	@Override
-	public ShapeComponent getBoundingPoints() {
+	public ShapeComponent getBoundingPoints()
+	{
 		return null;
 	}
 	
 	@Override
-	public ShapePosition getPosition() {
+	public ShapePosition getPosition()
+	{
 		return new ShapePosition(
 			getAnchor(), 
 			new PointInt(
@@ -109,7 +122,8 @@ public class Shape extends ShapeComponent implements IShape, Cloneable {
 	}
 
 	@Override
-	public List<IShape> getShapes() {
+	public List<IShape> getShapes()
+	{
 		List<IShape> list = new ArrayList<>();
 		list.add(this);
 		return list;

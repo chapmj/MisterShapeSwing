@@ -1,16 +1,16 @@
 package controller.commands;
 
-import model.shape.ShapeComponent;
+import model.interfaces.IShape;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 public class RedrawTask extends AbstractControllerTask
 {
-    private List<ShapeComponent> shapeComponents;
-    private Consumer<List<ShapeComponent>> redrawer;
+    private List<IShape> shapeComponents;
+    private Consumer<List<IShape>> redrawer;
 
-    public RedrawTask(List<ShapeComponent> shapeComponents, Consumer<List<ShapeComponent>> redrawer)
+    public RedrawTask(List<IShape> shapeComponents, Consumer<List<IShape>> redrawer)
     {
 
         this.shapeComponents = shapeComponents;

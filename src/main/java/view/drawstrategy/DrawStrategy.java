@@ -5,12 +5,17 @@ import model.shape.ShapeColor;
 import model.shape.ShapeShadingType;
 import view.interfaces.IDrawStrategy;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
 
 public abstract class DrawStrategy implements IDrawStrategy
 {
 	public abstract void draw();
 	protected IShape shape;
+	protected BasicStroke stroke = makeStroke();
+
+	public DrawStrategy()
+	{ }
 
 	public DrawStrategy(IShape shape)
 	{
@@ -26,62 +31,39 @@ public abstract class DrawStrategy implements IDrawStrategy
 		return new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, miterlimit, dash1, dash_phase);
 	}
 
-	public Color getPrimaryColor() {
+	protected Color getPrimaryColor()
+	{
 		return toColor(shape.getPrimaryColor());
 	}
 
-	public Color getSecondaryColor() {
+	protected Color getSecondaryColor()
+	{
 		return toColor(shape.getSecondaryColor());
 	}
 
-	public ShapeShadingType getShadingType() {
+	protected ShapeShadingType getShadingType()
+	{
 		return shape.getStyle().shadingType;
 	}
 
 	private Color toColor(ShapeColor color)
 	{
-		switch (color) {
-			case BLACK:
-				return Color.BLACK;
-
-			case BLUE:
-				return Color.BLUE;
-
-			case CYAN:
-				return Color.CYAN;
-
-			case DARK_GRAY:
-				return Color.DARK_GRAY;
-
-			case GRAY:
-				return Color.GRAY;
-
-			case GREEN:
-				return Color.GREEN;
-
-			case LIGHT_GRAY:
-				return Color.LIGHT_GRAY;
-
-			case MAGENTA:
-				return Color.MAGENTA;
-
-			case ORANGE:
-				return Color.ORANGE;
-
-			case PINK:
-				return Color.PINK;
-
-			case RED:
-				return Color.RED;
-
-			case WHITE:
-				return Color.WHITE;
-
-			case YELLOW:
-				return Color.YELLOW;
-
-			default:
-				return Color.BLACK;
+		switch (color)
+		{
+			case BLACK: return Color.BLACK;
+			case BLUE: return Color.BLUE;
+			case CYAN: return Color.CYAN;
+			case DARK_GRAY: return Color.DARK_GRAY;
+			case GRAY: return Color.GRAY;
+			case GREEN: return Color.GREEN;
+			case LIGHT_GRAY: return Color.LIGHT_GRAY;
+			case MAGENTA: return Color.MAGENTA;
+			case ORANGE: return Color.ORANGE;
+			case PINK: return Color.PINK;
+			case RED: return Color.RED;
+			case WHITE: return Color.WHITE;
+			case YELLOW: return Color.YELLOW;
+			default: return Color.BLACK;
 		}
 	}
 

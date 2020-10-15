@@ -2,9 +2,9 @@ package model.api;
 
 import controller.interfaces.IControllerTask;
 import model.PointInt;
+import model.interfaces.IShape;
 import model.persistence.CanvasStateObserver;
 import model.persistence.ModelState;
-import model.shape.ShapeComponent;
 import model.shape.ShapeGroup;
 
 import java.util.List;
@@ -17,18 +17,18 @@ public class ModelAPI
                 ModelState.getCanvasState().addShapeGroup(shapeGroup);
         }
 
-        public static void addShapes(List<ShapeComponent> shapes)
+        public static void addShapes(List<IShape> shapes)
         {
                 ModelState.getCanvasState().addComponent(shapes);
         }
 
 
-        public static void removeShapes(List<ShapeComponent> shapeComponents)
+        public static void removeShapes(List<IShape> shapeComponents)
         {
                 ModelState.getCanvasState().removeComponent(shapeComponents);
         }
 
-        public static List<ShapeComponent> getSelection()
+        public static List<IShape> getSelection()
         {
                 return ModelState.getShapeComponentSelectionList();
         }
@@ -40,7 +40,7 @@ public class ModelAPI
                 ModelState.getCanvasState().addComponentSelection(group);
         }
 
-        public static void addComponentToSelection(List<ShapeComponent> selection)
+        public static void addComponentToSelection(List<IShape> selection)
         {
                 ModelState.getCanvasState().addComponentSelection(selection);
         }
@@ -57,7 +57,7 @@ public class ModelAPI
                 ModelState.getCanvasState().clearComponentSelectionList();
         }
 
-        public static List<ShapeComponent> getComponentBuffer()
+        public static List<IShape> getComponentBuffer()
         {
                 return ModelState.getCanvasState().getComponentCopyBuffer();
         }
@@ -71,7 +71,8 @@ public class ModelAPI
 
         public static void setPasteLocation(PointInt point)
         {
-
+                var pointCopy = PointInt.newInstance(point);
+                ModelState.getCanvasState().setLastPasteLocation(pointCopy);
         }
 
         public static void setPasteLocation(int offsetX, int offSetY)
@@ -79,12 +80,12 @@ public class ModelAPI
 
         }
 
-        public static void setShapeLocation(ShapeComponent shapeComponent, int x, int y)
+        public static void setShapeLocation(IShape shapeComponent, int x, int y)
         {
                 shapeComponent.setAnchor(new PointInt(x, y));
         }
 
-        public static void setShapeLocation(ShapeComponent shapeComponent, PointInt point)
+        public static void setShapeLocation(IShape shapeComponent, PointInt point)
         {
                 shapeComponent.setAnchor(point);
         }
@@ -94,17 +95,17 @@ public class ModelAPI
                 ModelState.refresh();
         }
 
-        public static void removeShape(ShapeComponent shape)
+        public static void removeShape(IShape shape)
         {
                 ModelState.getCanvasState().removeComponent(shape);
         }
 
-        public static void addShape(ShapeComponent shape)
+        public static void addShape(IShape shape)
         {
                 ModelState.getCanvasState().addComponent(shape);
         }
 
-        public static List<ShapeComponent> getComponents()
+        public static List<IShape> getComponents()
         {
                 return ModelState.getCanvasState().getComponentList();
         }
@@ -127,7 +128,7 @@ public class ModelAPI
                 }
         }
 
-        public static void putComponentBuffer(List<ShapeComponent> shapeComponents)
+        public static void putComponentBuffer(List<IShape> shapeComponents)
         {
                 ModelState.getCanvasState().setComponentCopyBuffer(shapeComponents);
         }
