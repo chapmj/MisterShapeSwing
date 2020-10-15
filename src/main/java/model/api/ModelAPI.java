@@ -87,7 +87,7 @@ public class ModelAPI
 
         public static void setShapeLocation(IShape shapeComponent, PointInt point)
         {
-                shapeComponent.setAnchor(point);
+                shapeComponent.setAnchor(PointInt.newInstance(point));
         }
 
         public static void commit()
