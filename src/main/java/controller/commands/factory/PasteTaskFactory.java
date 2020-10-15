@@ -24,6 +24,8 @@ public class PasteTaskFactory extends AbstractTaskFactory
     public AbstractControllerTask createTask()
     {
         var shapeCopies = new ArrayList<>(componentBuffer.get());
+
+
         return new PasteTask(pasteLocation.get(), shapeCopies);
     }
 }

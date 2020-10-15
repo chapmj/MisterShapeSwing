@@ -14,10 +14,11 @@ public class Dimensions
 		this.height = height;
 	}
 
-	public Dimensions(Dimensions dimensions)
+	public static Dimensions newInstance(Dimensions dimensions)
 	{
-		this.width = dimensions.getWidth();
-		this.height = dimensions.getHeight();
+	    var width = dimensions.getWidth();
+	    var height = dimensions.getHeight();
+		return new Dimensions(width, height);
 	}
 
 	public Dimensions(ShapePosition position)
@@ -26,7 +27,8 @@ public class Dimensions
 		this.width = position.getRight().getX() - position.getLeft().getX();
 	}
 
-	public Integer getHeight()
+
+    public Integer getHeight()
 	{
 		return height;
 	}

@@ -28,7 +28,7 @@ public class Selection implements IBoundary
 		this.anchor = new PointInt(leftx, lefty);
 		this.height = shape.getHeight() + (2 * selectionFactor);
 		this.width = shape.getWidth() + (2 * selectionFactor);
-		IShape s = ShapeFactory.duplicateShapeComponent(shape);
+		IShape s = ShapeFactory.createShape(shape);
 		s.setAnchor(this.anchor);
 		s.setHeight(this.height);
 		s.setWidth(this.width);

@@ -10,17 +10,19 @@ public class PointInt {
 		this.y = y;	
 	}
 
-	public Integer getX() {
+    public static PointInt newInstance(PointInt anchor)
+    {
+        var x = anchor.x;
+        var y = anchor.y;
+        return new PointInt(x, y);
+    }
+
+    public Integer getX() {
 		return x;
 	}
 
 	public Integer getY() {
 		return y;
-	}
-
-	// Make a deep copy of self.
-	public PointInt clone() {
-		return new PointInt(x,y);
 	}
 
 	public PointInt add(int x, int y) {

@@ -4,7 +4,8 @@ import java.util.List;
 
 /* OBSERVER PATTERN
  */
-public interface IObservableSubject{
+public interface IObservableSubject
+{
 	// Citation: Head First Design Patterns, pg 58.
     void registerObserver(IObservable obs);
 	void deregisterObserver(IObservable obs);

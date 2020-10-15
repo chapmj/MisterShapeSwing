@@ -15,7 +15,7 @@ public class CopyBufferSvc
 
     public static List<IShape> get()
     {
-        return supplier.get();
+        return new ArrayList<>(supplier.get());
     }
 
     public static Supplier<List<IShape>> getSupplier()

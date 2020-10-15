@@ -1,15 +1,18 @@
 package controller.commands;
 
 import controller.api.AddShapesSvc;
+import controller.api.PasteLocationSvc;
 import controller.api.RemoveShapeSvc;
 import controller.api.ShapeLocationSvc;
 import model.CommandHistory;
 import model.PointInt;
 import model.api.ModelAPI;
 import model.interfaces.IShape;
+import model.shape.ShapeFactory;
 import model.shape.ShapeGroup;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /* Responsible for updating the model's canvas state.
  * Used to add shapes to the canvas based on shape components
@@ -22,6 +25,7 @@ public class PasteTask extends AbstractControllerTask
 
 	private PointInt pasteLocation;
 	private final List<IShape> shapes;
+	private List<IShape> dupes;
 
 	@SuppressWarnings("unused")
 	private PasteTask() throws Exception
@@ -42,26 +46,37 @@ public class PasteTask extends AbstractControllerTask
 	@Override
 	public void execute()
 	{
-		shapes.stream().forEach((shapeComponent) ->
+		var pasteDelta = createPasteAnchor();
+
+		dupes = shapes.stream()
+				.map(ShapeFactory::createShape)
+				.collect(Collectors.toList());
+		//update shape coordinates
+		for (IShape dupe : dupes)
 		{
-			var moveGroup = new ShapeGroup(shapes);
-			var pasteDelta = new PointInt(
-					(pasteLocation.getX() + INC_X) - moveGroup.getAnchor().getX(),
-					(pasteLocation.getY() + INC_Y) - moveGroup.getAnchor().getY());
+			var x = dupe.getAnchor().getX() + pasteDelta.getX();
+			var y = dupe.getAnchor().getY() + pasteDelta.getY();
+			ShapeLocationSvc.accept(dupe, new PointInt(x, y));
+		}
 
-			var x = shapeComponent.getAnchor().getX() + pasteDelta.getX();
-			var y = shapeComponent.getAnchor().getY() + pasteDelta.getY();
-
-			ShapeLocationSvc.accept(shapeComponent, new PointInt(x, y));
-
-		});
-
-		incrementPasteLocation();
-		AddShapesSvc.accept(shapes);
-		ModelAPI.commit();//changes are made, update observers to redraw
+		AddShapesSvc.accept(dupes);
 
 		CommandHistory.add(this);
+		PasteLocationSvc.accept(pasteLocation);
 		ModelAPI.notifyCanvasObservers();
+	}
+
+	private PointInt createPasteAnchor()
+	{
+		var moveGroup = new ShapeGroup(shapes);
+		var deltaX = moveGroup.getAnchor().getX();
+		var deltaY = moveGroup.getAnchor().getY();
+
+		var pasteAnchorX = pasteLocation.getX() + INC_X;
+		var pasteAnchorY = pasteLocation.getY() + INC_X;
+
+		incrementPasteLocation();
+		return new PointInt(pasteAnchorX - deltaX, pasteAnchorY - deltaY);
 	}
 
 	/* The opposite of Pasting a objects is removing them from the canvas.
@@ -72,7 +87,8 @@ public class PasteTask extends AbstractControllerTask
 	public void undo()
 	{
 		decrementPasteLocation();
-		RemoveShapeSvc.accept(shapes);
+		PasteLocationSvc.accept(pasteLocation);
+		RemoveShapeSvc.accept(dupes);
 	}
 
 	// Put the objects back in the shape list.
@@ -80,7 +96,8 @@ public class PasteTask extends AbstractControllerTask
 	public void redo()
 	{
 		incrementPasteLocation();
-		AddShapesSvc.accept(shapes);
+		PasteLocationSvc.accept(pasteLocation);
+		AddShapesSvc.accept(dupes);
 	}
 
 	// Track where to paste something on the canvas.

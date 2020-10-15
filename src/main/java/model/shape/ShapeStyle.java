@@ -6,14 +6,18 @@ public final class ShapeStyle {
 	public final ShapeShadingType shadingType;
 
 	public ShapeStyle(ShapeColor primaryColor, ShapeColor secondaryColor, ShapeShadingType shadingType) {
-		//TODO:  if any of these are null throw an error
 		super();
 		this.primaryColor = primaryColor;
 		this.secondaryColor = secondaryColor;
 		this.shadingType = shadingType;
 	}
 	
-	public ShapeStyle clone() {
+	public static ShapeStyle newInstance(ShapeStyle shapeStyle) {
+
+		var primaryColor = shapeStyle.primaryColor;
+		var secondaryColor = shapeStyle.secondaryColor;
+		var shadingType = shapeStyle.shadingType;
+
 		return new ShapeStyle(primaryColor, secondaryColor, shadingType);
 	}
 }
