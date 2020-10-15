@@ -9,7 +9,7 @@ import java.util.List;
 import model.interfaces.IShape;
 
 // A shape component that represents a drawable object for the canvas.
-public class Shape extends ShapeComponent implements IShape, Cloneable
+public class Shape extends ShapeComponent implements IShape
 {
 
 	ShapeType type; 
@@ -105,12 +105,6 @@ public class Shape extends ShapeComponent implements IShape, Cloneable
 		this.anchor = anchor;
 	}
 
-	@Override
-	public ShapeComponent clone()
-	{
-	    return (ShapeComponent) ShapeFactory.duplicateShape(this);
-	}
-	
 	@Override
 	public ShapeComponent getBoundingPoints()
 	{

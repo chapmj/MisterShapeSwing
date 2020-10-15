@@ -5,7 +5,6 @@ import controller.api.SelectionSvc;
 import model.interfaces.IShape;
 import model.shape.ShapeComponent;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
